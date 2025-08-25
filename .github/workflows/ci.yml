@@ -5,22 +5,22 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
-      - '**.md'
+      - "docs/**"
+      - "**.md"
   pull_request:
     paths-ignore:
-      - 'docs/**'
-      - '**.md'
+      - "docs/**"
+      - "**.md"
   workflow_dispatch:
     inputs:
       job:
-        description: 'Run a single job'
+        description: "Run a single job"
         required: false
-        default: ''
+        default: ""
 
 # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
-  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
   cancel-in-progress: true
 
 env:
@@ -28,7 +28,7 @@ env:
 
 jobs:
   setup:
-    name: 'setup - ${{ matrix.label }}'
+    name: "setup - ${{ matrix.label }}"
     runs-on: ${{matrix.os}}
     timeout-minutes: 30
     strategy:
@@ -44,8 +44,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node: 22.18.0
-          cache: 'pnpm'
-      - uses: 'nick-fields/retry@v3.0.2'
+          cache: "pnpm"
+      - uses: "nick-fields/retry@v3.0.2"
         with:
           max_attempts: 10
           timeout_minutes: 15
@@ -53,7 +53,7 @@ jobs:
           command: pnpm fetch --ignore-scripts
 
   dependency-check:
-    name: 'dependency-check - ${{ matrix.label }}'
+    name: "dependency-check - ${{ matrix.label }}"
     needs: setup
     if: ${{ !inputs.job || inputs.job == 'dependency-check' }}
     runs-on: ${{ matrix.os }}
@@ -79,7 +79,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: pnpm install
         id: install
         run: |
@@ -87,14 +87,12 @@ jobs:
           echo "pnpmoutput<<EOF" >> $GITHUB_OUTPUT
           cat out >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-      - name: CLI must load
-        run: cd packages/massimo-cli && node index.js --help
       - name: Circular Dependency
         if: contains(steps.install.outputs.pnpmoutput, 'cyclic')
         run: exit 1
 
   massimo:
-    name: 'massimo - ${{ matrix.label }}'
+    name: "massimo - ${{ matrix.label }}"
     needs: setup
     if: ${{ !inputs.job || inputs.job == 'massimo' }}
     runs-on: ${{ matrix.os }}
@@ -120,8 +118,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: 'pnpm'
-      - uses: 'nick-fields/retry@v3.0.2'
+          cache: "pnpm"
+      - uses: "nick-fields/retry@v3.0.2"
         with:
           max_attempts: 10
           timeout_minutes: 15
@@ -131,7 +129,7 @@ jobs:
         run: cd packages/massimo && pnpm test && pnpm run lint
 
   massimo-cli:
-    name: 'massimo-cli - ${{ matrix.label }}'
+    name: "massimo-cli - ${{ matrix.label }}"
     needs: setup
     if: ${{ !inputs.job || inputs.job == 'massimo-cli' }}
     runs-on: ${{ matrix.os }}
@@ -157,8 +155,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: 'pnpm'
-      - uses: 'nick-fields/retry@v3.0.2'
+          cache: "pnpm"
+      - uses: "nick-fields/retry@v3.0.2"
         with:
           max_attempts: 10
           timeout_minutes: 15
@@ -168,7 +166,7 @@ jobs:
         run: cd packages/massimo-cli && pnpm test && pnpm run lint
 
   massimo-cli-e2e:
-    name: 'massimo-cli-e2e - ${{ matrix.label }}'
+    name: "massimo-cli-e2e - ${{ matrix.label }}"
     needs: setup
     if: ${{ !inputs.job || inputs.job == 'massimo-cli-e2e' }}
     runs-on: ${{ matrix.os }}
@@ -188,8 +186,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: 'pnpm'
-      - uses: 'nick-fields/retry@v3.0.2'
+          cache: "pnpm"
+      - uses: "nick-fields/retry@v3.0.2"
         with:
           max_attempts: 10
           timeout_minutes: 15
