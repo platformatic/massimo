@@ -1,0 +1,27 @@
+{
+  "name": "@platformatic/massimo",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "pnpm -r --workspace-concurrency=1 --if-present test",
+    "test:cleanup": "rm -vrf tmp packages/**/tmp",
+    "lint": "pnpm -r --workspace-concurrency=1 --if-present lint",
+    "lint:markdown": "markdownlint-cli2",
+    "lint:updated-only": "node ./scripts/lint-updated-packages.js",
+    "cleanall": "rm pnpm-lock.yaml && rm -rf node_modules && rm -rf packages/*/node_modules",
+    "clean": "rm -rf node_modules && rm -rf packages/*/node_modules"
+  },
+  "packageManager": "pnpm@9.15.9",
+  "devDependencies": {
+    "@fastify/pre-commit": "^2.1.0",
+    "markdownlint-cli2": "^0.18.0"
+  },
+  "pre-commit": "lint:updated-only, gen-schemas-types",
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}
