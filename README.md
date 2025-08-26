@@ -36,13 +36,13 @@ npm install @platformatic/massimo
 ### Generate an OpenAPI Client
 
 ```bash
-npx @platformatic/massimo-cli http://api.example.com/openapi.json --name myclient
+massimo http://api.example.com/openapi.json --name myclient
 ```
 
 ### Generate a GraphQL Client
 
 ```bash
-npx @platformatic/massimo-cli http://api.example.com/graphql --name myclient --type graphql
+massimo http://api.example.com/graphql --name myclient --type graphql
 ```
 
 ### Use the Generated Client
