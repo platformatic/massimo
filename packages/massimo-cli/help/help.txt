@@ -3,19 +3,19 @@ Create a Fastify plugin that exposes a client for a remote OpenAPI or GraphQL AP
 To create a client for a remote OpenAPI API, you can use the following command:
 
 ```bash
-$ plt-massimo http://example.com/to/schema/file -n myclient
+$ massimo http://example.com/to/schema/file -n myclient
 ```
 
 To create a client for a remote Graphql API, you can use the following command:
 
 ```bash
-$ plt-massimo http://example.com/graphql -n myclient
+$ massimo http://example.com/graphql -n myclient
 ```
 
 Instead of an URL, you can also use a local file:
 
 ```bash
-$ plt-massimo path/to/schema -n myclient
+$ massimo path/to/schema -n myclient
 ```
 
 All the above commands will create a Fastify plugin that exposes a client in the `request` object for the remote API in a folder `myclient` and a file named myclient.js inside it.
@@ -52,7 +52,7 @@ export default async function (app: FastifyInstance) {
 You can generate only the types with the --types-only flag.
 
 ```bash
-$ plt-massimo http://exmaple.com/to/schema/file --name myclient --types-only
+$ massimo http://exmaple.com/to/schema/file --name myclient --types-only
 ```
 
 Will create the single myclient.d.ts file.

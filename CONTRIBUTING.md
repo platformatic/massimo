@@ -29,7 +29,7 @@ pnpm install
 
 ### 3. Link CLI Tools Globally
 
-To use the `plt-massimo` command globally during development:
+To use the `massimo` command globally during development:
 
 ```bash
 pnpm run global-links
@@ -38,7 +38,7 @@ pnpm run global-links
 Verify the setup:
 
 ```bash
-plt-massimo --version
+massimo --version
 ```
 
 ### 4. Setup Docker Environment (Optional)
@@ -46,16 +46,19 @@ plt-massimo --version
 This step is only required if you plan to run integration tests. Choose the appropriate Docker Compose file for your system:
 
 **Intel Macs:**
+
 ```bash
 docker compose -f docker-compose-mac.yml up -d
 ```
 
 **Apple Silicon Macs:**
+
 ```bash
 docker compose -f docker-compose-apple-silicon.yml up -d
 ```
 
 **Windows/Linux:**
+
 ```bash
 docker compose up -d
 ```
@@ -93,6 +96,7 @@ pnpm test
 ```
 
 **Test Configuration:**
+
 - Tests run with concurrency=1 and extended timeouts (300000ms)
 - Pre-commit hooks enforce linting
 - All tests must pass before opening a pull request
@@ -102,11 +106,13 @@ pnpm test
 If tests fail without code changes:
 
 1. Clean the environment:
+
 ```bash
 pnpm cleanall
 ```
 
 2. Clear pnpm store and reinstall:
+
 ```bash
 pnpm store path
 rm -rf /path/from/previous/command
@@ -126,10 +132,12 @@ npm run build              # Build package
 ## Architecture Overview
 
 ### Core Components (packages/)
+
 - **massimo**: Client library for creating clients for remote OpenAPI or GraphQL APIs
-- **massimo-cli**: CLI tool for generating client code (`plt-massimo` command)
+- **massimo-cli**: CLI tool for generating client code (`massimo` command)
 
 ### Client Generation Capabilities
+
 - **OpenAPI**: Generate TypeScript clients from OpenAPI specifications
 - **GraphQL**: Generate TypeScript clients from GraphQL schemas
 - **Frontend Integration**: Support for various frontend frameworks
@@ -138,19 +146,23 @@ npm run build              # Build package
 ## Development Guidelines
 
 ### Workspace Dependencies
+
 - Use `workspace:*` for internal package dependencies
 - All packages share the same version
 - Dependencies are replaced by precise versions during publish by pnpm
 
 ### Configuration
+
 - JSON Schema validation for all configuration files
 - Supports JSON, YAML, and TOML config formats
 - Uses neostandard ESLint configuration
 
 ### API Support
+
 Supports any backend that exposes OpenAPI or GraphQL schemas. The client generator is backend-agnostic with automatic client code generation for TypeScript and JavaScript.
 
 ### Package Structure Patterns
+
 - Each package has its own `package.json` with consistent scripts
 - TypeScript definitions are auto-generated
 - Generated clients follow consistent patterns for different API types (OpenAPI/GraphQL)
@@ -161,19 +173,22 @@ Supports any backend that exposes OpenAPI or GraphQL schemas. The client generat
 To test your local changes with client generation:
 
 1. Ensure CLI tools are linked globally:
+
 ```bash
 pnpm run global-links
 ```
 
 2. Create a test directory:
+
 ```bash
 mkdir test-client
 cd test-client
 ```
 
 3. Generate a client from a remote API:
+
 ```bash
-plt-massimo http://example.com/openapi.json --name testclient
+massimo http://example.com/openapi.json --name testclient
 ```
 
 4. Test the generated client in your application.
@@ -190,6 +205,7 @@ When creating documentation guides, follow this structured approach:
 4. **Conclusion**: Clear summary of what was accomplished and next steps
 
 **Additional Requirements:**
+
 - Include architecture diagrams to illustrate the solution
 - Focus on client generation examples and API integration patterns
 - Prefer using existing project demos and real-world examples over creating artificial examples
@@ -201,7 +217,9 @@ When creating documentation guides, follow this structured approach:
 The documentation is built using [Docusaurus 3](https://docusaurus.io/) and requires both the main Massimo repository and the separate [docs repository](https://github.com/platformatic/docs).
 
 **Setup:**
+
 1. Create a working directory and clone both repositories:
+
 ```bash
 mkdir /workdir && cd /workdir
 git clone https://github.com/platformatic/massimo.git
@@ -209,12 +227,14 @@ git clone https://github.com/platformatic/docs.git
 ```
 
 2. Install dependencies in both repositories:
+
 ```bash
 cd massimo && npm install && cd ..
 cd docs && npm install
 ```
 
 3. Set up the environment and start the development server:
+
 ```bash
 export DOCS=`realpath $PWD/../massimo/docs`
 npm run sync-and-start
@@ -231,6 +251,7 @@ npm run sync-and-start
 ### Creating a Pull Request
 
 1. If your PR fixes a GitHub issue, add this at the top of the PR description:
+
 ```
 fixes #<issue-number>
 ```
@@ -244,10 +265,13 @@ Massimo packages share the same release number and are released together.
 
 1. Update version in root `package.json`
 2. Sync versions across packages:
+
 ```bash
 ./scripts/sync-version.sh
 ```
+
 3. Publish the release:
+
 ```bash
 pnpm -r publish --access=public
 ```
@@ -260,6 +284,7 @@ If you encounter SQLite-related errors:
 
 1. Ensure pnpm was not installed with volta
 2. Clean and reinstall:
+
 ```bash
 rm -rf ./node_modules
 pnpm store prune

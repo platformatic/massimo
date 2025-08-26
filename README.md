@@ -50,38 +50,38 @@ npx @platformatic/massimo-cli http://api.example.com/graphql --name myclient --t
 **JavaScript/TypeScript:**
 
 ```typescript
-import myClient from './myclient/myclient.js'
+import myClient from "./myclient/myclient.js";
 
-const client = await myClient({ 
-  url: 'https://api.example.com' 
-})
+const client = await myClient({
+  url: "https://api.example.com",
+});
 
 // OpenAPI
-const users = await client.getUsers()
-const newUser = await client.createUser({ name: 'John Doe' })
+const users = await client.getUsers();
+const newUser = await client.createUser({ name: "John Doe" });
 
 // GraphQL
 const result = await client.graphql({
-  query: 'query { users { id name } }'
-})
+  query: "query { users { id name } }",
+});
 ```
 
 **Fastify Plugin:**
 
 ```javascript
-import fastify from 'fastify'
-import pltClient from '@platformatic/massimo/fastify-plugin'
+import fastify from "fastify";
+import pltClient from "@platformatic/massimo/fastify-plugin";
 
-const app = fastify()
+const app = fastify();
 
-app.register(pltClient, { 
-  url: 'https://api.example.com',
-  name: 'myapi'
-})
+app.register(pltClient, {
+  url: "https://api.example.com",
+  name: "myapi",
+});
 
-app.get('/users', async (request, reply) => {
-  return request.myapi.getUsers()
-})
+app.get("/users", async (request, reply) => {
+  return request.myapi.getUsers();
+});
 ```
 
 ## 📚 Documentation
@@ -90,40 +90,40 @@ app.get('/users', async (request, reply) => {
 
 ```bash
 # Generate client from URL
-plt-massimo <url> --name <client-name>
+massimo <url> --name <client-name>
 
 # Generate from local file
-plt-massimo ./openapi.json --name myclient
+massimo ./openapi.json --name myclient
 
 # Generate only TypeScript types
-plt-massimo <url> --name myclient --types-only
+massimo <url> --name myclient --types-only
 
 # Specify client type (auto-detected by default)
-plt-massimo <url> --name myclient --type openapi
-plt-massimo <url> --name myclient --type graphql
+massimo <url> --name myclient --type openapi
+massimo <url> --name myclient --type graphql
 
 # Custom output folder
-plt-massimo <url> --name myclient --folder ./clients
+massimo <url> --name myclient --folder ./clients
 ```
 
 ### Client Options
 
 ```typescript
 interface ClientOptions {
-  url: string;                    // Base URL for the API
+  url: string; // Base URL for the API
   headers?: Record<string, string>; // Default headers
-  timeout?: number;               // Request timeout in ms
-  throwOnError?: boolean;         // Throw on HTTP errors
+  timeout?: number; // Request timeout in ms
+  throwOnError?: boolean; // Throw on HTTP errors
 }
 
 const client = await generateMyClient({
-  url: 'https://api.example.com',
+  url: "https://api.example.com",
   headers: {
-    'Authorization': 'Bearer token'
+    Authorization: "Bearer token",
   },
   timeout: 5000,
-  throwOnError: true
-})
+  throwOnError: true,
+});
 ```
 
 ### Authentication
@@ -135,11 +135,11 @@ Configure authentication headers dynamically:
 app.configureMyClient({
   async getHeaders(req, reply) {
     return {
-      'Authorization': `Bearer ${req.user.token}`,
-      'X-User-ID': req.user.id
-    }
-  }
-})
+      Authorization: `Bearer ${req.user.token}`,
+      "X-User-ID": req.user.id,
+    };
+  },
+});
 ```
 
 ### TypeScript Support
@@ -197,7 +197,7 @@ Massimo consists of two main packages:
 
 - **Type Safety**: Full TypeScript support with request/response typing
 - **Error Handling**: Built-in error handling and validation
-- **Request/Response Interceptors**: Middleware support for modifying requests/responses  
+- **Request/Response Interceptors**: Middleware support for modifying requests/responses
 - **Retry Logic**: Configurable retry mechanisms
 - **Telemetry**: Automatic telemetry and tracing propagation
 

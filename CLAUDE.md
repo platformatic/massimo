@@ -35,10 +35,12 @@ npm test               # Run tests for specific package
 ## Architecture
 
 ### Core Components (packages/)
+
 - **massimo**: Client library for creating clients for remote OpenAPI or GraphQL APIs
-- **massimo-cli**: CLI tool for generating client code (`plt-massimo` command)
+- **massimo-cli**: CLI tool for generating client code (`massimo` command)
 
 ### Client Generation Capabilities
+
 - **OpenAPI**: Generate TypeScript clients from OpenAPI specifications
 - **GraphQL**: Generate TypeScript clients from GraphQL schemas
 - **Frontend Integration**: Support for various frontend frameworks
@@ -47,23 +49,28 @@ npm test               # Run tests for specific package
 ## Development Guidelines
 
 ### Workspace Dependencies
+
 Use `workspace:*` for internal package dependencies. All packages share the same version (currently 0.0.1).
 
 ### Testing
+
 - Tests require Docker for database setup
 - Test script automatically selects appropriate Docker Compose file based on OS
 - Tests run with concurrency=1 and extended timeouts (300000ms)
 - Pre-commit hooks enforce linting
 
 ### Configuration
+
 - JSON Schema validation for all configuration files
 - Supports JSON, YAML, and TOML config formats
 - Uses neostandard ESLint configuration
 
 ### API Support
+
 Supports any backend that exposes OpenAPI or GraphQL schemas. The client generator is backend-agnostic with automatic client code generation for TypeScript and JavaScript.
 
 ## Package Structure Patterns
+
 - Each package has its own `package.json` with consistent scripts
 - TypeScript definitions are auto-generated
 - Generated clients follow consistent patterns for different API types (OpenAPI/GraphQL)
@@ -74,6 +81,7 @@ Supports any backend that exposes OpenAPI or GraphQL schemas. The client generat
 All commits must include a DCO (Developer Certificate of Origin) sign-off. Always use `git commit -s` to automatically add the human's sign-off, and manually include Claude's sign-off.
 
 When creating commits, the commit message should include:
+
 - `Co-Authored-By: Claude <noreply@anthropic.com>`
 - `Signed-off-by: Claude <noreply@anthropic.com>`
 
