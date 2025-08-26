@@ -193,8 +193,6 @@ jobs:
           timeout_minutes: 15
           retry_on: error
           command: pnpm install --frozen-lockfile
-      - name: Start docker containers for testing
-        run: docker compose up -d postgresql
       - name: Install E2E Playwright browsers
         run: cd packages/massimo-cli && pnpm exec playwright install
       - name: Run massimo-cli package e2e test suite
