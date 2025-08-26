@@ -15,7 +15,6 @@
 - **Framework Agnostic**: Works with any Node.js application or frontend framework
 - **Authentication Support**: Built-in support for headers, tokens, and custom authentication
 - **Fastify Plugin**: Ready-to-use Fastify plugin for seamless integration
-- **Telemetry Support**: Built-in telemetry propagation for observability
 
 ## 📦 Installation
 
