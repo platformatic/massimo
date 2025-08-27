@@ -285,9 +285,11 @@ The same powerful features you loved in @platformatic/client are now available a
 
 ## Documentation & Resources
 
-- [Getting Started Guide](https://docs.platformatic.dev/massimo/getting-started)
-- [CLI Reference](https://docs.platformatic.dev/massimo/cli-reference)  
-- [API Documentation](https://docs.platformatic.dev/massimo/programmatic)
+- [Official Documentation](https://massimohttp.dev/) - Complete guides and API reference
+- [Getting Started Guide](https://massimohttp.dev/getting-started)
+- [CLI Reference](https://massimohttp.dev/reference/cli-reference)  
+- [Frontend Client Guide](https://massimohttp.dev/reference/frontend)
+- [Programmatic API](https://massimohttp.dev/reference/programmatic)
 - [GitHub Repository](https://github.com/platformatic/massimo)
 
 Join our [Discord community](https://discord.gg/platformatic) for support and to connect with other developers using Massimo!
