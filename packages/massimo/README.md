@@ -1,6 +1,6 @@
 # @platformatic/massimo
 
-Check out the full documentation for Massimo on [Massimo](http://todo).
+Check out the full documentation for Massimo on [massimohttp.dev](https://massimohttp.dev).
 
 ## Install
 
