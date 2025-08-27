@@ -14,25 +14,25 @@ Since its initial release, what started as a developer tool has evolved into an 
 
 ## Complete Feature Overview
 
-Massimo is a powerful API SDK client and CLI tool for creating fully-typed clients for remote OpenAPI or GraphQL APIs. Here's everything you need to know about its comprehensive, production-proven feature set:
+Massimo is a powerful API SDK client and CLI tool for creating fully-typed clients for remote [OpenAPI](https://www.openapis.org/) or [GraphQL](https://graphql.org/) APIs. Here's everything you need to know about its comprehensive, production-proven feature set:
 
 ### 🚀 Core Features
 
-**OpenAPI & GraphQL Support**
-- Generate typed clients from OpenAPI 3.x specifications with full TypeScript support
-- Create GraphQL clients from schemas with automatic type generation
-- Support for any backend that exposes OpenAPI or GraphQL endpoints
+**[OpenAPI](https://www.openapis.org/) & [GraphQL](https://graphql.org/) Support**
+- Generate typed clients from [OpenAPI 3.x](https://spec.openapis.org/oas/v3.1.0) specifications with full [TypeScript](https://www.typescriptlang.org/) support
+- Create [GraphQL](https://graphql.org/) clients from schemas with automatic type generation
+- Support for any backend that exposes [OpenAPI](https://www.openapis.org/) or [GraphQL](https://graphql.org/) endpoints
 
 **Type-Safe Development**
-- Full TypeScript-first development experience
-- Automatically generated TypeScript types for complete type safety
+- Full [TypeScript](https://www.typescriptlang.org/)-first development experience
+- Automatically generated [TypeScript](https://www.typescriptlang.org/) types for complete type safety
 - Request and response type validation with detailed error messages
-- Support for complex OpenAPI schemas including nested objects and arrays
+- Support for complex [OpenAPI](https://www.openapis.org/) schemas including nested objects and arrays
 
 **Framework Integration**
-- Works seamlessly with any JavaScript framework (Node.js, React, Vue, Angular)
-- First-class Fastify plugin for server-side integration
-- Browser-compatible clients using `fetch` API
+- Works seamlessly with any [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) framework ([Node.js](https://nodejs.org/), [React](https://react.dev/), [Vue](https://vuejs.org/), [Angular](https://angular.dev/))
+- First-class [Fastify](https://fastify.dev/) plugin for server-side integration
+- Browser-compatible clients using native [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API
 - Support for both server and client environments
 
 ### 🛠️ CLI Tool Features
@@ -56,13 +56,13 @@ massimo http://api.example.com/openapi.json --types-only --name myclient
 
 **Advanced CLI Options**
 - `--frontend` - Generate browser-compatible clients using `fetch`
-- `--language js|ts` - Choose JavaScript or TypeScript output
+- `--language js|ts` - Choose [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) or [TypeScript](https://www.typescriptlang.org/) output
 - `--full-response` - Return complete response objects instead of just body
 - `--full-request` - Wrap parameters in `body`, `headers`, `query` structure
 - `--validate-response` - Enable response validation against schema
 - `--optional-headers` - Mark specific headers as optional
 - `--typescript` - Generate TypeScript plugin files
-- `--with-credentials` - Add credentials support for CORS requests
+- `--with-credentials` - Add credentials support for [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) requests
 
 ### 📦 Client Library Features
 
@@ -120,30 +120,82 @@ app.configureMyClient({
 - Support for various authentication schemes (Bearer, API Key, etc.)
 - CORS credentials handling for browser clients
 
-### 🌐 Frontend & Browser Support
+### 🌐 Two Client Types: Server vs Frontend
 
-**Frontend Client Generation**
-- Generate browser-compatible clients using native `fetch` API
-- Support for both named operations and factory patterns
-- Global configuration for base URLs and default headers
+Massimo generates two fundamentally different types of clients depending on your target environment:
 
-**Frontend Client Usage**
+#### **Server-Side Clients ([Node.js](https://nodejs.org/)/[Fastify](https://fastify.dev/))**
+Built on **[Undici](https://undici.nodejs.org/)** for maximum performance and Node.js compatibility:
+
+```bash
+# Generate server-side client (default)
+massimo http://api.example.com/openapi.json --name myclient
+```
+
+**Key Features:**
+- Uses [Undici](https://undici.nodejs.org/) [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP) client for optimal Node.js performance
+- Built-in connection pooling and [HTTP/2](https://developer.mozilla.org/en-US/docs/Glossary/HTTP_2) support
+- Advanced timeout controls (body timeout, headers timeout)
+- Custom dispatchers and agents for fine-tuned control
+- Full telemetry and tracing integration
+- Designed for high-throughput server applications
+
 ```javascript
-// Named operations approach
+// Server-side client usage
+import myClient from './myclient/myclient.js';
+
+const client = await myClient({
+  url: 'https://api.example.com',
+  bodyTimeout: 30000,
+  headersTimeout: 10000,
+  dispatcher: customAgent // Custom Undici agent
+});
+
+// Works seamlessly in Fastify
+app.get('/users', async (request) => {
+  return request.myclient.getUsers(); // Automatic telemetry propagation
+});
+```
+
+#### **Frontend Clients (Browser/Fetch)**
+**Zero dependencies** - uses native browser [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API):
+
+```bash
+# Generate frontend client
+massimo http://api.example.com/openapi.json --frontend --name myclient
+```
+
+**Key Features:**
+- **No external dependencies** - pure [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)/[TypeScript](https://www.typescriptlang.org/)
+- Uses native browser [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API
+- Optimized bundle size for frontend applications
+- Support for [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) credentials and browser security policies
+- Works in any [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) environment with fetch support
+
+```javascript
+// Frontend client - two usage patterns available
+
+// Pattern 1: Named operations with global state
 import { setBaseUrl, getMovies, setDefaultHeaders } from './api.js';
 
 setBaseUrl('https://api.example.com');
 setDefaultHeaders({ Authorization: 'Bearer token' });
-const movies = await getMovies({});
+const movies = await getMovies({}); // Uses global config
 
-// Factory approach
+// Pattern 2: Factory approach (isolated instances)
 import build from './api.js';
 
 const client = build('https://api.example.com', {
   headers: { Authorization: 'Bearer token' }
 });
-const movies = await client.getMovies({});
+const movies = await client.getMovies({}); // Self-contained
 ```
+
+**Bundle Impact:**
+- Server client: Includes Undici (~200KB) for performance
+- Frontend client: **Zero dependencies** - only your generated code (~5-10KB)
+
+This architectural difference means you can use the same OpenAPI spec to generate both a high-performance server client for your backend services AND a lightweight, dependency-free client for your frontend applications!
 
 ### 🏗️ Advanced Features
 
