@@ -2,7 +2,7 @@
 
 Today marks a significant milestone in the evolution of type-safe API development. What began as **@platformatic/client** in our [v0.19.0 release](https://blog.platformatic.dev/its-platformatic-client-time-in-the-v0190-release) has grown into something much bigger—a production-proven, enterprise-grade solution now powering companies like [Spendesk](https://www.businesswire.com/news/home/20230929251750/en/Spendesk-Adopts-Platformatic-to-Enhance-Backend-Development-Efficiency), who are not only using Massimo in production but actively contributing to its development.
 
-We're thrilled to introduce **Massimo** (formerly @platformatic/client)—not just a new name, but the next evolution of type-safe API client generation. This relaunch also marks Massimo's independence as standalone packages without the @platformatic scope. 
+We're thrilled to introduce **[Massimo](https://massimohttp.dev/)** (formerly @platformatic/client)—not just a new name, but the next evolution of type-safe API client generation. This relaunch also marks Massimo's independence as standalone packages without the @platformatic scope. 
 
 ## Why "Massimo"?
 
@@ -15,6 +15,32 @@ Since its initial release, what started as a developer tool has evolved into an 
 ## Complete Feature Overview
 
 Massimo is a powerful API SDK client and CLI tool for creating fully-typed clients for remote [OpenAPI](https://www.openapis.org/) or [GraphQL](https://graphql.org/) APIs. Here's everything you need to know about its comprehensive, production-proven feature set:
+
+### 🏗️ Dual Architecture: Library + Generator
+
+Massimo provides **two complementary approaches** to API client development:
+
+**1. Code Generator (`massimo-cli`)**
+- Generates standalone, dependency-free client code at build time
+- Creates TypeScript/JavaScript files you can commit to your repository
+- Perfect for teams who want full control and transparency over their API client code
+- Ideal for frontend applications where bundle size matters
+
+**2. Runtime Library (`massimo`)**
+- Dynamic client creation from schemas at runtime  
+- Uses the same TypeScript generation engine internally for type safety
+- Perfect for server-side applications and rapid prototyping
+- Handles schema updates automatically without manual regeneration
+
+**The Key Connection:**
+The generator doesn't just create standalone files - it's also the **type-safety engine** that powers the runtime library. When you use the runtime library, it uses the same code generation logic internally to ensure your API calls are fully typed, even when created dynamically.
+
+This dual approach means you can choose the right strategy for your use case:
+- **Frontend apps**: Use the generator for zero-dependency, optimized bundles
+- **Backend services**: Use the library for dynamic, runtime client creation with generated type safety
+- **Hybrid projects**: Mix both approaches as needed
+
+Both approaches use the same underlying type generation system, ensuring consistency and type safety across your entire application stack.
 
 ### 🚀 Core Features
 
@@ -41,6 +67,9 @@ The `massimo-cli` provides extensive command-line functionality:
 
 **Client Generation Options**
 ```bash
+# Install CLI
+npm install -g massimo-cli
+
 # Generate OpenAPI client
 massimo http://api.example.com/openapi.json --name myclient
 
