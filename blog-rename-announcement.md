@@ -91,7 +91,7 @@ massimo http://api.example.com/openapi.json --types-only --name myclient
 - `--validate-response` - Enable response validation against schema
 - `--optional-headers` - Mark specific headers as optional
 - `--typescript` - Generate TypeScript plugin files
-- `--with-credentials` - Add credentials support for [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) requests
+- `--with-credentials` - Frontend client only: adds `credentials: 'include'` to fetch calls ([learn more about credentials](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#including_credentials))
 
 ### 📦 Client Library Features
 
