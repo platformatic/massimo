@@ -2,7 +2,7 @@
   "name": "@platformatic/massimo",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "workspaces": [
     "packages/*"
   ],
