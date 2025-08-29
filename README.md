@@ -1,6 +1,6 @@
 # Massimo
 
-[![npm version](https://badge.fury.io/js/@platformatic%2Fmassimo.svg)](https://badge.fury.io/js/@platformatic%2Fmassimo)
+[![npm version](https://badge.fury.io/js/massimo.svg)](https://badge.fury.io/js/massimo)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 **Massimo** is an API SDK client and CLI tool for creating fully-typed clients for remote OpenAPI or GraphQL APIs. Generate TypeScript/JavaScript clients with automatic type inference, authentication support, and seamless integration with popular frontend frameworks.
