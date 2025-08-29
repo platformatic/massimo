@@ -21,13 +21,13 @@
 ### CLI Tool
 
 ```bash
-npm install -g @platformatic/massimo-cli
+npm install -g massimo-cli
 ```
 
 ### Library
 
 ```bash
-npm install @platformatic/massimo
+npm install massimo
 ```
 
 ## 🛠️ Quick Start
