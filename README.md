@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/massimo-logo-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="./assets/massimo-logo-light.svg">
-    <img alt="Massimo Logo" src="./assets/massimo-logo-light.svg" width="400">
+    <img alt="Massimo Logo" src="./assets/massimo-logo-light.svg" width="250">
   </picture>
 </div>
 
