@@ -46,7 +46,7 @@ massimo http://api.example.com/graphql --name myclient --type graphql
 
 ### Use the Generated Client
 
-**JavaScript/TypeScript (Node.js, Unidici-based):**
+**JavaScript/TypeScript (Node.js, Undici-based):**
 
 ```typescript
 import myClient from "./myclient/myclient.js";
