@@ -65,6 +65,38 @@ const result = await client.graphql({
 });
 ```
 
+**Frontend Client (Browser, Fetch-based):**
+
+```typescript
+// Generate frontend client
+// massimo http://api.example.com/openapi.json --frontend --name myclient
+
+// Option 1: Named operations
+import { setBaseUrl, getUsers, createUser } from "./myclient/api.js";
+
+setBaseUrl("https://api.example.com");
+
+// Make type-safe API calls
+const users = await getUsers({});
+const newUser = await createUser({
+  name: "Jane Doe",
+  email: "jane@example.com",
+});
+
+// Option 2: Factory method
+import buildClient from "./myclient/api.js";
+
+const client = buildClient("https://api.example.com");
+
+// Set default headers for authentication
+client.setDefaultHeaders({
+  Authorization: "Bearer token",
+});
+
+const users = await client.getUsers({});
+const user = await client.getUserById({ id: "123" });
+```
+
 **Fastify Plugin:**
 
 ```javascript
