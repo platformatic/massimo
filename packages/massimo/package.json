@@ -1,6 +1,6 @@
 {
   "name": "@platformatic/massimo",
-  "version": "3.0.0-alpha.5",
+  "version": "0.1.0",
   "description": "A client for HTTP services.",
   "main": "index.js",
   "type": "module",
