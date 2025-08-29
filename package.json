@@ -20,7 +20,7 @@
     "@fastify/pre-commit": "^2.2.0",
     "markdownlint-cli2": "^0.18.1"
   },
-  "pre-commit": "lint:updated-only, gen-schemas-types",
+  "pre-commit": "lint:updated-only",
   "engines": {
     "node": ">=22.18.0"
   }
