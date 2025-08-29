@@ -1,7 +1,19 @@
-# Massimo
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/massimo-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/massimo-logo-light.svg">
+    <img alt="Massimo Logo" src="./assets/massimo-logo-light.svg" width="250">
+  </picture>
+</div>
+
+<h1 align="center">Massimo</h1>
+
+<div align="center">
 
 [![npm version](https://badge.fury.io/js/massimo.svg)](https://badge.fury.io/js/massimo)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+</div>
 
 **Massimo** is an API SDK client and CLI tool for creating fully-typed clients for remote OpenAPI or GraphQL APIs. Generate TypeScript/JavaScript clients with automatic type inference, authentication support, and seamless integration with popular frontend frameworks.
 
