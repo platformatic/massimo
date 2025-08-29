@@ -49,6 +49,9 @@ massimo http://api.example.com/graphql --name myclient --type graphql
 **JavaScript/TypeScript (Node.js, Undici-based):**
 
 ```typescript
+// Generate Node.js client
+// massimo http://api.example.com/openapi.json --name myclient
+
 import myClient from "./myclient/myclient.js";
 
 const client = await myClient({
