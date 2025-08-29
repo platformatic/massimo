@@ -48,6 +48,16 @@ massimo http://api.example.com/graphql --name myclient --type graphql
 
 **JavaScript/TypeScript (Node.js, Undici-based):**
 
+The undici-based client is preferred for Node.js environments when you need:
+
+- Maximum performance - Undici is the fastest HTTP/1.1 client for Node.js
+- Advanced connection management with pooling, keep-alive, and pipelining
+- HTTP/2 support with full capabilities
+- Node.js optimized runtime (bundled with Node.js 18+)
+- Advanced features like interceptors, custom dispatchers, and WebSocket support
+- Efficient streaming with pipeline and stream methods for large payloads
+- Comprehensive error types and network-level error handling
+
 ```typescript
 // Generate Node.js client
 // massimo http://api.example.com/openapi.json --name myclient
@@ -69,6 +79,16 @@ const result = await client.graphql({
 ```
 
 **Frontend Client (Browser, Fetch-based):**
+
+The fetch-based client is preferred for browser environments and when you need:
+
+- Browser compatibility with native Fetch API (Undici is Node.js-only)
+- Zero dependencies for minimal bundle size
+- Isomorphic code that runs in browsers and Node.js
+- Maximum compatibility across all JavaScript runtimes
+- Simple HTTP requests without advanced configuration
+- Publishing to npm with broadest runtime support
+- Independence from specific undici version features
 
 ```typescript
 // Generate frontend client
