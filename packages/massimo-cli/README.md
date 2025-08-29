@@ -5,7 +5,7 @@ Check out the full documentation for Massimo on [massimohttp.dev](https://massim
 ## Install
 
 ```sh
-npm install @platformatic/massimo-cli
+npm install massimo-cli
 ```
 
 ## License

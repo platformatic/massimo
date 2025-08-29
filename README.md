@@ -33,13 +33,13 @@
 ### CLI Tool
 
 ```bash
-npm install -g @platformatic/massimo-cli
+npm install -g massimo-cli
 ```
 
 ### Library
 
 ```bash
-npm install @platformatic/massimo
+npm install massimo
 ```
 
 ## 🛠️ Quick Start
@@ -58,9 +58,22 @@ massimo http://api.example.com/graphql --name myclient --type graphql
 
 ### Use the Generated Client
 
-**JavaScript/TypeScript:**
+**JavaScript/TypeScript (Node.js, Undici-based):**
+
+The undici-based client is preferred for Node.js environments when you need:
+
+- Maximum performance - Undici is the fastest HTTP/1.1 client for Node.js
+- Advanced connection management with pooling, keep-alive, and pipelining
+- HTTP/2 support with full capabilities
+- Node.js optimized runtime (bundled with Node.js 18+)
+- Advanced features like interceptors, custom dispatchers, and WebSocket support
+- Efficient streaming with pipeline and stream methods for large payloads
+- Comprehensive error types and network-level error handling
 
 ```typescript
+// Generate Node.js client
+// massimo http://api.example.com/openapi.json --name myclient
+
 import myClient from "./myclient/myclient.js";
 
 const client = await myClient({
@@ -75,6 +88,48 @@ const newUser = await client.createUser({ name: "John Doe" });
 const result = await client.graphql({
   query: "query { users { id name } }",
 });
+```
+
+**Frontend Client (Browser, Fetch-based):**
+
+The fetch-based client is preferred for browser environments and when you need:
+
+- Browser compatibility with native Fetch API (Undici is Node.js-only)
+- Zero dependencies for minimal bundle size
+- Isomorphic code that runs in browsers and Node.js
+- Maximum compatibility across all JavaScript runtimes
+- Simple HTTP requests without advanced configuration
+- Publishing to npm with broadest runtime support
+- Independence from specific undici version features
+
+```typescript
+// Generate frontend client
+// massimo http://api.example.com/openapi.json --frontend --name myclient
+
+// Option 1: Named operations
+import { setBaseUrl, getUsers, createUser } from "./myclient/api.js";
+
+setBaseUrl("https://api.example.com");
+
+// Make type-safe API calls
+const users = await getUsers({});
+const newUser = await createUser({
+  name: "Jane Doe",
+  email: "jane@example.com",
+});
+
+// Option 2: Factory method
+import buildClient from "./myclient/api.js";
+
+const client = buildClient("https://api.example.com");
+
+// Set default headers for authentication
+client.setDefaultHeaders({
+  Authorization: "Bearer token",
+});
+
+const users = await client.getUsers({});
+const user = await client.getUserById({ id: "123" });
 ```
 
 **Fastify Plugin:**
