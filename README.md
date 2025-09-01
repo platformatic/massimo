@@ -136,7 +136,7 @@ const user = await client.getUserById({ id: "123" });
 
 ```javascript
 import fastify from "fastify";
-import pltClient from "massimo/fastify-plugin";
+import pltClient from "massimo/fastify-plugin.js";
 
 const server = fastify();
 
@@ -168,7 +168,7 @@ Massimo generates full TypeScript support for Fastify. To add types information 
 ```typescript
 import { type MoviesClient } from "./movies/movies.ts";
 import fastify, { type FastifyRequest } from "fastify";
-import pltClient from "massimo/fastify-plugin";
+import pltClient from "massimo/fastify-plugin.js";
 
 const server = fastify();
 server.register(pltClient, { url: "http://example.com" });
