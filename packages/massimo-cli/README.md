@@ -1,4 +1,4 @@
-# @platformatic/massimo-cli
+# massimo-cli
 
 Check out the full documentation for Massimo on [massimohttp.dev](https://massimohttp.dev).
 
