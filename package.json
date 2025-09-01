@@ -1,8 +1,8 @@
 {
-  "name": "@platformatic/massimo-private",
+  "name": "massimo",
   "version": "0.1.3",
   "private": true,
-  "type": "commonjs",
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],

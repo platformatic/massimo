@@ -136,7 +136,7 @@ const user = await client.getUserById({ id: "123" });
 
 ```javascript
 import fastify from "fastify";
-import pltClient from "@platformatic/massimo/fastify-plugin";
+import pltClient from "massimo/fastify-plugin";
 
 const app = fastify();
 
@@ -250,8 +250,8 @@ interface GraphQLClient {
 
 Massimo consists of two main packages:
 
-- **`@platformatic/massimo`**: Core client library for generating and using API clients
-- **`@platformatic/massimo-cli`**: Command-line tool for generating client code
+- **`massimo`**: Core client library for generating and using API clients
+- **`massimo-cli`**: Command-line tool for generating client code
 
 ### Supported APIs
 

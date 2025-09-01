@@ -37,7 +37,7 @@ test('graphql client generation (javascript)', async t => {
 
   const plugin = `
 import { resolve } from 'node:path'
-import { buildGraphQLClient } from '@platformatic/massimo'
+import { buildGraphQLClient } from 'massimo'
 
 export default async function (app) {
   const client = await buildGraphQLClient({
@@ -120,7 +120,7 @@ test('graphql client generation (typescript)', async t => {
 /// <reference types="./movies" />
 import { type FastifyPluginAsync } from 'fastify'
 import { resolve } from 'node:path'
-import { buildGraphQLClient } from '@platformatic/massimo'
+import { buildGraphQLClient } from 'massimo'
 
 const myPlugin: FastifyPluginAsync<{}> = async (app, options) => {
   const client = await buildGraphQLClient({
