@@ -135,13 +135,15 @@ const user = await client.getUserById({ id: "123" });
 **Fastify Plugin:**
 
 ```javascript
-const fastify = require("fastify")();
-const pltClient = require("@platformatic/client/fastify-plugin");
+import fastify from "fastify";
+import pltClient from "@platformatic/client/fastify-plugin";
 
-fastify.register(pltClient, { url: "http://example.com" });
+const server = fastify();
+
+server.register(pltClient, { url: "http://example.com" });
 
 // GraphQL
-fastify.post("/", async (request, reply) => {
+server.post("/", async (request, reply) => {
   const res = await request.movies.graphql({
     query: 'mutation { saveMovie(input: { title: "foo" }) { id, title } }',
   });
@@ -149,12 +151,12 @@ fastify.post("/", async (request, reply) => {
 });
 
 // OpenAPI
-fastify.post("/", async (request, reply) => {
+server.post("/", async (request, reply) => {
   const res = await request.movies.createMovie({ title: "foo" });
   return res;
 });
 
-fastify.listen({ port: 3000 });
+server.listen({ port: 3000 });
 ```
 
 Note that you would need to install @platformatic/client as a dependency.
