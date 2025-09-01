@@ -154,7 +154,7 @@ server.post("/", async (request, reply) => {
 server.listen({ port: 3000 });
 ```
 
-Note that you would need to install @platformatic/client as a dependency.
+Note that you would need to install `massimo` as a dependency.
 
 **TypeScript with Fastify Plugin:**
 
