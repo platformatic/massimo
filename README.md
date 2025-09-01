@@ -74,7 +74,7 @@ The undici-based client is preferred for Node.js environments when you need:
 // Generate Node.js client
 // massimo http://api.example.com/openapi.json --name myclient
 
-import myClient from "./myclient/myclient.js";
+import myClient from "./myclient/myclient.mjs";
 
 const client = await myClient({
   url: "https://api.example.com",
@@ -107,7 +107,7 @@ The fetch-based client is preferred for browser environments and when you need:
 // massimo http://api.example.com/openapi.json --frontend --name myclient
 
 // Option 1: Named operations
-import { setBaseUrl, getUsers, createUser } from "./myclient/api.js";
+import { setBaseUrl, getUsers, createUser } from "./myclient/api.mjs";
 
 setBaseUrl("https://api.example.com");
 
@@ -119,7 +119,7 @@ const newUser = await createUser({
 });
 
 // Option 2: Factory method
-import buildClient from "./myclient/api.js";
+import buildClient from "./myclient/api.mjs";
 
 const client = buildClient("https://api.example.com");
 
@@ -136,17 +136,59 @@ const user = await client.getUserById({ id: "123" });
 
 ```javascript
 import fastify from "fastify";
-import pltClient from "@platformatic/massimo/fastify-plugin";
+import pltClient from "massimo/fastify-plugin.js";
 
-const app = fastify();
+const server = fastify();
 
-app.register(pltClient, {
-  url: "https://api.example.com",
-  name: "myapi",
+server.register(pltClient, {
+  url: "http://example.com",
+  type: "openapi", // or "graphql"
 });
 
-app.get("/users", async (request, reply) => {
-  return request.myapi.getUsers();
+// OpenAPI
+server.post("/", async (request, reply) => {
+  const res = await request.movies.createMovie({ title: "foo" });
+  return res;
+});
+
+server.listen({ port: 3000 });
+```
+
+Note that you would need to install `massimo` as a dependency.
+
+**TypeScript with Fastify Plugin:**
+
+Massimo generates full TypeScript support for Fastify. To add types information to your plugin, you can either extend the FastifyRequest interface globally or locally.
+
+```typescript
+import { type MoviesClient } from "./movies/movies.ts";
+import fastify, { type FastifyRequest } from "fastify";
+import pltClient from "massimo/fastify-plugin.js";
+
+const server = fastify();
+server.register(pltClient, {
+  url: "http://example.com",
+  type: "openapi", // or "graphql"
+});
+
+// Method A: extend the interface globally
+declare module "fastify" {
+  interface FastifyRequest {
+    movies: MoviesClient;
+  }
+}
+
+server.get("/movies", async (request: FastifyRequest, reply: FastifyReply) => {
+  return request.movies.getMovies();
+});
+
+// Method B: use a local request extension
+interface MoviesRequest extends FastifyRequest {
+  movies: MoviesClient;
+}
+
+server.get("/movies", async (request: MoviesRequest, reply: FastifyReply) => {
+  return request.movies.getMovies();
 });
 ```
 
@@ -250,8 +292,8 @@ interface GraphQLClient {
 
 Massimo consists of two main packages:
 
-- **`@platformatic/massimo`**: Core client library for generating and using API clients
-- **`@platformatic/massimo-cli`**: Command-line tool for generating client code
+- **`massimo`**: Core client library for generating and using API clients
+- **`massimo-cli`**: Command-line tool for generating client code
 
 ### Supported APIs
 

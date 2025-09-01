@@ -29,7 +29,7 @@ test(name, async () => {
 
   equal(await isFileAccessible(join(dir, name, name + '.js')), false)
 
-  const typeDef = join(dir, name, name + '-types.d.ts')
+  const typeDef = join(dir, name, name + '-types.d.mts')
   const def = await readFile(typeDef, 'utf-8')
   ok(def.includes(`export type PutMartelloRequest = {
   
@@ -63,7 +63,7 @@ type BuildOptions = {
 }
 export default function build(url: string, options?: BuildOptions): PlatformaticFrontendClient`))
 
-  const typeFile = join(dir, name, name + '.ts')
+  const typeFile = join(dir, name, name + '.mts')
   const data = await readFile(typeFile, 'utf-8')
   ok(data.includes(`
   if (response.status === 204) {

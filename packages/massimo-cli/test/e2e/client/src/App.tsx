@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 // Note: this import works only after generating the frontend code through the Platformatic CLI
-import { createMovie, getMovies, setBaseUrl, updateMovie } from './generated/api/api.ts'
+import { createMovie, getMovies, setBaseUrl, updateMovie } from './generated/api/api.mts'
 
 setBaseUrl('http://localhost:9999')
 

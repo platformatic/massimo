@@ -50,7 +50,7 @@ test('openapi client generation (javascript)', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './movies/movies.js'
+import movies from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${runtimeUrl}' })
@@ -115,7 +115,7 @@ test('openapi client generation (typescript)', async t => {
 
   const toWrite = `
 import Fastify from 'fastify';
-import { generateMoviesClient } from './movies/movies.js';
+import { generateMoviesClient } from './movies/movies.mjs';
 
 const app = Fastify({ logger: true });
 
@@ -213,7 +213,7 @@ test('openapi client generation (javascript) with slash at the end', async t => 
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './movies/movies.js'
+import movies from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 
@@ -308,7 +308,7 @@ test('datatypes', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './movies/movies.js'
+import movies from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${runtimeUrl}' })
@@ -432,7 +432,7 @@ test('full-response option', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './movies/movies.js'
+import movies from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${runtimeUrl}' })
@@ -518,7 +518,7 @@ test('openapi client generation (javascript) from file', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './movies/movies.js'
+import movies from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${runtimeUrl}' })
@@ -585,14 +585,14 @@ test('name with dashes', async t => {
     const pkg = JSON.parse(await fs.readFile(join(dir, 'uncanny-movies', 'package.json'), 'utf-8'))
     same(pkg, {
       name: 'uncanny-movies',
-      main: './uncanny-movies.js',
-      types: './uncanny-movies.d.ts'
+      main: './uncanny-movies.mjs',
+      types: './uncanny-movies.d.mts'
     })
   }
 
   const toWrite = `
 import Fastify from 'fastify'
-import uncannyMovies from './uncanny-movies/uncanny-movies.js'
+import uncannyMovies from './uncanny-movies/uncanny-movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await uncannyMovies({ url: '${runtimeUrl}' })
@@ -656,7 +656,7 @@ test('no dashes typescript', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import { generateUncannyMoviesClient } from './uncanny-movies/uncanny-movies.js'
+import { generateUncannyMoviesClient } from './uncanny-movies/uncanny-movies.mjs'
 
 const app = Fastify({ logger: true })
 
@@ -750,14 +750,14 @@ test('name with tilde', async t => {
     const pkg = JSON.parse(await fs.readFile(join(dir, 'uncanny~movies', 'package.json'), 'utf-8'))
     same(pkg, {
       name: 'uncanny~movies',
-      main: './uncanny~movies.js',
-      types: './uncanny~movies.d.ts'
+      main: './uncanny~movies.mjs',
+      types: './uncanny~movies.d.mts'
     })
   }
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './uncanny~movies/uncanny~movies.js'
+import movies from './uncanny~movies/uncanny~movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${runtimeUrl}' })
@@ -811,7 +811,7 @@ test('openapi client generation from YAML file', async t => {
   same(json.openapi, '3.0.3')
 
   // Check operation names are correctly capitalized
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const typeData = await readFile(typeFile, 'utf-8')
 
   equal(match(typeData, 'getMovies(req: GetMoviesRequest): Promise<GetMoviesResponses>;'), true)
@@ -823,7 +823,7 @@ test('nested optional parameters are correctly identified', async t => {
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapiFile, '--name', 'movies', '--full', 'false'])
 
   // check the type file has the correct implementation for the request
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const data = await readFile(typeFile, 'utf-8')
 
   equal(
@@ -839,7 +839,7 @@ test('request with same parameter name in body/path/header/query', async t => {
   const openapiFile = join(import.meta.dirname, 'fixtures', 'same-parameter-name-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapiFile, '--name', 'movies', '--full', 'false'])
   // check the type file has the correct implementation for the request
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -879,7 +879,7 @@ test('openapi client generation (javascript) from file with fullRequest, fullRes
     ])
 
     // check the type file has the correct implementation for the request and the response
-    const typeFile = join(dir, 'full', 'full.d.ts')
+    const typeFile = join(dir, 'full', 'full.d.mts')
     const data = await readFile(typeFile, 'utf-8')
     equal(
       data.includes(`
@@ -908,7 +908,7 @@ export type Full = {
 }`),
       true
     )
-    const implementationFile = join(dir, 'full', 'full.js')
+    const implementationFile = join(dir, 'full', 'full.mjs')
     const implementationData = await readFile(implementationFile, 'utf-8')
 
     // check the implementation instantiate the client with fullRequest and fullResponse
@@ -964,7 +964,7 @@ test('do not generate implementation file if in @platformatic/service', async t 
     ])
 
     // check the type file has the correct implementation for the request and the response
-    const typeFile = join(dir, 'full', 'full.d.ts')
+    const typeFile = join(dir, 'full', 'full.d.mts')
     const data = await readFile(typeFile, 'utf-8')
     equal(
       data.includes(`
@@ -1012,7 +1012,7 @@ test('optional-headers option', async t => {
     'false'
   ])
 
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -1030,7 +1030,7 @@ test('common parameters in paths', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'common-parameters', 'openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--full-request'])
 
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -1099,7 +1099,7 @@ export type PostPathWithFieldIdRequest = {
 
   const toWrite = `
 import Fastify from 'fastify'
-import commonparams from './commonparams/commonparams.js'
+import commonparams from './commonparams/commonparams.mjs'
 
 const app = Fastify({ logger: true })
 const client = await commonparams({ url: '${runtimeUrl}' })
@@ -1162,7 +1162,7 @@ test('requestbody as array', async t => {
 
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'requestbody-as-array-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--full', 'false'])
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const data = await readFile(typeFile, 'utf-8')
 
   equal(
@@ -1186,7 +1186,7 @@ test('requestBody and params should generate a full request', async t => {
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapiFile, '--name', 'movies', '--full', 'false'])
 
   // check the type file has the correct implementation for the request
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -1204,7 +1204,7 @@ test('support formdata', async t => {
 
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'multipart-formdata-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--full', 'false'])
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -1232,7 +1232,7 @@ test('export formdata on full request object', async t => {
 
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'multipart-formdata-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--full-request'])
-  const typeFile = join(dir, 'movies', 'movies.d.ts')
+  const typeFile = join(dir, 'movies', 'movies.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(data.includes("import { type FormData } from 'undici"), true)
   equal(
@@ -1250,7 +1250,7 @@ test('client with watt.json and skipConfigUpdate', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'client-with-config', 'openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'client', '--full-request'])
 
-  const data = await readFile(join(dir, 'client', 'client.d.ts'), 'utf-8')
+  const data = await readFile(join(dir, 'client', 'client.d.mts'), 'utf-8')
   ok(data.includes("import { type FormData } from 'undici"))
 
   const wattConfig = JSON.parse(
@@ -1266,7 +1266,7 @@ test('tsdoc client operation descriptions', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'tsdoc-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'tsdoc', '--full', 'false'])
 
-  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.ts'), 'utf-8')
+  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.mts'), 'utf-8')
 
   // Description and summary on method
   ok(
@@ -1322,7 +1322,7 @@ test('tsdoc client request option descriptions', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'tsdoc-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'tsdoc', '--full', 'false'])
 
-  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.ts'), 'utf-8')
+  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.mts'), 'utf-8')
 
   // Description on title, not on id, built from requestBody scheme #ref
   ok(
@@ -1390,7 +1390,7 @@ test('tsdoc client request option descriptions (full-request)', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'tsdoc-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'tsdoc', '--full-request'])
 
-  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.ts'), 'utf-8')
+  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.mts'), 'utf-8')
 
   // Descriptions from mixed parameters and requestBody schema #ref
   ok(

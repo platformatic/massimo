@@ -23,7 +23,7 @@ function generateTypesFromGraphQL ({ schema, name }) {
 
   const functionName = `generate${capitalize(camelcasedName)}Client`
 
-  writer.writeLine("import { type PlatformaticClientOptions } from '@platformatic/massimo'")
+  writer.writeLine("import { type PlatformaticClientOptions } from 'massimo'")
   writer.blankLine()
 
   writer.write('interface GraphQLQueryOptions').block(() => {
@@ -69,7 +69,7 @@ function generateImplementationFromGraqhQL ({ name, url }) {
     useSingleQuote: true
   })
 
-  writer.writeLine("import { buildGraphQLClient } from '@platformatic/massimo'")
+  writer.writeLine("import { buildGraphQLClient } from 'massimo'")
   writer.writeLine("import { join } from 'node:path'")
   writer.blankLine()
 

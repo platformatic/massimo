@@ -25,7 +25,7 @@ test('body-string', async () => {
 
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapi, '--name', 'full', '--full'])
 
-  const typeFile = join(dir, 'full', 'full.d.ts')
+  const typeFile = join(dir, 'full', 'full.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`

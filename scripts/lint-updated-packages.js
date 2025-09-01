@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-'use strict'
-
-const { execSync } = require('child_process')
+import { execSync } from 'node:child_process'
 
 // Function to get modified files from git status
 function getUpdatedFiles() {

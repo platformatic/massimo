@@ -46,7 +46,7 @@ test('dashes in name', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './uncanny-movies/uncanny-movies.js'
+import movies from './uncanny-movies/uncanny-movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${app.url}' })
@@ -111,7 +111,7 @@ test('dashes in name (typescript)', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import { generateUncannyMoviesClient } from './uncanny-movies/uncanny-movies.js'
+import { generateUncannyMoviesClient } from './uncanny-movies/uncanny-movies.mjs'
 
 const app = Fastify({ logger: true })
 
@@ -211,7 +211,7 @@ test('different folder name', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './uncanny/movies.js'
+import movies from './uncanny/movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${app.url}' })
@@ -283,7 +283,7 @@ test('tilde in name', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './uncanny~movies/uncanny~movies.js'
+import movies from './uncanny~movies/uncanny~movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${app.url}' })

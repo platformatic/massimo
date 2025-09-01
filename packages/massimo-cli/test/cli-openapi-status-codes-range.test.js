@@ -34,11 +34,11 @@ test('status-codes-range', async () => {
     '--full'
   ])
 
-  const typeFile = join(dir, 'full', 'full.d.ts')
+  const typeFile = join(dir, 'full', 'full.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   ok(
     data.includes(
-      "import { type GetHeadersOptions, type PlatformaticClientOptions, type StatusCode1xx, type StatusCode2xx, type StatusCode3xx, type StatusCode4xx, type StatusCode5xx } from '@platformatic/massimo'"
+      "import { type GetHeadersOptions, type PlatformaticClientOptions, type StatusCode1xx, type StatusCode2xx, type StatusCode3xx, type StatusCode4xx, type StatusCode5xx } from 'massimo'"
     )
   )
   ok(

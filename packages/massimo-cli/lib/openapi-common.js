@@ -1,4 +1,4 @@
-import { hasDuplicatedParameters } from '@platformatic/massimo'
+import { hasDuplicatedParameters } from 'massimo'
 import camelcase from 'camelcase'
 import CodeBlockWriter from 'code-block-writer'
 import jsonpointer from 'jsonpointer'
