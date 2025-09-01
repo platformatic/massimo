@@ -1,4 +1,4 @@
-import { generateOperationId } from '@platformatic/massimo'
+import { generateOperationId } from 'massimo'
 import camelcase from 'camelcase'
 import CodeBlockWriter from 'code-block-writer'
 import { writeOperations } from './openapi-common.js'

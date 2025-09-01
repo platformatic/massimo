@@ -84,7 +84,7 @@ test('openapi client generation (javascript)', async t => {
 
   const plugin = `
 import { resolve } from 'node:path'
-import { buildOpenAPIClient }  from '@platformatic/massimo'
+import { buildOpenAPIClient }  from 'massimo'
 
 export default async function (app) {
   const client = await buildOpenAPIClient({
@@ -157,7 +157,7 @@ test('openapi client generation (typescript)', async t => {
 /// <reference types="./movies" />
 import { type FastifyPluginAsync } from 'fastify'
 import { resolve } from 'node:path'
-import { buildOpenAPIClient } from '@platformatic/massimo'
+import { buildOpenAPIClient } from 'massimo'
 
 const myPlugin: FastifyPluginAsync<{}> = async (app, options) => {
   const client = await buildOpenAPIClient({
@@ -251,7 +251,7 @@ test('openapi client generation (typescript) with --types-only', async t => {
   const plugin = `
 /// <reference types="${dir}/movies/movies" />
 import { type FastifyPluginAsync } from 'fastify'
-import pltClient from '@platformatic/massimo/fastify-plugin.js'
+import pltClient from 'massimo/fastify-plugin.js'
 
 const myPlugin: FastifyPluginAsync<{}> = async (app, options) => {
   app.register(pltClient, {
@@ -352,7 +352,7 @@ test('openapi client generation (typescript) with --types-only and --folder', as
   const plugin = `
 /// <reference types="./uncanny/movies" />
 import { type FastifyPluginAsync } from 'fastify'
-import pltClient from '@platformatic/massimo/fastify-plugin.js'
+import pltClient from 'massimo/fastify-plugin.js'
 
 const myPlugin: FastifyPluginAsync<{}> = async (app, options) => {
   app.register(pltClient, {

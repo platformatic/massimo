@@ -1,4 +1,4 @@
-import { generateOperationId } from '@platformatic/massimo'
+import { generateOperationId } from 'massimo'
 import CodeBlockWriter from 'code-block-writer'
 import { writeOperations } from './openapi-common.js'
 import { capitalize, toJavaScriptName } from './utils.js'
@@ -36,7 +36,7 @@ function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, v
     useSingleQuote: true
   })
 
-  writer.writeLine("import { buildOpenAPIClient } from '@platformatic/massimo'")
+  writer.writeLine("import { buildOpenAPIClient } from 'massimo'")
   writer.writeLine("import { join } from 'node:path'")
   writer.blankLine()
 
@@ -117,7 +117,7 @@ function generateTypesFromOpenAPI ({
   }
 
   writer.writeLine(
-    "import { type GetHeadersOptions, type PlatformaticClientOptions, type StatusCode1xx, type StatusCode2xx, type StatusCode3xx, type StatusCode4xx, type StatusCode5xx } from '@platformatic/massimo'"
+    "import { type GetHeadersOptions, type PlatformaticClientOptions, type StatusCode1xx, type StatusCode2xx, type StatusCode3xx, type StatusCode4xx, type StatusCode5xx } from 'massimo'"
   )
   writer.writeLine("import { type FormData } from 'undici'")
   writer.blankLine()

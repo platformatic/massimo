@@ -33,7 +33,7 @@
   "homepage": "https://github.com/platformatic/massimo#readme",
   "dependencies": {
     "@fastify/error": "^4.0.0",
-    "@platformatic/massimo": "workspace:*",
+    "massimo": "workspace:*",
     "camelcase": "~6.3.0",
     "code-block-writer": "^13.0.1",
     "graphql": "^16.8.1",
