@@ -140,14 +140,9 @@ import pltClient from "massimo/fastify-plugin.js";
 
 const server = fastify();
 
-server.register(pltClient, { url: "http://example.com" });
-
-// GraphQL
-server.post("/", async (request, reply) => {
-  const res = await request.movies.graphql({
-    query: 'mutation { saveMovie(input: { title: "foo" }) { id, title } }',
-  });
-  return res;
+server.register(pltClient, {
+  url: "http://example.com",
+  type: "openapi", // or "graphql"
 });
 
 // OpenAPI
@@ -171,7 +166,10 @@ import fastify, { type FastifyRequest } from "fastify";
 import pltClient from "massimo/fastify-plugin.js";
 
 const server = fastify();
-server.register(pltClient, { url: "http://example.com" });
+server.register(pltClient, {
+  url: "http://example.com",
+  type: "openapi", // or "graphql"
+});
 
 // Method A: extend the interface globally
 declare module "fastify" {
