@@ -212,7 +212,49 @@ massimo <url> --name myclient --type graphql
 
 # Custom output folder
 massimo <url> --name myclient --folder ./clients
+
+# Specify module format (ESM or CommonJS)
+massimo <url> --name myclient --module esm
+massimo <url> --name myclient --module cjs
 ```
+
+### Module Format Detection
+
+Massimo automatically detects and generates the appropriate module format (ESM or CommonJS) for your clients:
+
+#### **Auto-Detection (Default Behavior)**
+
+When no `--module` flag is specified, Massimo:
+
+1. **Searches for the nearest `package.json`** starting from the output directory and walking up the directory tree
+2. **If package.json is found**, checks the `type` field:
+   - If `"type": "module"` → Generates ESM files (`.mjs`, `.d.mts`) 
+   - If `"type"` is missing or any other value → Generates CommonJS files (`.cjs`, `.d.ts`)
+3. **If no package.json is found** → Defaults to ESM files (`.mjs`, `.d.mts`)
+4. **Generated files**:
+   - **ESM**: `client.mjs` + `client.d.mts` + `package.json` with `"type": "module"`
+   - **CommonJS**: `client.cjs` + `client.d.ts` + `package.json` without `"type"` field
+
+#### **Explicit Module Format**
+
+When using the `--module` flag:
+
+```bash
+# Force ESM generation
+massimo <url> --name myclient --module esm
+
+# Force CommonJS generation  
+massimo <url> --name myclient --module cjs
+```
+
+This overrides any auto-detection and generates files in the specified format.
+
+#### **Generated File Extensions**
+
+| Module Format | Implementation | Types | Package.json |
+|--------------|----------------|--------|--------------|
+| **ESM** | `.mjs` | `.d.mts` | `"type": "module"` |
+| **CommonJS** | `.cjs` | `.d.ts` | No `"type"` field |
 
 ### Client Options
 

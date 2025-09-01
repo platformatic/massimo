@@ -11,7 +11,8 @@ export function processOpenAPI ({
   optionalHeaders,
   validateResponse,
   typesComment,
-  propsOptional
+  propsOptional,
+  moduleFormat = 'esm'
 }) {
   return {
     types: generateTypesFromOpenAPI({
@@ -21,14 +22,16 @@ export function processOpenAPI ({
       fullRequest,
       optionalHeaders,
       typesComment,
-      propsOptional
+      propsOptional,
+      moduleFormat
     }),
-    implementation: generateImplementationFromOpenAPI({ name, fullResponse, fullRequest, validateResponse })
+    implementation: generateImplementationFromOpenAPI({ name, fullResponse, fullRequest, validateResponse, moduleFormat })
   }
 }
 
-function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, validateResponse }) {
+function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, validateResponse, moduleFormat = 'esm' }) {
   const camelcasedName = toJavaScriptName(name)
+  const isESM = moduleFormat === 'esm'
 
   const writer = new CodeBlockWriter({
     indentNumberOfSpaces: 2,
@@ -36,16 +39,23 @@ function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, v
     useSingleQuote: true
   })
 
-  writer.writeLine("import { buildOpenAPIClient } from 'massimo'")
-  writer.writeLine("import { join } from 'node:path'")
+  if (isESM) {
+    writer.writeLine("import { buildOpenAPIClient } from 'massimo'")
+    writer.writeLine("import { join } from 'node:path'")
+  } else {
+    writer.writeLine("const { buildOpenAPIClient } = require('massimo')")
+    writer.writeLine("const { join } = require('node:path')")
+  }
   writer.blankLine()
 
   const functionName = `generate${capitalize(camelcasedName)}Client`
-  writer.write(`export async function ${functionName} (opts)`).block(() => {
+  const funcDecl = isESM ? `export async function ${functionName} (opts)` : `async function ${functionName} (opts)`
+  writer.write(funcDecl).block(() => {
     writer.write('return buildOpenAPIClient(').inlineBlock(() => {
       writer.writeLine("type: 'openapi',")
       writer.writeLine(`name: '${camelcasedName}',`)
-      writer.writeLine(`path: join(import.meta.dirname, '${name}.openapi.json'),`)
+      const pathExpr = isESM ? `join(import.meta.dirname, '${name}.openapi.json')` : `join(__dirname, '${name}.openapi.json')`
+      writer.writeLine(`path: ${pathExpr},`)
       writer.writeLine('url: opts.url,')
       writer.writeLine('serviceId: opts.serviceId,')
       writer.writeLine('throwOnError: opts.throwOnError,')
@@ -57,7 +67,12 @@ function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, v
     writer.write(')')
   })
   writer.blankLine()
-  writer.writeLine(`export default ${functionName}`)
+  if (isESM) {
+    writer.writeLine(`export default ${functionName}`)
+  } else {
+    writer.writeLine(`module.exports = ${functionName}`)
+    writer.writeLine(`module.exports.default = ${functionName}`)
+  }
   return writer.toString()
 }
 
@@ -68,7 +83,8 @@ function generateTypesFromOpenAPI ({
   fullRequest,
   optionalHeaders,
   typesComment,
-  propsOptional
+  propsOptional,
+  moduleFormat = 'esm'
 }) {
   const camelcasedName = toJavaScriptName(name)
   const capitalizedName = capitalize(camelcasedName)

@@ -4,7 +4,7 @@ import { access, mkdir, readFile, rm, writeFile } from 'fs/promises'
 import graphql from 'graphql'
 import helpMe from 'help-me'
 import parseArgs from 'minimist'
-import { join } from 'path'
+import { join, dirname } from 'path'
 import pino from 'pino'
 import pinoPretty from 'pino-pretty'
 import { getGlobalDispatcher, interceptors, request } from 'undici'
@@ -43,6 +43,30 @@ export async function createDirectory (path, empty = false) {
   return mkdir(path, { recursive: true, maxRetries: 10, retryDelay: 1000 })
 }
 
+export async function detectModuleFormat (folder, explicitFormat) {
+  if (explicitFormat === 'esm' || explicitFormat === 'cjs') {
+    return explicitFormat
+  }
+  let currentDir = folder
+  while (currentDir !== dirname(currentDir)) {
+    const packageJsonPath = join(currentDir, 'package.json')
+    if (await isFileAccessible(packageJsonPath)) {
+      try {
+        const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf8'))
+        if (packageJson.type === 'module') return 'esm'
+        // If no type field or any other value, it's CommonJS per Node.js defaults
+        return 'cjs'
+      } catch (err) {
+        // If we can't parse it, continue searching
+      }
+    }
+    currentDir = dirname(currentDir)
+  }
+
+  // Default to ESM
+  return 'esm'
+}
+
 async function writeOpenAPIClient (
   folder,
   name,
@@ -58,7 +82,8 @@ async function writeOpenAPIClient (
   typesComment,
   logger,
   withCredentials,
-  propsOptional
+  propsOptional,
+  moduleFormat
 ) {
   await createDirectory(folder)
 
@@ -96,30 +121,35 @@ async function writeOpenAPIClient (
       optionalHeaders,
       validateResponse,
       typesComment,
-      propsOptional
+      propsOptional,
+      moduleFormat
     })
-    await writeFile(join(folder, `${name}.d.mts`), types)
+    const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.ts'
+    const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
+    await writeFile(join(folder, `${name}.${typeExt}`), types)
     if (generateImplementation) {
-      await writeFile(join(folder, `${name}.mjs`), implementation)
+      await writeFile(join(folder, `${name}.${implExt}`), implementation)
     }
 
     if (!typesOnly) {
-      await writeFile(join(folder, 'package.json'), getPackageJSON({ name, generateImplementation }))
+      await writeFile(join(folder, 'package.json'), getPackageJSON({ name, generateImplementation, moduleFormat }))
     }
   }
 }
 
-async function writeGraphQLClient (folder, name, schema, url, generateImplementation) {
+async function writeGraphQLClient (folder, name, schema, url, generateImplementation, moduleFormat) {
   await createDirectory(folder, { recursive: true })
-  const { types, implementation } = processGraphQL({ schema, name, folder, url })
+  const { types, implementation } = processGraphQL({ schema, name, folder, url, moduleFormat })
   const clientSchema = graphql.buildClientSchema(schema)
   const sdl = graphql.printSchema(clientSchema)
+  const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.ts'
+  const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
   await writeFile(join(folder, `${name}.schema.graphql`), sdl)
-  await writeFile(join(folder, `${name}.d.mts`), types)
+  await writeFile(join(folder, `${name}.${typeExt}`), types)
   if (generateImplementation) {
-    await writeFile(join(folder, `${name}.mjs`), implementation)
+    await writeFile(join(folder, `${name}.${implExt}`), implementation)
   }
-  await writeFile(join(folder, 'package.json'), getPackageJSON({ name, generateImplementation }))
+  await writeFile(join(folder, 'package.json'), getPackageJSON({ name, generateImplementation, moduleFormat }))
 }
 
 async function downloadAndWriteOpenAPI (
@@ -139,7 +169,8 @@ async function downloadAndWriteOpenAPI (
   typesComment,
   withCredentials,
   propsOptional,
-  retryTimeoutMs
+  retryTimeoutMs,
+  moduleFormat
 ) {
   logger.debug(`Trying to download OpenAPI schema from ${url}`)
   let requestOptions
@@ -174,7 +205,8 @@ async function downloadAndWriteOpenAPI (
         typesComment,
         logger,
         withCredentials,
-        propsOptional
+        propsOptional,
+        moduleFormat
       )
       /* c8 ignore next 3 */
     } catch (err) {
@@ -188,7 +220,7 @@ async function downloadAndWriteOpenAPI (
   return false
 }
 
-async function downloadAndWriteGraphQL (logger, url, folder, name, generateImplementation) {
+async function downloadAndWriteGraphQL (logger, url, folder, name, generateImplementation, typesOnly, moduleFormat) {
   logger.debug(`Trying to download GraphQL schema from ${url}`)
   const query = graphql.getIntrospectionQuery()
   const res = await request(url, {
@@ -208,7 +240,7 @@ async function downloadAndWriteGraphQL (logger, url, folder, name, generateImple
   }
 
   const { data: schema } = JSON.parse(text)
-  await writeGraphQLClient(folder, name, schema, url, generateImplementation)
+  await writeGraphQLClient(folder, name, schema, url, generateImplementation, moduleFormat)
   return 'graphql'
 }
 
@@ -227,7 +259,8 @@ async function readFromFileAndWrite (
   language,
   typesComment,
   withCredentials,
-  propsOptional
+  propsOptional,
+  moduleFormat
 ) {
   logger.info(`Trying to read schema from file ${file}`)
   const text = await readFile(file, 'utf8')
@@ -248,7 +281,8 @@ async function readFromFileAndWrite (
       typesComment,
       logger,
       withCredentials,
-      propsOptional
+      propsOptional,
+      moduleFormat
     )
     return 'openapi'
   } catch (err) {
@@ -258,7 +292,7 @@ async function readFromFileAndWrite (
     const introspectionResult = graphql.introspectionFromSchema(schema)
 
     // dummy URL
-    await writeGraphQLClient(folder, name, introspectionResult, 'http://localhost:3042/graphql', generateImplementation)
+    await writeGraphQLClient(folder, name, introspectionResult, 'http://localhost:3042/graphql', generateImplementation, moduleFormat)
     return 'graphql'
   }
 }
@@ -280,7 +314,8 @@ async function downloadAndProcess (options) {
     typesComment,
     withCredentials,
     propsOptional,
-    retryTimeoutMs
+    retryTimeoutMs,
+    moduleFormat
   } = options
 
   const generateImplementation = options.generateImplementation
@@ -308,7 +343,8 @@ async function downloadAndProcess (options) {
           typesComment,
           withCredentials,
           propsOptional,
-          retryTimeoutMs
+          retryTimeoutMs,
+          moduleFormat
         )
       )
       toTry.push(
@@ -330,14 +366,15 @@ async function downloadAndProcess (options) {
           typesComment,
           withCredentials,
           propsOptional,
-          retryTimeoutMs
+          retryTimeoutMs,
+          moduleFormat
         )
       )
     } else if (options.type === 'graphql') {
       toTry.push(
-        downloadAndWriteGraphQL.bind(null, logger, url + '/graphql', folder, name, generateImplementation, typesOnly)
+        downloadAndWriteGraphQL.bind(null, logger, url + '/graphql', folder, name, generateImplementation, typesOnly, moduleFormat)
       )
-      toTry.push(downloadAndWriteGraphQL.bind(null, logger, url, folder, name, generateImplementation, typesOnly))
+      toTry.push(downloadAndWriteGraphQL.bind(null, logger, url, folder, name, generateImplementation, typesOnly, moduleFormat))
     } else {
       // add download functions only if it's an URL
       toTry.push(
@@ -359,11 +396,12 @@ async function downloadAndProcess (options) {
           typesComment,
           withCredentials,
           propsOptional,
-          retryTimeoutMs
+          retryTimeoutMs,
+          moduleFormat
         )
       )
       toTry.push(
-        downloadAndWriteGraphQL.bind(null, logger, url + '/graphql', folder, name, generateImplementation, typesOnly)
+        downloadAndWriteGraphQL.bind(null, logger, url + '/graphql', folder, name, generateImplementation, typesOnly, moduleFormat)
       )
       toTry.push(
         downloadAndWriteOpenAPI.bind(
@@ -384,10 +422,11 @@ async function downloadAndProcess (options) {
           typesComment,
           withCredentials,
           propsOptional,
-          retryTimeoutMs
+          retryTimeoutMs,
+          moduleFormat
         )
       )
-      toTry.push(downloadAndWriteGraphQL.bind(null, logger, url, folder, name, generateImplementation, typesOnly))
+      toTry.push(downloadAndWriteGraphQL.bind(null, logger, url, folder, name, generateImplementation, typesOnly, moduleFormat))
     }
   } else {
     // add readFromFileAndWrite to the functions only if it's not an URL
@@ -408,7 +447,8 @@ async function downloadAndProcess (options) {
         language,
         typesComment,
         withCredentials,
-        propsOptional
+        propsOptional,
+        moduleFormat
       )
     )
   }
@@ -424,14 +464,19 @@ async function downloadAndProcess (options) {
   }
 }
 
-function getPackageJSON ({ name, generateImplementation }) {
+function getPackageJSON ({ name, generateImplementation, moduleFormat }) {
+  const isESM = moduleFormat === 'esm'
   const obj = {
     name,
-    types: `./${name}.d.mts`
+    types: `./${name}.${isESM ? 'd.mts' : 'd.ts'}`
+  }
+
+  if (isESM) {
+    obj.type = 'module'
   }
 
   if (generateImplementation) {
-    obj.main = `./${name}.mjs`
+    obj.main = `./${name}.${isESM ? 'mjs' : 'cjs'}`
   }
 
   return JSON.stringify(obj, null, 2)
@@ -447,7 +492,7 @@ export async function command (argv) {
     _: [url],
     ...options
   } = parseArgs(argv, {
-    string: ['name', 'folder', 'optional-headers', 'language', 'type', 'url-auth-headers', 'types-comment'],
+    string: ['name', 'folder', 'optional-headers', 'language', 'type', 'url-auth-headers', 'types-comment', 'module'],
     boolean: [
       'typescript',
       'full-response',
@@ -516,6 +561,7 @@ export async function command (argv) {
       options.name = options.isFrontend ? 'api' : 'client'
     }
     options.folder = options.folder || join(process.cwd(), options.name)
+    options.moduleFormat = await detectModuleFormat(options.folder, options.module)
     options.urlAuthHeaders = options['url-auth-headers']
     options.typesComment = options['types-comment']
     options.withCredentials = options['with-credentials']
