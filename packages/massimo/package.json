@@ -1,6 +1,6 @@
 {
   "name": "massimo",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A client for HTTP services.",
   "main": "index.js",
   "type": "module",
@@ -68,4 +68,3 @@
     "node": ">=22.18.0"
   }
 }
-
