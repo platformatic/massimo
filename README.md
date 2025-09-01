@@ -136,17 +136,59 @@ const user = await client.getUserById({ id: "123" });
 
 ```javascript
 import fastify from "fastify";
-import pltClient from "massimo/fastify-plugin";
+import pltClient from "massimo/fastify-plugin.js";
 
-const app = fastify();
+const server = fastify();
 
-app.register(pltClient, {
-  url: "https://api.example.com",
-  name: "myapi",
+server.register(pltClient, {
+  url: "http://example.com",
+  type: "openapi", // or "graphql"
 });
 
-app.get("/users", async (request, reply) => {
-  return request.myapi.getUsers();
+// OpenAPI
+server.post("/", async (request, reply) => {
+  const res = await request.movies.createMovie({ title: "foo" });
+  return res;
+});
+
+server.listen({ port: 3000 });
+```
+
+Note that you would need to install `massimo` as a dependency.
+
+**TypeScript with Fastify Plugin:**
+
+Massimo generates full TypeScript support for Fastify. To add types information to your plugin, you can either extend the FastifyRequest interface globally or locally.
+
+```typescript
+import { type MoviesClient } from "./movies/movies.ts";
+import fastify, { type FastifyRequest } from "fastify";
+import pltClient from "massimo/fastify-plugin.js";
+
+const server = fastify();
+server.register(pltClient, {
+  url: "http://example.com",
+  type: "openapi", // or "graphql"
+});
+
+// Method A: extend the interface globally
+declare module "fastify" {
+  interface FastifyRequest {
+    movies: MoviesClient;
+  }
+}
+
+server.get("/movies", async (request: FastifyRequest, reply: FastifyReply) => {
+  return request.movies.getMovies();
+});
+
+// Method B: use a local request extension
+interface MoviesRequest extends FastifyRequest {
+  movies: MoviesClient;
+}
+
+server.get("/movies", async (request: MoviesRequest, reply: FastifyReply) => {
+  return request.movies.getMovies();
 });
 ```
 
