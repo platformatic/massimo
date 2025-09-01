@@ -1,12 +1,12 @@
-import $RefParser from '@apidevtools/json-schema-ref-parser'
-import Ajv from 'ajv'
-import camelCase from 'camelcase'
-import fs from 'fs/promises'
-import { createHash } from 'node:crypto'
-import { join } from 'path'
-import * as undici from 'undici'
-import * as errors from './lib/errors.js'
-import { kGetHeaders, kHeaders, kTelemetryContext } from './lib/symbols.js'
+const $RefParser = require('@apidevtools/json-schema-ref-parser')
+const Ajv = require('ajv')
+const camelCase = require('camelcase')
+const fs = require('fs/promises')
+const { createHash } = require('node:crypto')
+const { join } = require('path')
+const undici = require('undici')
+const errors = require('./lib/errors.js')
+const { kGetHeaders, kHeaders, kTelemetryContext } = require('./lib/symbols.js')
 
 const {
   FormData,
@@ -348,7 +348,7 @@ function wrapGraphQLClient (url, openTelemetry, logger) {
   }
 }
 
-export function generateOperationId (path, method, methodMeta, all) {
+function generateOperationId (path, method, methodMeta, all) {
   let operationId = null
   // use methodMeta.operationId only if it's present AND it is a valid string that can be
   // concatenated without converting it
@@ -392,7 +392,7 @@ export function generateOperationId (path, method, methodMeta, all) {
   return operationId
 }
 
-export async function buildOpenAPIClient (options, openTelemetry) {
+async function buildOpenAPIClient (options, openTelemetry) {
   const client = {}
   let spec
   let baseUrl
@@ -478,7 +478,7 @@ export async function buildOpenAPIClient (options, openTelemetry) {
   return client
 }
 
-export function hasDuplicatedParameters (methodMeta) {
+function hasDuplicatedParameters (methodMeta) {
   if (!methodMeta.parameters) return false
   if (methodMeta.parameters.length === 0) {
     return false
@@ -490,7 +490,7 @@ export function hasDuplicatedParameters (methodMeta) {
   return s.size !== methodMeta.parameters.length
 }
 
-export async function buildGraphQLClient (options, openTelemetry, logger = abstractLogger) {
+async function buildGraphQLClient (options, openTelemetry, logger = abstractLogger) {
   options = options || {}
   if (!options.url) {
     throw new Error('options.url is required')
@@ -502,4 +502,10 @@ export async function buildGraphQLClient (options, openTelemetry, logger = abstr
   }
 }
 
-export * as errors from './lib/errors.js'
+module.exports = {
+  generateOperationId,
+  buildOpenAPIClient,
+  buildGraphQLClient,
+  hasDuplicatedParameters,
+  errors
+}

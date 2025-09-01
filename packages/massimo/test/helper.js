@@ -1,4 +1,4 @@
-import undici from 'undici'
+const undici = require('undici')
 
 const { setGlobalDispatcher, Agent, request } = undici
 
@@ -9,4 +9,4 @@ setGlobalDispatcher(
   })
 )
 
-export { request }
+module.exports = { request }

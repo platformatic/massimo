@@ -1,27 +1,27 @@
-import { create } from '@platformatic/db'
-import { safeRemove } from '@platformatic/foundation'
-import { deepEqual, equal, match, notEqual, ok, rejects, strictEqual } from 'node:assert/strict'
-import { cp, mkdtemp, unlink } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { mock, test } from 'node:test'
-import { getGlobalDispatcher, MockAgent, setGlobalDispatcher } from 'undici'
-import { buildOpenAPIClient } from '../index.js'
-import { MissingParamsRequiredError, UnexpectedCallFailureError } from '../lib/errors.js'
-import './helper.js'
+const { create } = require('@platformatic/db')
+const { safeRemove } = require('@platformatic/foundation')
+const { deepEqual, equal, match, notEqual, ok, rejects, strictEqual } = require('node:assert/strict')
+const { cp, mkdtemp, unlink } = require('node:fs/promises')
+const { tmpdir } = require('node:os')
+const { join } = require('node:path')
+const { mock, test } = require('node:test')
+const { getGlobalDispatcher, MockAgent, setGlobalDispatcher } = require('undici')
+const { buildOpenAPIClient } = require('../index.js')
+const { MissingParamsRequiredError, UnexpectedCallFailureError } = require('../lib/errors.js')
+require('./helper.js')
 
 test('rejects with no url', async t => {
   await rejects(buildOpenAPIClient())
   await rejects(buildOpenAPIClient({}))
   await rejects(
     buildOpenAPIClient({
-      path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json')
+      path: join(__dirname, 'fixtures', 'movies', 'openapi.json')
     })
   )
 })
 
 test('build basic client from url', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -146,7 +146,7 @@ test('build basic client from url', async t => {
 })
 
 test('build full response client from url', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -301,7 +301,7 @@ test('build full response client from url', async t => {
 })
 
 test('properly call query parser', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -342,7 +342,7 @@ test('properly call query parser', async t => {
 })
 
 test('properly call undici dispatcher', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -398,7 +398,7 @@ test('properly call undici dispatcher', async t => {
 })
 
 test('throw on error level response', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -417,7 +417,7 @@ test('throw on error level response', async t => {
 
   const client = await buildOpenAPIClient({
     url: `${app.url}/movies-api/`,
-    path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json'),
+    path: join(__dirname, 'fixtures', 'movies', 'openapi.json'),
     throwOnError: true,
     fullRequest: false,
     fullResponse: false
@@ -446,7 +446,7 @@ test('throw on error level response', async t => {
 })
 
 test('only add the throwOnError interceptor once', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -485,7 +485,7 @@ test('only add the throwOnError interceptor once', async t => {
   const spy = t.mock.method(mockAgent, 'compose')
   const client = await buildOpenAPIClient({
     url: `${app.url}/movies-api`,
-    path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json'),
+    path: join(__dirname, 'fixtures', 'movies', 'openapi.json'),
     throwOnError: true,
     fullRequest: false
   })
@@ -501,7 +501,7 @@ test('only add the throwOnError interceptor once', async t => {
 })
 
 test('throw on error level response (modified global dispatcher)', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -548,7 +548,7 @@ test('throw on error level response (modified global dispatcher)', async t => {
   // should use getGlobalDispatcher() internally and hit mock
   const client = await buildOpenAPIClient({
     url: `${app.url}/movies-api`,
-    path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json'),
+    path: join(__dirname, 'fixtures', 'movies', 'openapi.json'),
     throwOnError: true,
     fullRequest: false,
     fullResponse: false
@@ -570,7 +570,7 @@ test('throw on error level response (modified global dispatcher)', async t => {
 })
 
 test('throw on error level response (supplied dispatcher)', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -614,7 +614,7 @@ test('throw on error level response (supplied dispatcher)', async t => {
   // should use getGlobalDispatcher() internally and hit mock
   const client = await buildOpenAPIClient({
     url: `${app.url}/movies-api`,
-    path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json'),
+    path: join(__dirname, 'fixtures', 'movies', 'openapi.json'),
     throwOnError: true,
     dispatcher: mockAgent,
     fullRequest: false,
@@ -637,7 +637,7 @@ test('throw on error level response (supplied dispatcher)', async t => {
 })
 
 test('build basic client from file', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -656,7 +656,7 @@ test('build basic client from file', async t => {
 
   const client = await buildOpenAPIClient({
     url: `${app.url}/movies-api/`,
-    path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json'),
+    path: join(__dirname, 'fixtures', 'movies', 'openapi.json'),
     fullRequest: false,
     fullResponse: false
   })
@@ -729,7 +729,7 @@ test('build basic client from file', async t => {
 })
 
 test('build basic client from url with custom headers', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'auth')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'auth')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -823,7 +823,7 @@ test('build basic client from url with custom headers', async t => {
 })
 
 test('302', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies-no-200')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies-no-200')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 

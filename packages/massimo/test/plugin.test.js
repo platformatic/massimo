@@ -1,15 +1,15 @@
-import { create } from '@platformatic/db'
-import { safeRemove } from '@platformatic/foundation'
-import Fastify from 'fastify'
-import { deepEqual, equal, rejects } from 'node:assert/strict'
-import { cp, mkdtemp, unlink } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { test } from 'node:test'
-import { getGlobalDispatcher, MockAgent, setGlobalDispatcher } from 'undici'
-import client from '../fastify-plugin.js'
-import { WrongOptsTypeError } from '../lib/errors.js'
-import './helper.js'
+const { create } = require('@platformatic/db')
+const { safeRemove } = require('@platformatic/foundation')
+const Fastify = require('fastify')
+const { deepEqual, equal, rejects } = require('node:assert/strict')
+const { cp, mkdtemp, unlink } = require('node:fs/promises')
+const { tmpdir } = require('node:os')
+const { join } = require('node:path')
+const { test } = require('node:test')
+const { getGlobalDispatcher, MockAgent, setGlobalDispatcher } = require('undici')
+const client = require('../fastify-plugin.js')
+const { WrongOptsTypeError } = require('../lib/errors.js')
+require('./helper.js')
 
 test('wrong type', async t => {
   const app = Fastify()
@@ -26,7 +26,7 @@ test('wrong type', async t => {
 })
 
 test('default decorator', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -86,7 +86,7 @@ test('default decorator', async t => {
 })
 
 test('req decorator with OpenAPI and auth', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'auth')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'auth')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -140,7 +140,7 @@ test('req decorator with OpenAPI and auth', async t => {
 })
 
 test('app decorator with OpenAPI', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -201,7 +201,7 @@ test('app decorator with OpenAPI', async t => {
 })
 
 test('req decorator with OpenAPI', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -269,7 +269,7 @@ test('req decorator with OpenAPI', async t => {
 })
 
 test('validate response', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -329,7 +329,7 @@ test('validate response', async t => {
 })
 
 test('req decorator with GraphQL and auth', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'auth')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'auth')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -390,7 +390,7 @@ test('req decorator with GraphQL and auth', async t => {
 })
 
 test('configureClient getHeaders', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'auth')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'auth')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -480,7 +480,7 @@ test('applicationId', async t => {
     fullResponse: false,
     type: 'openapi',
     applicationId: 'movies',
-    path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json')
+    path: join(__dirname, 'fixtures', 'movies', 'openapi.json')
   })
 
   app.post('/movies', async (req, res) => {

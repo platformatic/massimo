@@ -1,3 +1,3 @@
-import neostandard from 'neostandard'
+const neostandard = require('neostandard')
 
-export default neostandard()
+module.exports = neostandard()

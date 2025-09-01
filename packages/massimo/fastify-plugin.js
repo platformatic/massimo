@@ -1,12 +1,12 @@
-import { buildGraphQLClient, buildOpenAPIClient } from './index.js'
-import { WrongOptsTypeError } from './lib/errors.js'
-import { kGetHeaders, kTelemetryContext } from './lib/symbols.js'
+const { buildGraphQLClient, buildOpenAPIClient } = require('./index.js')
+const { WrongOptsTypeError } = require('./lib/errors.js')
+const { kGetHeaders, kTelemetryContext } = require('./lib/symbols.js')
 
 function capitalize (str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-export async function plugin (app, opts) {
+async function plugin (app, opts) {
   let client = null
   let getHeaders = null
 
@@ -60,4 +60,6 @@ plugin[Symbol.for('plugin-meta')] = {
   name: '@platformatic/client'
 }
 
-export default plugin
+module.exports = plugin
+module.exports.plugin = plugin
+module.exports.default = plugin

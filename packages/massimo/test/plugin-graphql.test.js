@@ -1,16 +1,16 @@
-import { create } from '@platformatic/db'
-import { safeRemove } from '@platformatic/foundation'
-import Fastify from 'fastify'
-import { deepEqual } from 'node:assert/strict'
-import { cp, mkdtemp, unlink } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { test } from 'node:test'
-import client from '../fastify-plugin.js'
-import './helper.js'
+const { create } = require('@platformatic/db')
+const { safeRemove } = require('@platformatic/foundation')
+const Fastify = require('fastify')
+const { deepEqual } = require('node:assert/strict')
+const { cp, mkdtemp, unlink } = require('node:fs/promises')
+const { tmpdir } = require('node:os')
+const { join } = require('node:path')
+const { test } = require('node:test')
+const client = require('../fastify-plugin.js')
+require('./helper.js')
 
 test('app decorator with GraphQL', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 

@@ -1,13 +1,13 @@
-import { create } from '@platformatic/db'
-import { safeRemove } from '@platformatic/foundation'
-import Fastify from 'fastify'
-import { deepEqual, rejects } from 'node:assert/strict'
-import { cp, mkdtemp, unlink } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { test } from 'node:test'
-import { buildGraphQLClient } from '../index.js'
-import './helper.js'
+const { create } = require('@platformatic/db')
+const { safeRemove } = require('@platformatic/foundation')
+const Fastify = require('fastify')
+const { deepEqual, rejects } = require('node:assert/strict')
+const { cp, mkdtemp, unlink } = require('node:fs/promises')
+const { tmpdir } = require('node:os')
+const { join } = require('node:path')
+const { test } = require('node:test')
+const { buildGraphQLClient } = require('../index.js')
+require('./helper.js')
 
 test('rejects with no url', async t => {
   await rejects(buildGraphQLClient())
@@ -92,7 +92,7 @@ test('errors', async t => {
 })
 
 test('build basic client from url', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -162,7 +162,7 @@ test('build basic client from url', async t => {
 })
 
 test('build basic client from url with custom headers', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'auth')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'auth')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -235,7 +235,7 @@ test('build basic client from url with custom headers', async t => {
 })
 
 test('bad query', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -264,7 +264,7 @@ test('bad query', async t => {
 })
 
 test('error within resolver', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'movies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'movies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 

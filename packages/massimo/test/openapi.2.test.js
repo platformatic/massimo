@@ -1,20 +1,20 @@
-import { safeRemove } from '@platformatic/foundation'
-import { create } from '@platformatic/service'
-import Fastify from 'fastify'
-import { deepEqual, equal, fail, match, ok, strictEqual } from 'node:assert/strict'
-import { openAsBlob } from 'node:fs'
-import { cp, mkdtemp, readFile, unlink } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { test } from 'node:test'
-import { FormData } from 'undici'
-import { buildOpenAPIClient } from '../index.js'
-import { MissingParamsRequiredError, UnexpectedCallFailureError } from '../lib/errors.js'
+const { safeRemove } = require('@platformatic/foundation')
+const { create } = require('@platformatic/service')
+const Fastify = require('fastify')
+const { deepEqual, equal, fail, match, ok, strictEqual } = require('node:assert/strict')
+const { openAsBlob } = require('node:fs')
+const { cp, mkdtemp, readFile, unlink } = require('node:fs/promises')
+const { tmpdir } = require('node:os')
+const { join } = require('node:path')
+const { test } = require('node:test')
+const { FormData } = require('undici')
+const { buildOpenAPIClient } = require('../index.js')
+const { MissingParamsRequiredError, UnexpectedCallFailureError } = require('../lib/errors.js')
 
-import './helper.js'
+require('./helper.js')
 
 test('build basic client from file with (endpoint with duplicated parameters)', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'duped-params')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'duped-params')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -56,7 +56,7 @@ test('build basic client from file with (endpoint with duplicated parameters)', 
 })
 
 test('build basic client from file (enpoint with no parameters)', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'no-params')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'no-params')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -103,7 +103,7 @@ test('build basic client from file (enpoint with no parameters)', async t => {
 })
 
 test('build basic client from file (query array parameter)', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'array-query-params')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'array-query-params')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -144,7 +144,7 @@ test('build basic client from file (query array parameter)', async t => {
       fullRequest: false,
       fullResponse: false,
       url: `${app.url}`,
-      path: join(import.meta.dirname, 'fixtures', 'array-query-params', 'openapi.json')
+      path: join(__dirname, 'fixtures', 'array-query-params', 'openapi.json')
     })
 
     const result = await client.getQuery({
@@ -158,7 +158,7 @@ test('build basic client from file (query array parameter)', async t => {
 })
 
 test('build basic client from file (path parameter)', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'path-params')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'path-params')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -180,7 +180,7 @@ test('build basic client from file (path parameter)', async t => {
     const client = await buildOpenAPIClient({
       fullResponse: false,
       url: `${app.url}`,
-      path: join(import.meta.dirname, 'fixtures', 'path-params', 'openapi.json')
+      path: join(__dirname, 'fixtures', 'path-params', 'openapi.json')
     })
 
     const params = {
@@ -217,7 +217,7 @@ test('build basic client from file (path parameter)', async t => {
       fullRequest: false,
       fullResponse: false,
       url: `${app.url}`,
-      path: join(import.meta.dirname, 'fixtures', 'path-params', 'openapi.json')
+      path: join(__dirname, 'fixtures', 'path-params', 'openapi.json')
     })
 
     const result = await client.getPath({
@@ -233,7 +233,7 @@ test('build basic client from file (path parameter)', async t => {
       fullRequest: false,
       fullResponse: false,
       url: `${app.url}`,
-      path: join(import.meta.dirname, 'fixtures', 'path-params', 'openapi.json'),
+      path: join(__dirname, 'fixtures', 'path-params', 'openapi.json'),
       bodyTimeout: 900000,
       headersTimeout: 900000
     })
@@ -247,7 +247,7 @@ test('build basic client from file (path parameter)', async t => {
 })
 
 test('validate response', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'validate-response')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'validate-response')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -352,7 +352,7 @@ test('build client with common parameters', async t => {
   t.after(() => {
     app.close()
   })
-  const specPath = join(import.meta.dirname, 'fixtures', 'common-parameters-openapi.json')
+  const specPath = join(__dirname, 'fixtures', 'common-parameters-openapi.json')
   const client = await buildOpenAPIClient({
     url: clientUrl,
     path: specPath,
@@ -390,7 +390,7 @@ test('build client with header injection options (getHeaders)', async t => {
   t.after(() => {
     app.close()
   })
-  const specPath = join(import.meta.dirname, 'fixtures', 'common-parameters-openapi.json')
+  const specPath = join(__dirname, 'fixtures', 'common-parameters-openapi.json')
 
   const fieldId = 'foo'
   const movieId = '123'
@@ -424,7 +424,7 @@ test('build client with header injection options (getHeaders)', async t => {
 })
 
 test('edge cases', async t => {
-  const specPath = join(import.meta.dirname, 'fixtures', 'misc', 'openapi.json')
+  const specPath = join(__dirname, 'fixtures', 'misc', 'openapi.json')
   const client = await buildOpenAPIClient({
     fullRequest: false,
     fullResponse: false,
@@ -435,7 +435,7 @@ test('edge cases', async t => {
 })
 
 test('should not throw when params are not passed', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'misc')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'misc')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -465,7 +465,7 @@ test('should not throw when params are not passed', async t => {
 })
 
 test('do not set bodies for methods that should not have them', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'no-bodies')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'no-bodies')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -521,7 +521,7 @@ test('do not set bodies for methods that should not have them', async t => {
 })
 
 test('multipart/form-data', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'sample-service')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'sample-service')
   const app = await create(join(fixtureDirPath, 'platformatic.json'))
 
   t.after(async () => {
@@ -548,7 +548,7 @@ test('multipart/form-data', async t => {
 })
 
 test('multipart/form-data with files', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'sample-service')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'sample-service')
   const app = await create(join(fixtureDirPath, 'platformatic.json'))
 
   t.after(async () => {
@@ -564,7 +564,7 @@ test('multipart/form-data with files', async t => {
   })
 
   const formData = new FormData()
-  const sampleFilePath = join(import.meta.dirname, 'helper.js')
+  const sampleFilePath = join(__dirname, 'helper.js')
   const fileAsBlob = await openAsBlob(sampleFilePath)
   formData.append('file', fileAsBlob, 'helper.js')
   const resp = await client.postFiles(formData)
@@ -572,7 +572,7 @@ test('multipart/form-data with files', async t => {
 })
 
 test('multipart/form-data without FormData', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'sample-service')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'sample-service')
   const app = await create(join(fixtureDirPath, 'platformatic.json'))
 
   t.after(async () => {
@@ -596,7 +596,7 @@ test('multipart/form-data without FormData', async t => {
 })
 
 test('multipart/form-data with files AND fields', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'sample-service')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'sample-service')
   const app = await create(join(fixtureDirPath, 'platformatic.json'))
 
   t.after(async () => {
@@ -612,7 +612,7 @@ test('multipart/form-data with files AND fields', async t => {
   })
 
   const formData = new FormData()
-  const sampleFilePath = join(import.meta.dirname, 'helper.js')
+  const sampleFilePath = join(__dirname, 'helper.js')
   const fileAsBlob = await openAsBlob(sampleFilePath)
   formData.append('file', fileAsBlob, 'helper.js')
   formData.append('username', 'johndoe')

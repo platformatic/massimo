@@ -1,14 +1,14 @@
-import { create } from '@platformatic/db'
-import { safeRemove } from '@platformatic/foundation'
-import { telemetry } from '@platformatic/telemetry'
-import Fastify from 'fastify'
-import { equal } from 'node:assert/strict'
-import { cp, mkdtemp, unlink } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { test } from 'node:test'
-import client from '../fastify-plugin.js'
-import './helper.js'
+const { create } = require('@platformatic/db')
+const { safeRemove } = require('@platformatic/foundation')
+const { telemetry } = require('@platformatic/telemetry')
+const Fastify = require('fastify')
+const { equal } = require('node:assert/strict')
+const { cp, mkdtemp, unlink } = require('node:fs/promises')
+const { tmpdir } = require('node:os')
+const { join } = require('node:path')
+const { test } = require('node:test')
+const client = require('../fastify-plugin.js')
+require('./helper.js')
 
 const getSpansPerType = (spans, type = 'http') => {
   let attibuteToLookFor
@@ -25,7 +25,7 @@ const getSpansPerType = (spans, type = 'http') => {
 }
 
 test('telemetry correctly propagates from an application client to a server for an OpenAPI endpoint', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'telemetry')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'telemetry')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -104,7 +104,7 @@ test('telemetry correctly propagates from an application client to a server for 
 })
 
 test('telemetry correctly propagates from a generic client through an application client and then to another application, propagating the traceId', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'telemetry')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'telemetry')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 
@@ -191,7 +191,7 @@ test('telemetry correctly propagates from a generic client through an applicatio
 })
 
 test('telemetry correctly propagates from an application client to a server for a GraphQL endpoint', async t => {
-  const fixtureDirPath = join(import.meta.dirname, 'fixtures', 'telemetry')
+  const fixtureDirPath = join(__dirname, 'fixtures', 'telemetry')
   const tmpDir = await mkdtemp(join(tmpdir(), 'platformatic-client-'))
   await cp(fixtureDirPath, tmpDir, { recursive: true })
 

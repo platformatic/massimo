@@ -1,6 +1,6 @@
-import { equal } from 'node:assert/strict'
-import { test } from 'node:test'
-import { generateOperationId } from '../index.js'
+const { equal } = require('node:assert/strict')
+const { test } = require('node:test')
+const { generateOperationId } = require('../index.js')
 
 test('generates name from different path with same method and opeartionId', async t => {
   const bucket = []
