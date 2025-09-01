@@ -74,7 +74,7 @@ The undici-based client is preferred for Node.js environments when you need:
 // Generate Node.js client
 // massimo http://api.example.com/openapi.json --name myclient
 
-import myClient from "./myclient/myclient.js";
+import myClient from "./myclient/myclient.mjs";
 
 const client = await myClient({
   url: "https://api.example.com",
@@ -107,7 +107,7 @@ The fetch-based client is preferred for browser environments and when you need:
 // massimo http://api.example.com/openapi.json --frontend --name myclient
 
 // Option 1: Named operations
-import { setBaseUrl, getUsers, createUser } from "./myclient/api.js";
+import { setBaseUrl, getUsers, createUser } from "./myclient/api.mjs";
 
 setBaseUrl("https://api.example.com");
 
@@ -119,7 +119,7 @@ const newUser = await createUser({
 });
 
 // Option 2: Factory method
-import buildClient from "./myclient/api.js";
+import buildClient from "./myclient/api.mjs";
 
 const client = buildClient("https://api.example.com");
 

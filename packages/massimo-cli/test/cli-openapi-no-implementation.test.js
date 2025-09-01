@@ -20,10 +20,10 @@ test('generates only types in target folder with --types-only flag', async t => 
   ])
   const files = await fs.readdir(dir)
   same(files.length, 1)
-  same(files[0], 'movies.d.ts')
+  same(files[0], 'movies.d.mts')
 
   // avoid name clash
-  const fileContents = await fs.readFile(join(dir, 'movies.d.ts'), 'utf-8')
+  const fileContents = await fs.readFile(join(dir, 'movies.d.mts'), 'utf-8')
   match(fileContents, /export interface FullResponse<T, U extends number> {/)
   match(fileContents, /'statusCode': U;/)
   match(fileContents, /'headers': Record<string, string>;/)
@@ -49,7 +49,7 @@ test('add an initial comment with --types-comment flag', async t => {
     'this is an auto-generated file'
   ])
 
-  const fileContents = await fs.readFile(join(dir, 'movies.d.ts'), 'utf-8')
+  const fileContents = await fs.readFile(join(dir, 'movies.d.mts'), 'utf-8')
   ok(fileContents.startsWith('// this is an auto-generated file'))
 })
 

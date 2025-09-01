@@ -1,6 +1,6 @@
-import { generateOperationId } from 'massimo'
 import camelcase from 'camelcase'
 import CodeBlockWriter from 'code-block-writer'
+import { generateOperationId } from 'massimo'
 import { writeOperations } from './openapi-common.js'
 import {
   capitalize,
@@ -111,13 +111,13 @@ function generateFrontendImplementationFromOpenAPI ({
     writer.write('function sanitizeUrl(url)').block(() => {
       writer.writeLine("if (url.endsWith('/')) { return url.slice(0, -1) } else { return url }")
     })
-    writer.writeLine(`/**  @type {import('./${name}-types.d.ts').${camelCaseName}['setBaseUrl']} */`)
+    writer.writeLine(`/**  @type {import('./${name}-types.d.mts').${camelCaseName}['setBaseUrl']} */`)
     writer.writeLine('export const setBaseUrl = (newUrl) => { baseUrl = sanitizeUrl(newUrl) }')
     writer.newLine()
-    writer.writeLine(`/**  @type {import('./${name}-types.d.ts').${camelCaseName}['setDefaultHeaders']} */`)
+    writer.writeLine(`/**  @type {import('./${name}-types.d.mts').${camelCaseName}['setDefaultHeaders']} */`)
     writer.writeLine('export const setDefaultHeaders = (headers) => { defaultHeaders = headers }')
     writer.newLine()
-    writer.writeLine(`/**  @type {import('./${name}-types.d.ts').${camelCaseName}['setDefaultFetchParams']} */`)
+    writer.writeLine(`/**  @type {import('./${name}-types.d.mts').${camelCaseName}['setDefaultFetchParams']} */`)
     writer.writeLine('export const setDefaultFetchParams = (fetchParams) => { defaultFetchParams = fetchParams }')
     writer.newLine()
     writer.write('function headersToJSON(headers) ').block(() => {
@@ -196,7 +196,9 @@ function generateFrontendImplementationFromOpenAPI ({
         const quotedParams = queryParams.map(qp => `'${qp}'`)
         let queryParametersType = ''
         if (isTsLang) {
-          queryParametersType = `: (keyof NonNullable<Types.${fullRequest ? `${operationRequestName}['query']` : operationRequestName}>)[]`
+          queryParametersType = `: (keyof NonNullable<Types.${
+            fullRequest ? `${operationRequestName}['query']` : operationRequestName
+          }>)[]`
         }
         writer.writeLine(`const queryParameters${queryParametersType} = [${quotedParams.join(', ')}]`)
         writer.writeLine('const searchParams = new URLSearchParams()')
@@ -352,7 +354,7 @@ function generateFrontendImplementationFromOpenAPI ({
       // ```
       //
       writer
-        .writeLine(`/**  @type {import('./${name}-types.d.ts').${camelCaseName}['${operationId}']} */`)
+        .writeLine(`/**  @type {import('./${name}-types.d.mts').${camelCaseName}['${operationId}']} */`)
         .write(`export const ${operationId} = async (request) =>`)
         .block(() => {
           writer.write(`return await ${underscoredOperationId}(baseUrl, request)`)
