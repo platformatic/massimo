@@ -5,6 +5,28 @@
   "main": "index.js",
   "type": "module",
   "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      },
+      "require": {
+        "types": "./lib/cjs/index.d.cts",
+        "default": "./lib/cjs/index.cjs"
+      }
+    },
+    "./fastify-plugin": {
+      "import": {
+        "types": "./fastify-plugin.d.ts",
+        "default": "./fastify-plugin.js"
+      },
+      "require": {
+        "types": "./lib/cjs/fastify-plugin.d.cts",
+        "default": "./lib/cjs/fastify-plugin.cjs"
+      }
+    }
+  },
   "scripts": {
     "lint": "eslint",
     "test": "node --test --test-reporter=cleaner-spec-reporter --test-concurrency=1 --test-timeout=2000000 test/*.test.js test/**/*.test.js",
@@ -46,3 +68,4 @@
     "node": ">=22.18.0"
   }
 }
+

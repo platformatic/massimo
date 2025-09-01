@@ -251,7 +251,7 @@ test('openapi client generation (typescript) with --types-only', async t => {
   const plugin = `
 /// <reference types="${dir}/movies/movies" />
 import { type FastifyPluginAsync } from 'fastify'
-import pltClient from 'massimo/fastify-plugin.js'
+import pltClient from 'massimo/fastify-plugin'
 
 const myPlugin: FastifyPluginAsync<{}> = async (app, options) => {
   app.register(pltClient, {
@@ -352,7 +352,7 @@ test('openapi client generation (typescript) with --types-only and --folder', as
   const plugin = `
 /// <reference types="./uncanny/movies" />
 import { type FastifyPluginAsync } from 'fastify'
-import pltClient from 'massimo/fastify-plugin.js'
+import pltClient from 'massimo/fastify-plugin'
 
 const myPlugin: FastifyPluginAsync<{}> = async (app, options) => {
   app.register(pltClient, {
