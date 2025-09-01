@@ -34,7 +34,7 @@ test('empty-req-res', async () => {
     '--full'
   ])
 
-  const typeFile = join(dir, 'full', 'full.d.ts')
+  const typeFile = join(dir, 'full', 'full.d.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`

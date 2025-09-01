@@ -20,40 +20,42 @@ test('retry-request', async () => {
 
   // We are going to simulate a network failure first, then a success.
   // The retry interceptor should handle this.
-  mockPool.intercept({ path: '/documentation/json' })
-    .reply(500, 'Internal Server Error') // First attempt fails
+  mockPool.intercept({ path: '/documentation/json' }).reply(500, 'Internal Server Error') // First attempt fails
 
-  mockPool.intercept({ path: '/documentation/json' })
-    .reply(200, { // Second attempt succeeds
-      openapi: '3.0.3',
-      info: {
-        title: 'Platformatic DB',
-        description: 'Testing HTTP REST retry',
-        version: '1.0.0'
-      },
-      paths: {
-        '/hello': {
-          get: {
-            operationId: 'getRetry',
-            responses: { 200: { description: 'Default Response' } }
-          }
+  mockPool.intercept({ path: '/documentation/json' }).reply(200, {
+    // Second attempt succeeds
+    openapi: '3.0.3',
+    info: {
+      title: 'Platformatic DB',
+      description: 'Testing HTTP REST retry',
+      version: '1.0.0'
+    },
+    paths: {
+      '/hello': {
+        get: {
+          operationId: 'getRetry',
+          responses: { 200: { description: 'Default Response' } }
         }
       }
-    })
+    }
+  })
 
   await command([
     'http://mock.platformatic.dev',
-    '--name', 'full',
+    '--name',
+    'full',
     '--validate-response',
-    '--optional-headers', 'headerId',
+    '--optional-headers',
+    'headerId',
     '--full',
-    '--retry-timeout-ms', '10'
+    '--retry-timeout-ms',
+    '10'
   ])
 
-  ok(await isFileAccessible(join(dir, 'full', 'full.js')), 'Implementation file should be created')
-  ok(await isFileAccessible(join(dir, 'full', 'full.d.ts')), 'Type definition file should be created')
+  ok(await isFileAccessible(join(dir, 'full', 'full.mjs')), 'Implementation file should be created')
+  ok(await isFileAccessible(join(dir, 'full', 'full.d.mts')), 'Type definition file should be created')
 
-  const typeFile = join(dir, 'full', 'full.d.ts')
+  const typeFile = join(dir, 'full', 'full.d.mts')
   const data = await readFile(typeFile, 'utf-8')
 
   ok(data.includes('export type GetRetryRequest ='), 'Should contain GetRetryRequest type')

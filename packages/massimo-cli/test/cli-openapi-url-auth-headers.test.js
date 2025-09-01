@@ -53,7 +53,7 @@ test('url-auth-headers option with valid values', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import authUrlHeaders from './authUrlHeaders/authUrlHeaders.js'
+import authUrlHeaders from './authUrlHeaders/authUrlHeaders.mjs'
 
 const app = Fastify({ logger: true })
 

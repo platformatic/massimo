@@ -18,7 +18,7 @@ test('generate types for allOf/anyOf combinations in body', async () => {
     '--full-response'
   ])
 
-  const typeFile = join(dir, 'fantozzi-types', 'fantozzi-types.d.ts')
+  const typeFile = join(dir, 'fantozzi-types', 'fantozzi-types.d.mts')
   const data = await readFile(typeFile, 'utf-8')
 
   ok(

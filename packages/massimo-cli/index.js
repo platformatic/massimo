@@ -82,9 +82,9 @@ async function writeOpenAPIClient (
       withCredentials,
       propsOptional
     })
-    await writeFile(join(folder, `${name}-types.d.ts`), types)
+    await writeFile(join(folder, `${name}-types.d.mts`), types)
     if (generateImplementation) {
-      const extension = language === 'js' ? 'js' : 'ts'
+      const extension = language === 'js' ? 'mjs' : 'mts'
       await writeFile(join(folder, `${name}.${extension}`), implementation)
     }
   } else {
@@ -98,9 +98,9 @@ async function writeOpenAPIClient (
       typesComment,
       propsOptional
     })
-    await writeFile(join(folder, `${name}.d.ts`), types)
+    await writeFile(join(folder, `${name}.d.mts`), types)
     if (generateImplementation) {
-      await writeFile(join(folder, `${name}.js`), implementation)
+      await writeFile(join(folder, `${name}.mjs`), implementation)
     }
 
     if (!typesOnly) {
@@ -115,9 +115,9 @@ async function writeGraphQLClient (folder, name, schema, url, generateImplementa
   const clientSchema = graphql.buildClientSchema(schema)
   const sdl = graphql.printSchema(clientSchema)
   await writeFile(join(folder, `${name}.schema.graphql`), sdl)
-  await writeFile(join(folder, `${name}.d.ts`), types)
+  await writeFile(join(folder, `${name}.d.mts`), types)
   if (generateImplementation) {
-    await writeFile(join(folder, `${name}.js`), implementation)
+    await writeFile(join(folder, `${name}.mjs`), implementation)
   }
   await writeFile(join(folder, 'package.json'), getPackageJSON({ name, generateImplementation }))
 }
@@ -427,11 +427,11 @@ async function downloadAndProcess (options) {
 function getPackageJSON ({ name, generateImplementation }) {
   const obj = {
     name,
-    types: `./${name}.d.ts`
+    types: `./${name}.d.mts`
   }
 
   if (generateImplementation) {
-    obj.main = `./${name}.js`
+    obj.main = `./${name}.mjs`
   }
 
   return JSON.stringify(obj, null, 2)

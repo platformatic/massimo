@@ -84,7 +84,7 @@ async function _getRedirect (url, request) {
   }
 }
 
-/**  @type {import('./sample-types.d.ts').Sample['getRedirect']} */
+/**  @type {import('./sample-types.d.mts').Sample['getRedirect']} */
 export const getRedirect = async (request) => {
   return await _getRedirect(baseUrl, request)
 }`
@@ -121,11 +121,11 @@ export default function build(url: string, options?: BuildOptions): Platformatic
     // Support custom url in cli
     const dir = await moveToTmpdir(after)
     await execa('node', [cliPath, `${app.url}/custom-swagger`, '--frontend', '--name', 'sample'])
-    const implementation = await readFile(join(dir, 'sample', 'sample.js'), 'utf8')
-    const types = await readFile(join(dir, 'sample', 'sample-types.d.ts'), 'utf8')
+    const implementation = await readFile(join(dir, 'sample', 'sample.mjs'), 'utf8')
+    const types = await readFile(join(dir, 'sample', 'sample-types.d.mts'), 'utf8')
 
     const jsImplementationTemplate = `
-/**  @type {import('./sample-types.d.ts').Sample['getCustomSwagger']} */
+/**  @type {import('./sample-types.d.mts').Sample['getCustomSwagger']} */
 export const getCustomSwagger = async (request) => {
   return await _getCustomSwagger(baseUrl, request)
 }`
@@ -189,27 +189,27 @@ test('generate correct file names', async t => {
 
   // Without --name will create api/client filenames
   await execa('node', [cliPath, app.url, '--language', 'ts', '--frontend'])
-  ok(await readFile(join(dir, 'api', 'api.ts'), 'utf-8'))
-  ok(await readFile(join(dir, 'api', 'api-types.d.ts'), 'utf-8'))
+  ok(await readFile(join(dir, 'api', 'api.mts'), 'utf-8'))
+  ok(await readFile(join(dir, 'api', 'api-types.d.mts'), 'utf-8'))
 
   await execa('node', [cliPath, app.url])
-  ok(await readFile(join(dir, 'client', 'client.js'), 'utf-8'))
-  ok(await readFile(join(dir, 'client', 'client.d.ts'), 'utf-8'))
+  ok(await readFile(join(dir, 'client', 'client.mjs'), 'utf-8'))
+  ok(await readFile(join(dir, 'client', 'client.d.mts'), 'utf-8'))
 
-  // With --name will create foobar.ts and foobar-types.d.ts
+  // With --name will create foobar.ts and foobar-types.d.mts
   await execa('node', [cliPath, app.url, '--language', 'ts', '--name', 'foobar', '--frontend'])
-  ok(await readFile(join(dir, 'foobar', 'foobar.ts'), 'utf-8'))
-  ok(await readFile(join(dir, 'foobar', 'foobar-types.d.ts'), 'utf-8'))
+  ok(await readFile(join(dir, 'foobar', 'foobar.mts'), 'utf-8'))
+  ok(await readFile(join(dir, 'foobar', 'foobar-types.d.mts'), 'utf-8'))
 
-  // Without --name will create api.ts and api-types.d.ts
+  // Without --name will create api.ts and api-types.d.mts
   await execa('node', [cliPath, app.url, '--language', 'ts', '--frontend'])
-  ok(await readFile(join(dir, 'api', 'api.ts'), 'utf-8'))
-  ok(await readFile(join(dir, 'api', 'api-types.d.ts'), 'utf-8'))
+  ok(await readFile(join(dir, 'api', 'api.mts'), 'utf-8'))
+  ok(await readFile(join(dir, 'api', 'api-types.d.mts'), 'utf-8'))
 
   // Convert dashes to camelCase
   await execa('node', [cliPath, app.url, '--language', 'ts', '--name', 'sample-name', '--frontend'])
-  ok(await readFile(join(dir, 'sample-name', 'sample-name.ts'), 'utf-8'))
-  ok(await readFile(join(dir, 'sample-name', 'sample-name-types.d.ts'), 'utf-8'))
+  ok(await readFile(join(dir, 'sample-name', 'sample-name.mts'), 'utf-8'))
+  ok(await readFile(join(dir, 'sample-name', 'sample-name-types.d.mts'), 'utf-8'))
 })
 
 test('test factory and client', async t => {
@@ -233,7 +233,7 @@ test('test factory and client', async t => {
 
   await execa('node', [cliPath, app.url, '--name', 'foobar', '--frontend'])
   const testFile = `
-import build, { setBaseUrl, getReturnUrl } from './foobar.js'
+import build, { setBaseUrl, getReturnUrl } from './foobar.mjs'
 const client = build('${app.url}')
 setBaseUrl('${app2.url}')
 console.log(await client.getReturnUrl({}))
@@ -265,8 +265,8 @@ test('generate frontend client from path', async t => {
 
   const fileName = join(import.meta.dirname, 'fixtures', 'frontend-openapi.json')
   await execa('node', [cliPath, fileName, '--language', 'ts', '--frontend'])
-  const implementation = await readFile(join(dir, 'api', 'api.ts'), 'utf8')
-  const types = await readFile(join(dir, 'api', 'api-types.d.ts'), 'utf8')
+  const implementation = await readFile(join(dir, 'api', 'api.mts'), 'utf8')
+  const types = await readFile(join(dir, 'api', 'api-types.d.mts'), 'utf8')
 
   const tsImplementationTemplate = `
 export const getHello: Api['getHello'] = async (request: Types.GetHelloRequest): Promise<Types.GetHelloResponses> => {
@@ -295,8 +295,8 @@ test('generate frontend client from path (name with dashes)', async t => {
 
   const fileName = join(import.meta.dirname, 'fixtures', 'frontend-openapi.json')
   await execa('node', [cliPath, fileName, '--language', 'ts', '--frontend', '--name', 'a-custom-name'])
-  const implementation = await readFile(join(dir, 'a-custom-name', 'a-custom-name.ts'), 'utf8')
-  const types = await readFile(join(dir, 'a-custom-name', 'a-custom-name-types.d.ts'), 'utf8')
+  const implementation = await readFile(join(dir, 'a-custom-name', 'a-custom-name.mts'), 'utf8')
+  const types = await readFile(join(dir, 'a-custom-name', 'a-custom-name-types.d.mts'), 'utf8')
   const typePlatformaticFrontendClient = types
     .split('\n')
     .find(line => line.startsWith("type PlatformaticFrontendClient = Omit<ACustomName, 'setBaseUrl'>"))
@@ -332,8 +332,8 @@ test('append query parameters to url in non-GET requests', async t => {
   const dir = await moveToTmpdir(after)
 
   const fileName = join(import.meta.dirname, 'fixtures', 'append-query-params-frontend-openapi.json')
-  await execa('node', [cliPath, fileName, '--language', 'ts', '--frontend', '--name', 'fontend', '--full', 'false'])
-  const implementation = await readFile(join(dir, 'fontend', 'fontend.ts'), 'utf8')
+  await execa('node', [cliPath, fileName, '--language', 'ts', '--frontend', '--name', 'frontend', '--full', 'false'])
+  const implementation = await readFile(join(dir, 'frontend', 'frontend.mts'), 'utf8')
 
   const tsImplementationTemplate = `
 const _postRoot = async (url: string, request: Types.PostRootRequest): Promise<Types.PostRootResponses> => {
@@ -375,8 +375,8 @@ test('handle headers parameters', async t => {
   const dir = await moveToTmpdir(after)
 
   const fileName = join(import.meta.dirname, 'fixtures', 'headers-frontend-openapi.json')
-  await execa('node', [cliPath, fileName, '--language', 'ts', '--frontend', '--name', 'fontend', '--full', 'false'])
-  const implementation = await readFile(join(dir, 'fontend', 'fontend.ts'), 'utf8')
+  await execa('node', [cliPath, fileName, '--language', 'ts', '--frontend', '--name', 'frontend', '--full', 'false'])
+  const implementation = await readFile(join(dir, 'frontend', 'frontend.mts'), 'utf8')
 
   const tsImplementationTemplate = `const _postRoot = async (url: string, request: Types.PostRootRequest): Promise<Types.PostRootResponses> => {
   const body = request
@@ -409,8 +409,8 @@ test('handle headers parameters in get request', async t => {
   const dir = await moveToTmpdir(after)
 
   const fileName = join(import.meta.dirname, 'fixtures', 'get-headers-frontend-openapi.json')
-  await execa('node', [cliPath, fileName, '--language', 'ts', '--frontend', '--name', 'fontend', '--full', 'false'])
-  const implementation = await readFile(join(dir, 'fontend', 'fontend.ts'), 'utf8')
+  await execa('node', [cliPath, fileName, '--language', 'ts', '--frontend', '--name', 'frontend', '--full', 'false'])
+  const implementation = await readFile(join(dir, 'frontend', 'frontend.mts'), 'utf8')
 
   const tsImplementationTemplate = `
 const _getRoot = async (url: string, request: Types.GetRootRequest): Promise<Types.GetRootResponses> => {
@@ -439,8 +439,8 @@ test('handle wildcard in path parameter', async t => {
   const dir = await moveToTmpdir(after)
 
   const fileName = join(import.meta.dirname, 'fixtures', 'wildcard-in-path-openapi.json')
-  await execa('node', [cliPath, fileName, '--frontend', '--name', 'fontend', '--full', 'false'])
-  const implementation = await readFile(join(dir, 'fontend', 'fontend.js'), 'utf8')
+  await execa('node', [cliPath, fileName, '--frontend', '--name', 'frontend', '--full', 'false'])
+  const implementation = await readFile(join(dir, 'frontend', 'frontend.mjs'), 'utf8')
 
   const tsImplementationTemplate = `
 async function _getPkgScopeNameRange (url, request) {
@@ -471,7 +471,7 @@ test('do not add headers to fetch if a get request', async t => {
     '--frontend'
   ])
 
-  const typeFile = join(dir, 'movies', 'movies.ts')
+  const typeFile = join(dir, 'movies', 'movies.mts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -512,7 +512,7 @@ test('support empty response', async t => {
     '--frontend'
   ])
 
-  const implementationFile = join(dir, 'movies', 'movies.ts')
+  const implementationFile = join(dir, 'movies', 'movies.mts')
   const implementation = await readFile(implementationFile, 'utf-8')
 
   // Empty responses led to a full response returns
@@ -541,7 +541,7 @@ test('support empty response', async t => {
     true
   )
 
-  const typeFile = join(dir, 'movies', 'movies-types.d.ts')
+  const typeFile = join(dir, 'movies', 'movies-types.d.mts')
   const type = await readFile(typeFile, 'utf-8')
   equal(
     type.includes(`
@@ -568,7 +568,7 @@ test('call response.json only for json responses', async t => {
       '--full',
       'false'
     ])
-    const implementationFile = join(dir, 'movies', 'movies.ts')
+    const implementationFile = join(dir, 'movies', 'movies.mts')
     const implementation = await readFile(implementationFile, 'utf-8')
     const expected = `
   const response = await fetch(\`\${url}/auth/login\`, {
@@ -606,7 +606,7 @@ test('call response.json only for json responses', async t => {
       '--full',
       'false'
     ])
-    const implementationFile = join(dir, 'movies', 'movies.ts')
+    const implementationFile = join(dir, 'movies', 'movies.mts')
     const implementation = await readFile(implementationFile, 'utf-8')
     const expected = `
   const response = await fetch(\`\${url}/hello\`, {
@@ -638,10 +638,10 @@ test('should match expected implementation with typescript', async t => {
     '--full',
     'false'
   ])
-  const implementationFile = join(dir, 'movies', 'movies.ts')
+  const implementationFile = join(dir, 'movies', 'movies.mts')
   const implementation = await readFile(implementationFile, 'utf-8')
   const expected = await readFile(
-    join(import.meta.dirname, 'expected-generated-code', 'multiple-responses-movies.ts'),
+    join(import.meta.dirname, 'expected-generated-code', 'multiple-responses-movies.mts'),
     'utf-8'
   )
   equal(implementation.replace(/\r/g, ''), expected.replace(/\r/g, '')) // to make windows CI happy
@@ -662,7 +662,7 @@ test('serialize correctly array query parameters', async t => {
       '--full',
       'false'
     ])
-    const implementationFile = join(dir, 'movies', 'movies.ts')
+    const implementationFile = join(dir, 'movies', 'movies.mts')
     const implementation = await readFile(implementationFile, 'utf-8')
     const expected = `
   const queryParameters: (keyof NonNullable<Types.GetMoviesRequest>)[] = ['ids']
@@ -713,7 +713,7 @@ test('integration test for FormData handling', async t => {
     'false'
   ])
   const testFile = `
-import build from './formdata.js'
+import build from './formdata.mjs'
 const client = build('${app.url}')
 
 // Create FormData instance
@@ -760,7 +760,7 @@ test('integration test for custom fetch parameters', async t => {
     'false'
   ])
   const testFile = `
-import build, { setDefaultFetchParams } from './fetch-params.js'
+import build, { setDefaultFetchParams } from './fetch-params.mjs'
 
 // Create a client with custom fetch parameters
 const client = build('${app.url}')
@@ -807,7 +807,7 @@ test('integration test for allOf and anyOf schema types', async t => {
     'false'
   ])
   const testFile = `
-import build from './combined-types.js'
+import build from './combined-types.mjs'
 const client = build('${app.url}')
 
 // Test with combined schema
@@ -868,7 +868,7 @@ test('integration test for optional headers', async t => {
     'false'
   ])
   const testFile = `
-import build from './optheaders.js'
+import build from './optheaders.mjs'
 const client = build('${app.url}')
 
 // Test with all headers
@@ -920,7 +920,7 @@ test('integration test for optional query parameters', async t => {
     'false'
   ])
   const testFile = `
-import build from './optparams.js'
+import build from './optparams.mjs'
 const client = build('${app.url}')
 
 // Test with all parameters
@@ -971,7 +971,7 @@ test('integration test for JSON and text response types', async t => {
     'false'
   ])
   const testFile = `
-import build from './content-types.js'
+import build from './content-types.mjs'
 const client = build('${app.url}')
 
 // Test JSON response
@@ -1018,7 +1018,7 @@ test('integration test for simple 200 response with --full option', async t => {
   await execa('node', [cliPath, join(fixturesDir, 'openapi.json'), '--name', 'fullresponse', '--frontend', '--full'])
 
   const testFile = `
-import build from './fullresponse.js'
+import build from './fullresponse.mjs'
 const client = build('${app.url}')
 
 // Test 200 response with full response option
@@ -1072,7 +1072,7 @@ test('integration test for 204 No Content responses', async t => {
     'false'
   ])
   const testFile = `
-import build from './nocontent.js'
+import build from './nocontent.mjs'
 const client = build('${app.url}')
 
 console.log('DELETE response:', await client.deleteResource({}))
@@ -1104,7 +1104,7 @@ test('integration test for query parameters', async t => {
 
   await execa('node', [cliPath, join(fixturesDir, 'openapi.json'), '--name', 'foobar', '--frontend', '--full', 'false'])
   const testFile = `
-import build, { setBaseUrl, getQueryParamsArray } from './foobar.js'
+import build, { setBaseUrl, getQueryParamsArray } from './foobar.mjs'
 const client = build('${app.url}')
 console.log(await client.getQueryParamsArray({ ids: ['foo', 'bar']}))
 `
@@ -1136,7 +1136,7 @@ test('integration test for custom headers', async t => {
 
   await execa('node', [cliPath, join(fixturesDir, 'openapi.json'), '--name', 'foobar', '--frontend', '--full', 'false'])
   const testFile = `
-import build from './foobar.js'
+import build from './foobar.mjs'
 const client = build('${app.url}', {
   headers: {
     authorization: 'Bearer foobar'
@@ -1181,7 +1181,7 @@ test('integration test for DELETE without body', async t => {
     'false'
   ])
   const testFile = `
-import build from './delete-api.js'
+import build from './delete-api.mjs'
 const client = build('${app.url}')
 
 // Test DELETE without body
@@ -1220,7 +1220,7 @@ test('add credentials: include in client implementation from file', async t => {
       'false'
     ])
 
-    const implementationFile = join(dir, 'movies', 'movies.ts')
+    const implementationFile = join(dir, 'movies', 'movies.mts')
     const implementation = await readFile(implementationFile, 'utf-8')
     const expectedGetMethod = `
   const response = await fetch(\`\${url}/hello/\${request['name']}\`, {
@@ -1265,7 +1265,7 @@ test('add credentials: include in client implementation from url', async t => {
     '--with-credentials'
   ])
 
-  const implementationFile = join(dir, 'movies', 'movies.ts')
+  const implementationFile = join(dir, 'movies', 'movies.mts')
   const implementation = await readFile(implementationFile, 'utf-8')
 
   const expectedGetMethod = `
@@ -1303,7 +1303,7 @@ test('frontend client with config', async t => {
     'false'
   ])
 
-  const implementation = await readFile(join(dir, 'client', 'client.ts'), 'utf-8')
+  const implementation = await readFile(join(dir, 'client', 'client.mts'), 'utf-8')
   ok(
     implementation.includes(`import type { Client } from './client-types'
 import type * as Types from './client-types'`)
@@ -1320,7 +1320,7 @@ import type * as Types from './client-types'`)
 }`)
   )
 
-  const types = await readFile(join(dir, 'client', 'client-types.d.ts'), 'utf-8')
+  const types = await readFile(join(dir, 'client', 'client-types.d.mts'), 'utf-8')
   ok(
     types.includes(`export type GetHelloResponses =
   GetHelloResponseOK`)
@@ -1355,7 +1355,7 @@ test('frontend client with full option', async t => {
     '--full'
   ])
 
-  const implementation = await readFile(join(dir, 'full-opt', 'full-opt.ts'), 'utf-8')
+  const implementation = await readFile(join(dir, 'full-opt', 'full-opt.mts'), 'utf-8')
   ok(
     implementation.includes(`const _postHello = async (url: string, request: Types.PostHelloRequest): Promise<Types.PostHelloResponses> => {
   const queryParameters: (keyof NonNullable<Types.PostHelloRequest['query']>)[] = ['queryId']
@@ -1383,7 +1383,7 @@ test('frontend client with full option', async t => {
   )
   ok(implementation.includes('body: isFormData ? body : JSON.stringify(body),'))
 
-  const types = await readFile(join(dir, 'full-opt', 'full-opt-types.d.ts'), 'utf-8')
+  const types = await readFile(join(dir, 'full-opt', 'full-opt-types.d.mts'), 'utf-8')
   ok(
     types.includes(`export type PostHelloRequest = {
   body: {

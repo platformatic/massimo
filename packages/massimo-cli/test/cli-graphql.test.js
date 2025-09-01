@@ -46,7 +46,7 @@ test('graphql client generation (javascript)', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './movies/movies.js'
+import movies from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${app.url}' })
@@ -111,7 +111,7 @@ test('graphql client generation (typescript)', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import { generateMoviesClient } from './movies/movies.js'
+import { generateMoviesClient } from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 
@@ -201,8 +201,8 @@ test('graphql client generation with relations (typescript)', async t => {
 
   const toWrite = `
 import Fastify from 'fastify';
-import { generateMoviesClient } from './movies/movies.js';
-import type { Movie, Quote } from './movies/movies.js';
+import { generateMoviesClient } from './movies/movies.mjs';
+import type { Movie, Quote } from './movies/movies.mjs';
 
 const app = Fastify({ logger: true });
 
@@ -313,7 +313,7 @@ test('graphql client generation (javascript) with slash at the end of the URL', 
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './movies/movies.js'
+import movies from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${app.url}' })
@@ -382,7 +382,7 @@ test('graphql client generation (javascript) from a file', async t => {
 
   const toWrite = `
 import Fastify from 'fastify'
-import movies from './movies/movies.js'
+import movies from './movies/movies.mjs'
 
 const app = Fastify({ logger: true })
 const client = await movies({ url: '${app.url}' })
