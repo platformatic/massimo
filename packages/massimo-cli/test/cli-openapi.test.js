@@ -585,8 +585,9 @@ test('name with dashes', async t => {
     const pkg = JSON.parse(await fs.readFile(join(dir, 'uncanny-movies', 'package.json'), 'utf-8'))
     same(pkg, {
       name: 'uncanny-movies',
-      main: './uncanny-movies.mjs',
-      types: './uncanny-movies.d.mts'
+      types: './uncanny-movies.d.mts',
+      type: 'module',
+      main: './uncanny-movies.mjs'
     })
   }
 
@@ -750,8 +751,9 @@ test('name with tilde', async t => {
     const pkg = JSON.parse(await fs.readFile(join(dir, 'uncanny~movies', 'package.json'), 'utf-8'))
     same(pkg, {
       name: 'uncanny~movies',
-      main: './uncanny~movies.mjs',
-      types: './uncanny~movies.d.mts'
+      types: './uncanny~movies.d.mts',
+      type: 'module',
+      main: './uncanny~movies.mjs'
     })
   }
 

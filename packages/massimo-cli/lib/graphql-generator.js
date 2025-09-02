@@ -2,11 +2,11 @@ import CodeBlockWriter from 'code-block-writer'
 import { UnknownTypeError } from './errors.js'
 import { capitalize, toJavaScriptName } from './utils.js'
 
-export function processGraphQL ({ schema, name, folder, url }) {
+export function processGraphQL ({ schema, name, folder, url, moduleFormat }) {
   schema = schema.__schema
   return {
     types: generateTypesFromGraphQL({ schema, name }),
-    implementation: generateImplementationFromGraqhQL({ schema, name, url })
+    implementation: generateImplementationFromGraqhQL({ schema, name, url, moduleFormat })
   }
 }
 
@@ -60,8 +60,9 @@ function generateTypesFromGraphQL ({ schema, name }) {
   return writer.toString()
 }
 
-function generateImplementationFromGraqhQL ({ name, url }) {
+function generateImplementationFromGraqhQL ({ name, url, moduleFormat }) {
   const camelcasedName = toJavaScriptName(name)
+  const isESM = moduleFormat === 'esm'
 
   const writer = new CodeBlockWriter({
     indentNumberOfSpaces: 2,
@@ -69,27 +70,40 @@ function generateImplementationFromGraqhQL ({ name, url }) {
     useSingleQuote: true
   })
 
-  writer.writeLine("import { buildGraphQLClient } from 'massimo'")
-  writer.writeLine("import { join } from 'node:path'")
+  if (isESM) {
+    writer.writeLine("import { buildGraphQLClient } from 'massimo'")
+    writer.writeLine("import { join } from 'node:path'")
+  } else {
+    writer.writeLine("const { buildGraphQLClient } = require('massimo')")
+    writer.writeLine("const { join } = require('node:path')")
+  }
   writer.blankLine()
 
   url = new URL(url)
 
   const functionName = `generate${capitalize(camelcasedName)}Client`
-  writer.write(`export async function ${functionName} (opts)`).block(() => {
+  const funcDecl = isESM ? `export async function ${functionName} (opts)` : `async function ${functionName} (opts)`
+  writer.write(funcDecl).block(() => {
     writer.writeLine('const url = new URL(opts.url)')
     writer.writeLine(`url.pathname = '${url.pathname}'`)
     writer.write('return buildGraphQLClient(').inlineBlock(() => {
       writer.writeLine("type: 'graphql',")
       writer.writeLine(`name: '${camelcasedName}',`)
-      writer.writeLine(`path: join(import.meta.dirname, '${name}.schema.graphql'),`)
+      const pathExpr = isESM ? `join(import.meta.dirname, '${name}.schema.graphql')` : `join(__dirname, '${name}.schema.graphql')`
+      writer.writeLine(`path: ${pathExpr},`)
       writer.writeLine('serviceId: opts.serviceId,')
       writer.writeLine('url: url.toString()')
     })
     writer.write(')')
   })
   writer.blankLine()
-  writer.writeLine(`export default ${functionName}`)
+  if (isESM) {
+    writer.writeLine(`export default ${functionName}`)
+  } else {
+    writer.writeLine(`module.exports = ${functionName}`)
+    writer.writeLine(`module.exports.default = ${functionName}`)
+    writer.writeLine(`module.exports.${functionName} = ${functionName}`)
+  }
   return writer.toString()
 }
 
