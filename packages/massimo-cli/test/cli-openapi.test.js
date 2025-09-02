@@ -1014,7 +1014,7 @@ test('optional-headers option', async t => {
     'false'
   ])
 
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`

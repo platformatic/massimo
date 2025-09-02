@@ -18,7 +18,8 @@ export function processFrontendOpenAPI ({
   fullRequest,
   logger,
   withCredentials,
-  propsOptional
+  propsOptional,
+  typeExt = 'd.mts'
 }) {
   return {
     types: generateTypesFromOpenAPI({ schema, name, fullResponse, fullRequest, propsOptional }),
@@ -29,7 +30,8 @@ export function processFrontendOpenAPI ({
       fullResponse,
       fullRequest,
       logger,
-      withCredentials
+      withCredentials,
+      typeExt
     })
   }
 }
@@ -41,7 +43,8 @@ function generateFrontendImplementationFromOpenAPI ({
   fullResponse,
   fullRequest,
   logger,
-  withCredentials
+  withCredentials,
+  typeExt = 'd.mts'
 }) {
   const camelCaseName = capitalize(camelcase(name))
   const { paths } = schema
@@ -111,13 +114,13 @@ function generateFrontendImplementationFromOpenAPI ({
     writer.write('function sanitizeUrl(url)').block(() => {
       writer.writeLine("if (url.endsWith('/')) { return url.slice(0, -1) } else { return url }")
     })
-    writer.writeLine(`/**  @type {import('./${name}-types.d.mts').${camelCaseName}['setBaseUrl']} */`)
+    writer.writeLine(`/**  @type {import('./${name}-types.${typeExt}').${camelCaseName}['setBaseUrl']} */`)
     writer.writeLine('export const setBaseUrl = (newUrl) => { baseUrl = sanitizeUrl(newUrl) }')
     writer.newLine()
-    writer.writeLine(`/**  @type {import('./${name}-types.d.mts').${camelCaseName}['setDefaultHeaders']} */`)
+    writer.writeLine(`/**  @type {import('./${name}-types.${typeExt}').${camelCaseName}['setDefaultHeaders']} */`)
     writer.writeLine('export const setDefaultHeaders = (headers) => { defaultHeaders = headers }')
     writer.newLine()
-    writer.writeLine(`/**  @type {import('./${name}-types.d.mts').${camelCaseName}['setDefaultFetchParams']} */`)
+    writer.writeLine(`/**  @type {import('./${name}-types.${typeExt}').${camelCaseName}['setDefaultFetchParams']} */`)
     writer.writeLine('export const setDefaultFetchParams = (fetchParams) => { defaultFetchParams = fetchParams }')
     writer.newLine()
     writer.write('function headersToJSON(headers) ').block(() => {
@@ -354,7 +357,7 @@ function generateFrontendImplementationFromOpenAPI ({
       // ```
       //
       writer
-        .writeLine(`/**  @type {import('./${name}-types.d.mts').${camelCaseName}['${operationId}']} */`)
+        .writeLine(`/**  @type {import('./${name}-types.${typeExt}').${camelCaseName}['${operationId}']} */`)
         .write(`export const ${operationId} = async (request) =>`)
         .block(() => {
           writer.write(`return await ${underscoredOperationId}(baseUrl, request)`)

@@ -55,7 +55,7 @@ You can generate only the types with the --types-only flag.
 $ massimo http://exmaple.com/to/schema/file --name myclient --types-only
 ```
 
-Will create the single myclient.d.ts file.
+Will create the single myclient.d.ts file (or .d.mts/.d.cts depending on module format and --type-extension option).
 
 Options:
 
@@ -77,3 +77,4 @@ Options:
 * `--props-optional` - If `true`, properties will be defined as optional unless they're part of the `required` array. By default this option is `true`.
 * `--skip-config-update` - If `true`, it will not update the `platformatic|watt` config found in your repo. By default this option is `true`.
 * `--retry-timeout-ms` - If passed, the HTTP request to get an Open API schema will be retried (reference: https://undici.nodejs.org/#/docs/api/RetryHandler.md)
+* `--type-extension` - Force the use of module-specific type extensions (.d.mts for ESM, .d.cts for CJS) instead of the default logic.

@@ -59,17 +59,53 @@ export async function detectModuleFormat (folder, explicitFormat) {
       try {
         const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf8'))
         if (packageJson.type === 'module') return 'esm'
-        // If no type field or any other value, it's CommonJS per Node.js defaults
         return 'cjs'
       } catch (err) {
-        // If we can't parse it, continue searching
       }
     }
     currentDir = dirname(currentDir)
   }
 
-  // Default to ESM
   return 'esm'
+}
+
+export async function determineTypeExtension (folder, moduleFormat, typeExtension, explicitModuleFormat, generateImplementation = true) {
+  if (typeExtension) {
+    return moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
+  }
+
+  if (!explicitModuleFormat && !generateImplementation) {
+    return 'd.ts'
+  }
+
+  if (!explicitModuleFormat && generateImplementation) {
+    return moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
+  }
+
+  let currentDir = folder
+  while (currentDir !== dirname(currentDir)) {
+    const packageJsonPath = join(currentDir, 'package.json')
+    if (await isFileAccessible(packageJsonPath)) {
+      try {
+        const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf8'))
+        const parentType = packageJson.type === 'module' ? 'esm' : 'cjs'
+
+        if (moduleFormat === parentType) {
+          return 'd.ts'
+        }
+
+        return moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
+      } catch (err) {
+      }
+    }
+    currentDir = dirname(currentDir)
+  }
+
+  if (moduleFormat === 'cjs') {
+    return 'd.ts'
+  }
+
+  return 'd.mts'
 }
 
 async function writeOpenAPIClient (
@@ -88,7 +124,9 @@ async function writeOpenAPIClient (
   logger,
   withCredentials,
   propsOptional,
-  moduleFormat
+  moduleFormat,
+  typeExtension,
+  explicitModuleFormat
 ) {
   await createDirectory(folder)
 
@@ -107,6 +145,7 @@ async function writeOpenAPIClient (
   }
 
   if (isFrontend) {
+    const typeExt = await determineTypeExtension(folder, moduleFormat, typeExtension, explicitModuleFormat, generateImplementation)
     const { types, implementation } = processFrontendOpenAPI({
       schema,
       name,
@@ -116,8 +155,9 @@ async function writeOpenAPIClient (
       logger,
       withCredentials,
       propsOptional,
+      typeExt
     })
-    await writeFile(join(folder, `${name}-types.d.mts`), types)
+    await writeFile(join(folder, `${name}-types.${typeExt}`), types)
     if (generateImplementation) {
       const extension = language === 'js' ? 'mjs' : 'mts'
       await writeFile(join(folder, `${name}.${extension}`), implementation)
@@ -134,7 +174,7 @@ async function writeOpenAPIClient (
       propsOptional,
       moduleFormat,
     })
-    const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
+    const typeExt = await determineTypeExtension(folder, moduleFormat, typeExtension, explicitModuleFormat, generateImplementation)
     const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
     await writeFile(join(folder, `${name}.${typeExt}`), types)
     if (generateImplementation) {
@@ -144,7 +184,7 @@ async function writeOpenAPIClient (
     if (!typesOnly) {
       await writeFile(
         join(folder, 'package.json'),
-        getPackageJSON({ name, generateImplementation, moduleFormat })
+        await getPackageJSON({ name, generateImplementation, moduleFormat, folder, typeExtension, explicitModuleFormat })
       )
     }
   }
@@ -156,7 +196,9 @@ async function writeGraphQLClient (
   schema,
   url,
   generateImplementation,
-  moduleFormat
+  moduleFormat,
+  typeExtension,
+  explicitModuleFormat
 ) {
   await createDirectory(folder, { recursive: true })
   const { types, implementation } = processGraphQL({
@@ -168,7 +210,7 @@ async function writeGraphQLClient (
   })
   const clientSchema = graphql.buildClientSchema(schema)
   const sdl = graphql.printSchema(clientSchema)
-  const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
+  const typeExt = await determineTypeExtension(folder, moduleFormat, typeExtension, explicitModuleFormat, generateImplementation)
   const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
   await writeFile(join(folder, `${name}.schema.graphql`), sdl)
   await writeFile(join(folder, `${name}.${typeExt}`), types)
@@ -177,7 +219,7 @@ async function writeGraphQLClient (
   }
   await writeFile(
     join(folder, 'package.json'),
-    getPackageJSON({ name, generateImplementation, moduleFormat })
+    await getPackageJSON({ name, generateImplementation, moduleFormat, folder, typeExtension, explicitModuleFormat })
   )
 }
 
@@ -199,7 +241,9 @@ async function downloadAndWriteOpenAPI (
   withCredentials,
   propsOptional,
   retryTimeoutMs,
-  moduleFormat
+  moduleFormat,
+  typeExtension,
+  explicitModuleFormat
 ) {
   logger.debug(`Trying to download OpenAPI schema from ${url}`)
   let requestOptions
@@ -237,7 +281,9 @@ async function downloadAndWriteOpenAPI (
         logger,
         withCredentials,
         propsOptional,
-        moduleFormat
+        moduleFormat,
+        typeExtension,
+        explicitModuleFormat
       )
       /* c8 ignore next 3 */
     } catch (err) {
@@ -257,7 +303,9 @@ async function downloadAndWriteGraphQL (
   folder,
   name,
   generateImplementation,
-  moduleFormat
+  moduleFormat,
+  typeExtension,
+  explicitModuleFormat
 ) {
   logger.debug(`Trying to download GraphQL schema from ${url}`)
   const query = graphql.getIntrospectionQuery()
@@ -284,7 +332,9 @@ async function downloadAndWriteGraphQL (
     schema,
     url,
     generateImplementation,
-    moduleFormat
+    moduleFormat,
+    typeExtension,
+    explicitModuleFormat
   )
   return 'graphql'
 }
@@ -305,7 +355,9 @@ async function readFromFileAndWrite (
   typesComment,
   withCredentials,
   propsOptional,
-  moduleFormat
+  moduleFormat,
+  typeExtension,
+  explicitModuleFormat
 ) {
   logger.info(`Trying to read schema from file ${file}`)
   const text = await readFile(file, 'utf8')
@@ -327,7 +379,9 @@ async function readFromFileAndWrite (
       logger,
       withCredentials,
       propsOptional,
-      moduleFormat
+      moduleFormat,
+      typeExtension,
+      explicitModuleFormat
     )
     return 'openapi'
   } catch (err) {
@@ -346,7 +400,9 @@ async function readFromFileAndWrite (
       introspectionResult,
       'http://localhost:3042/graphql',
       generateImplementation,
-      moduleFormat
+      moduleFormat,
+      typeExtension,
+      explicitModuleFormat
     )
     return 'graphql'
   }
@@ -370,7 +426,9 @@ async function downloadAndProcess (options) {
     withCredentials,
     propsOptional,
     retryTimeoutMs,
-    moduleFormat
+    moduleFormat,
+    typeExtension,
+    explicitModuleFormat
   } = options
 
   const generateImplementation = options.generateImplementation
@@ -399,7 +457,9 @@ async function downloadAndProcess (options) {
           withCredentials,
           propsOptional,
           retryTimeoutMs,
-          moduleFormat
+          moduleFormat,
+          typeExtension,
+          explicitModuleFormat
         )
       )
       toTry.push(
@@ -422,7 +482,9 @@ async function downloadAndProcess (options) {
           withCredentials,
           propsOptional,
           retryTimeoutMs,
-          moduleFormat
+          moduleFormat,
+          typeExtension,
+          explicitModuleFormat
         )
       )
     } else if (options.type === 'graphql') {
@@ -434,7 +496,9 @@ async function downloadAndProcess (options) {
           folder,
           name,
           generateImplementation,
-          moduleFormat
+          moduleFormat,
+          typeExtension,
+          explicitModuleFormat
         )
       )
       toTry.push(
@@ -445,7 +509,9 @@ async function downloadAndProcess (options) {
           folder,
           name,
           generateImplementation,
-          moduleFormat
+          moduleFormat,
+          typeExtension,
+          explicitModuleFormat
         )
       )
     } else {
@@ -470,7 +536,9 @@ async function downloadAndProcess (options) {
           withCredentials,
           propsOptional,
           retryTimeoutMs,
-          moduleFormat
+          moduleFormat,
+          typeExtension,
+          explicitModuleFormat
         )
       )
       toTry.push(
@@ -481,7 +549,9 @@ async function downloadAndProcess (options) {
           folder,
           name,
           generateImplementation,
-          moduleFormat
+          moduleFormat,
+          typeExtension,
+          explicitModuleFormat
         )
       )
       toTry.push(
@@ -504,7 +574,9 @@ async function downloadAndProcess (options) {
           withCredentials,
           propsOptional,
           retryTimeoutMs,
-          moduleFormat
+          moduleFormat,
+          typeExtension,
+          explicitModuleFormat
         )
       )
       toTry.push(
@@ -515,7 +587,9 @@ async function downloadAndProcess (options) {
           folder,
           name,
           generateImplementation,
-          moduleFormat
+          moduleFormat,
+          typeExtension,
+          explicitModuleFormat
         )
       )
     }
@@ -539,7 +613,9 @@ async function downloadAndProcess (options) {
         typesComment,
         withCredentials,
         propsOptional,
-        moduleFormat
+        moduleFormat,
+        typeExtension,
+        explicitModuleFormat
       )
     )
   }
@@ -557,11 +633,12 @@ async function downloadAndProcess (options) {
   }
 }
 
-function getPackageJSON ({ name, generateImplementation, moduleFormat }) {
+async function getPackageJSON ({ name, generateImplementation, moduleFormat, folder, typeExtension, explicitModuleFormat }) {
   const isESM = moduleFormat === 'esm'
+  const typeExt = await determineTypeExtension(folder, moduleFormat, typeExtension, explicitModuleFormat, generateImplementation)
   const obj = {
     name,
-    types: `./${name}.${isESM ? 'd.mts' : 'd.cts'}`
+    types: `./${name}.${typeExt}`
   }
 
   if (isESM) {
@@ -604,7 +681,8 @@ export async function command (argv) {
       'frontend',
       'validate-response',
       'props-optional',
-      'skip-config-update'
+      'skip-config-update',
+      'type-extension'
     ],
     default: {
       typescript: false,
@@ -672,6 +750,8 @@ export async function command (argv) {
     options.withCredentials = options['with-credentials']
     options.skipConfigUpdate = options['skip-config-update'] ?? true
     options.retryTimeoutMs = options['retry-timeout-ms']
+    options.typeExtension = options['type-extension']
+    options.explicitModuleFormat = !!options.module
     await downloadAndProcess({ url, ...options, logger })
     logger.info(`Client generated successfully into ${options.folder}`)
     logger.info('Check out the docs to know more: https://docs.platformatic.dev/docs/service/overview')
