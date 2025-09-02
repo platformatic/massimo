@@ -79,7 +79,7 @@ export async function determineTypeExtension (folder, moduleFormat, typeExtensio
   }
 
   if (!explicitModuleFormat && generateImplementation) {
-    return moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
+    return 'd.ts'
   }
 
   let currentDir = folder
@@ -101,11 +101,11 @@ export async function determineTypeExtension (folder, moduleFormat, typeExtensio
     currentDir = dirname(currentDir)
   }
 
-  if (moduleFormat === 'cjs') {
-    return 'd.ts'
+  if (explicitModuleFormat) {
+    return moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
   }
 
-  return 'd.mts'
+  return 'd.ts'
 }
 
 async function writeOpenAPIClient (

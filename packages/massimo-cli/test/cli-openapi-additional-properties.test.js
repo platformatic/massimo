@@ -17,7 +17,7 @@ test('export formdata on full request object', async t => {
     '--full-request',
     '--full-response'
   ])
-  const typeFile = join(dir, 'additional-props', 'additional-props.d.mts')
+  const typeFile = join(dir, 'additional-props', 'additional-props.d.ts')
   const data = await readFile(typeFile, 'utf-8')
 
   equal(

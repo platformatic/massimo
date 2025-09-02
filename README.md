@@ -298,8 +298,12 @@ massimo <url> --name myclient --module cjs  # In CommonJS project → .d.ts
 massimo <url> --name myclient --module esm  # In CommonJS project → .d.mts
 massimo <url> --name myclient --module cjs  # In ESM project → .d.cts
 
-# Auto-detect everything (no module flag) → always .d.ts
+# Auto-detect everything (no module flag) → always .d.ts  
 massimo <url> --name myclient  # → .d.ts (maximum compatibility)
+
+# Explicit module generates module-specific when no parent package.json
+massimo <url> --name myclient --module esm  # No parent pkg → .d.mts
+massimo <url> --name myclient --module cjs  # No parent pkg → .d.cts
 ```
 
 ### Client Options

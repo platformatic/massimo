@@ -34,7 +34,7 @@ test('status-codes-range', async () => {
     '--full'
   ])
 
-  const typeFile = join(dir, 'full', 'full.d.mts')
+  const typeFile = join(dir, 'full', 'full.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   ok(
     data.includes(

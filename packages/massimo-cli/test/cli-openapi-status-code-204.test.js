@@ -29,7 +29,7 @@ test(name, async () => {
 
   equal(await isFileAccessible(join(dir, name, name + '.js')), false)
 
-  const typeDef = join(dir, name, name + '-types.d.mts')
+  const typeDef = join(dir, name, name + '-types.d.ts')
   const def = await readFile(typeDef, 'utf-8')
   ok(def.includes(`export type PutMartelloRequest = {
   

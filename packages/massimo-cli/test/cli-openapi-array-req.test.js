@@ -25,7 +25,7 @@ test(`${name} with full option`, async () => {
   await fs.writeFile('./platformatic.service.json', JSON.stringify(pltServiceConfig, null, 2))
 
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapi, '--name', name, '--full'])
-  const typeFile = join(dir, name, `${name}.d.mts`)
+  const typeFile = join(dir, name, `${name}.d.ts`)
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -67,7 +67,7 @@ test(`${name} without full option`, async () => {
   await fs.writeFile('./platformatic.service.json', JSON.stringify(pltServiceConfig, null, 2))
 
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapi, '--name', name, '--full', 'false'])
-  const typeFile = join(dir, name, `${name}.d.mts`)
+  const typeFile = join(dir, name, `${name}.d.ts`)
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`

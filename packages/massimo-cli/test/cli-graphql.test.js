@@ -107,7 +107,7 @@ test('graphql client generation (typescript)', async t => {
 
   const dir = await moveToTmpdir(after)
 
-  await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'movies'])
+  await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'movies', '--type-extension'])
 
   const toWrite = `
 import Fastify from 'fastify'
@@ -197,7 +197,7 @@ test('graphql client generation with relations (typescript)', async t => {
 
   const dir = await moveToTmpdir(after)
 
-  await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'movies'])
+  await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'movies', '--type-extension'])
 
   const toWrite = `
 import Fastify from 'fastify';
@@ -309,7 +309,7 @@ test('graphql client generation (javascript) with slash at the end of the URL', 
 
   const dir = await moveToTmpdir(after)
 
-  await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'movies'])
+  await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'movies', '--type-extension'])
 
   const toWrite = `
 import Fastify from 'fastify'
