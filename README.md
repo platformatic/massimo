@@ -213,7 +213,7 @@ massimo <url> --name myclient --type graphql
 # Custom output folder
 massimo <url> --name myclient --folder ./clients
 
-# Specify module format (ESM or CommonJS)
+# Specify module format (valid values: esm, cjs)
 massimo <url> --name myclient --module esm
 massimo <url> --name myclient --module cjs
 ```

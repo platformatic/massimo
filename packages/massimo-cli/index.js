@@ -44,8 +44,13 @@ export async function createDirectory (path, empty = false) {
 }
 
 export async function detectModuleFormat (folder, explicitFormat) {
-  if (explicitFormat === 'esm' || explicitFormat === 'cjs') {
-    return explicitFormat
+  if (explicitFormat) {
+    if (explicitFormat === 'esm' || explicitFormat === 'cjs') {
+      return explicitFormat
+    }
+    throw new Error(
+      `Invalid module format: ${explicitFormat}. Valid values are 'esm' or 'cjs'`
+    )
   }
   let currentDir = folder
   while (currentDir !== dirname(currentDir)) {
@@ -90,10 +95,15 @@ async function writeOpenAPIClient (
   // TODO deal with yaml
   const schema = parseFile(text)
   if (!schema) {
-    throw new Error('Cannot parse OpenAPI file. Please make sure is a JSON or a YAML file.')
+    throw new Error(
+      'Cannot parse OpenAPI file. Please make sure is a JSON or a YAML file.'
+    )
   }
   if (!typesOnly) {
-    await writeFile(join(folder, `${name}.openapi.json`), JSON.stringify(schema, null, 2))
+    await writeFile(
+      join(folder, `${name}.openapi.json`),
+      JSON.stringify(schema, null, 2)
+    )
   }
 
   if (isFrontend) {
@@ -105,7 +115,7 @@ async function writeOpenAPIClient (
       language,
       logger,
       withCredentials,
-      propsOptional
+      propsOptional,
     })
     await writeFile(join(folder, `${name}-types.d.mts`), types)
     if (generateImplementation) {
@@ -122,7 +132,7 @@ async function writeOpenAPIClient (
       validateResponse,
       typesComment,
       propsOptional,
-      moduleFormat
+      moduleFormat,
     })
     const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.ts'
     const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
@@ -132,14 +142,30 @@ async function writeOpenAPIClient (
     }
 
     if (!typesOnly) {
-      await writeFile(join(folder, 'package.json'), getPackageJSON({ name, generateImplementation, moduleFormat }))
+      await writeFile(
+        join(folder, 'package.json'),
+        getPackageJSON({ name, generateImplementation, moduleFormat })
+      )
     }
   }
 }
 
-async function writeGraphQLClient (folder, name, schema, url, generateImplementation, moduleFormat) {
+async function writeGraphQLClient (
+  folder,
+  name,
+  schema,
+  url,
+  generateImplementation,
+  moduleFormat
+) {
   await createDirectory(folder, { recursive: true })
-  const { types, implementation } = processGraphQL({ schema, name, folder, url, moduleFormat })
+  const { types, implementation } = processGraphQL({
+    schema,
+    name,
+    folder,
+    url,
+    moduleFormat,
+  })
   const clientSchema = graphql.buildClientSchema(schema)
   const sdl = graphql.printSchema(clientSchema)
   const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.ts'
@@ -149,7 +175,10 @@ async function writeGraphQLClient (folder, name, schema, url, generateImplementa
   if (generateImplementation) {
     await writeFile(join(folder, `${name}.${implExt}`), implementation)
   }
-  await writeFile(join(folder, 'package.json'), getPackageJSON({ name, generateImplementation, moduleFormat }))
+  await writeFile(
+    join(folder, 'package.json'),
+    getPackageJSON({ name, generateImplementation, moduleFormat })
+  )
 }
 
 async function downloadAndWriteOpenAPI (
@@ -183,7 +212,9 @@ async function downloadAndWriteOpenAPI (
   }
 
   const dispatcher = retryTimeoutMs
-    ? getGlobalDispatcher().compose([interceptors.retry({ minTimeout: retryTimeoutMs })])
+    ? getGlobalDispatcher().compose([
+      interceptors.retry({ minTimeout: retryTimeoutMs })
+    ])
     : undefined
   const res = await request(url, { ...requestOptions, dispatcher })
   if (res.statusCode === 200) {
@@ -220,7 +251,14 @@ async function downloadAndWriteOpenAPI (
   return false
 }
 
-async function downloadAndWriteGraphQL (logger, url, folder, name, generateImplementation, typesOnly, moduleFormat) {
+async function downloadAndWriteGraphQL (
+  logger,
+  url,
+  folder,
+  name,
+  generateImplementation,
+  moduleFormat
+) {
   logger.debug(`Trying to download GraphQL schema from ${url}`)
   const query = graphql.getIntrospectionQuery()
   const res = await request(url, {
@@ -230,7 +268,7 @@ async function downloadAndWriteGraphQL (logger, url, folder, name, generateImple
     },
     body: JSON.stringify({
       query
-    })
+    }),
   })
 
   const text = await res.body.text()
@@ -240,7 +278,14 @@ async function downloadAndWriteGraphQL (logger, url, folder, name, generateImple
   }
 
   const { data: schema } = JSON.parse(text)
-  await writeGraphQLClient(folder, name, schema, url, generateImplementation, moduleFormat)
+  await writeGraphQLClient(
+    folder,
+    name,
+    schema,
+    url,
+    generateImplementation,
+    moduleFormat
+  )
   return 'graphql'
 }
 
@@ -286,13 +331,23 @@ async function readFromFileAndWrite (
     )
     return 'openapi'
   } catch (err) {
-    logger.error(err, `Error parsing OpenAPI definition: "${err.message}". Trying with GraphQL`)
+    logger.error(
+      err,
+      `Error parsing OpenAPI definition: "${err.message}". Trying with GraphQL`
+    )
     // try GraphQL
     const schema = graphql.buildSchema(text)
     const introspectionResult = graphql.introspectionFromSchema(schema)
 
     // dummy URL
-    await writeGraphQLClient(folder, name, introspectionResult, 'http://localhost:3042/graphql', generateImplementation, moduleFormat)
+    await writeGraphQLClient(
+      folder,
+      name,
+      introspectionResult,
+      'http://localhost:3042/graphql',
+      generateImplementation,
+      moduleFormat
+    )
     return 'graphql'
   }
 }
@@ -372,9 +427,27 @@ async function downloadAndProcess (options) {
       )
     } else if (options.type === 'graphql') {
       toTry.push(
-        downloadAndWriteGraphQL.bind(null, logger, url + '/graphql', folder, name, generateImplementation, typesOnly, moduleFormat)
+        downloadAndWriteGraphQL.bind(
+          null,
+          logger,
+          url + '/graphql',
+          folder,
+          name,
+          generateImplementation,
+          moduleFormat
+        )
       )
-      toTry.push(downloadAndWriteGraphQL.bind(null, logger, url, folder, name, generateImplementation, typesOnly, moduleFormat))
+      toTry.push(
+        downloadAndWriteGraphQL.bind(
+          null,
+          logger,
+          url,
+          folder,
+          name,
+          generateImplementation,
+          moduleFormat
+        )
+      )
     } else {
       // add download functions only if it's an URL
       toTry.push(
@@ -401,7 +474,15 @@ async function downloadAndProcess (options) {
         )
       )
       toTry.push(
-        downloadAndWriteGraphQL.bind(null, logger, url + '/graphql', folder, name, generateImplementation, typesOnly, moduleFormat)
+        downloadAndWriteGraphQL.bind(
+          null,
+          logger,
+          url + '/graphql',
+          folder,
+          name,
+          generateImplementation,
+          moduleFormat
+        )
       )
       toTry.push(
         downloadAndWriteOpenAPI.bind(
@@ -426,7 +507,17 @@ async function downloadAndProcess (options) {
           moduleFormat
         )
       )
-      toTry.push(downloadAndWriteGraphQL.bind(null, logger, url, folder, name, generateImplementation, typesOnly, moduleFormat))
+      toTry.push(
+        downloadAndWriteGraphQL.bind(
+          null,
+          logger,
+          url,
+          folder,
+          name,
+          generateImplementation,
+          moduleFormat
+        )
+      )
     }
   } else {
     // add readFromFileAndWrite to the functions only if it's not an URL
@@ -460,7 +551,9 @@ async function downloadAndProcess (options) {
   }
   /* c8 ignore next 3 */
   if (!found) {
-    throw new Error(`Could not find a valid OpenAPI or GraphQL schema at ${url}`)
+    throw new Error(
+      `Could not find a valid OpenAPI or GraphQL schema at ${url}`
+    )
   }
 }
 
@@ -492,7 +585,16 @@ export async function command (argv) {
     _: [url],
     ...options
   } = parseArgs(argv, {
-    string: ['name', 'folder', 'optional-headers', 'language', 'type', 'url-auth-headers', 'types-comment', 'module'],
+    string: [
+      'name',
+      'folder',
+      'optional-headers',
+      'language',
+      'type',
+      'url-auth-headers',
+      'types-comment',
+      'module'
+    ],
     boolean: [
       'typescript',
       'full-response',
@@ -552,7 +654,7 @@ export async function command (argv) {
     options.propsOptional = options['props-optional'] ?? true
 
     options.optionalHeaders = options['optional-headers']
-      ? options['optional-headers'].split(',').map(h => h.trim())
+      ? options['optional-headers'].split(',').map((h) => h.trim())
       : []
 
     options.validateResponse = options['validate-response']
@@ -562,6 +664,9 @@ export async function command (argv) {
     }
     options.folder = options.folder || join(process.cwd(), options.name)
     options.moduleFormat = await detectModuleFormat(options.folder, options.module)
+    if (!options.module) {
+      logger.info(`Module format detected: ${options.moduleFormat}`)
+    }
     options.urlAuthHeaders = options['url-auth-headers']
     options.typesComment = options['types-comment']
     options.withCredentials = options['with-credentials']
