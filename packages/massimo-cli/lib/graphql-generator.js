@@ -2,17 +2,17 @@ import CodeBlockWriter from 'code-block-writer'
 import { UnknownTypeError } from './errors.js'
 import { capitalize, toJavaScriptName } from './utils.js'
 
-export function processGraphQL ({ schema, name, folder, url, moduleFormat = 'esm' }) {
+export function processGraphQL ({ schema, name, folder, url, moduleFormat }) {
   schema = schema.__schema
   return {
-    types: generateTypesFromGraphQL({ schema, name, moduleFormat }),
+    types: generateTypesFromGraphQL({ schema, name }),
     implementation: generateImplementationFromGraqhQL({ schema, name, url, moduleFormat })
   }
 }
 
 const skip = new Set(['Query', 'Mutation', 'Subscription', 'Boolean', 'String'])
 
-function generateTypesFromGraphQL ({ schema, name, moduleFormat = 'esm' }) {
+function generateTypesFromGraphQL ({ schema, name }) {
   const camelcasedName = toJavaScriptName(name)
 
   const writer = new CodeBlockWriter({
@@ -60,7 +60,7 @@ function generateTypesFromGraphQL ({ schema, name, moduleFormat = 'esm' }) {
   return writer.toString()
 }
 
-function generateImplementationFromGraqhQL ({ name, url, moduleFormat = 'esm' }) {
+function generateImplementationFromGraqhQL ({ name, url, moduleFormat }) {
   const camelcasedName = toJavaScriptName(name)
   const isESM = moduleFormat === 'esm'
 
@@ -102,6 +102,7 @@ function generateImplementationFromGraqhQL ({ name, url, moduleFormat = 'esm' })
   } else {
     writer.writeLine(`module.exports = ${functionName}`)
     writer.writeLine(`module.exports.default = ${functionName}`)
+    writer.writeLine(`module.exports.${functionName} = ${functionName}`)
   }
   return writer.toString()
 }

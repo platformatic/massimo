@@ -84,7 +84,7 @@ test('module format - package.json without type field (defaults to CommonJS)', a
   const files = await fs.readdir(join(dir, 'movies'))
   deepEqual(files.sort(), [
     'movies.cjs',
-    'movies.d.ts',
+    'movies.d.cts',
     'movies.schema.graphql',
     'package.json'
   ])
@@ -94,7 +94,7 @@ test('module format - package.json without type field (defaults to CommonJS)', a
   )
   deepEqual(pkg, {
     name: 'movies',
-    types: './movies.d.ts',
+    types: './movies.d.cts',
     main: './movies.cjs'
   })
 })
@@ -135,7 +135,7 @@ test('module format - package.json with type commonjs (generates CommonJS)', asy
   const files = await fs.readdir(join(dir, 'movies'))
   deepEqual(files.sort(), [
     'movies.cjs',
-    'movies.d.ts',
+    'movies.d.cts',
     'movies.schema.graphql',
     'package.json'
   ])
@@ -145,7 +145,7 @@ test('module format - package.json with type commonjs (generates CommonJS)', asy
   )
   deepEqual(pkg, {
     name: 'movies',
-    types: './movies.d.ts',
+    types: './movies.d.cts',
     main: './movies.cjs'
   })
 })
@@ -242,7 +242,7 @@ test('module format - explicit --module cjs flag', async t => {
   const files = await fs.readdir(join(dir, 'movies'))
   deepEqual(files.sort(), [
     'movies.cjs',
-    'movies.d.ts',
+    'movies.d.cts',
     'movies.schema.graphql',
     'package.json'
   ])
@@ -252,7 +252,7 @@ test('module format - explicit --module cjs flag', async t => {
   )
   deepEqual(pkg, {
     name: 'movies',
-    types: './movies.d.ts',
+    types: './movies.d.cts',
     main: './movies.cjs'
   })
 })

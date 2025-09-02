@@ -254,7 +254,7 @@ This overrides any auto-detection and generates files in the specified format.
 | Module Format | Implementation | Types | Package.json |
 |--------------|----------------|--------|--------------|
 | **ESM** | `.mjs` | `.d.mts` | `"type": "module"` |
-| **CommonJS** | `.cjs` | `.d.ts` | No `"type"` field |
+| **CommonJS** | `.cjs` | `.d.cts` | No `"type"` field |
 
 ### Client Options
 

@@ -134,7 +134,7 @@ async function writeOpenAPIClient (
       propsOptional,
       moduleFormat,
     })
-    const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.ts'
+    const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
     const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
     await writeFile(join(folder, `${name}.${typeExt}`), types)
     if (generateImplementation) {
@@ -168,7 +168,7 @@ async function writeGraphQLClient (
   })
   const clientSchema = graphql.buildClientSchema(schema)
   const sdl = graphql.printSchema(clientSchema)
-  const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.ts'
+  const typeExt = moduleFormat === 'esm' ? 'd.mts' : 'd.cts'
   const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
   await writeFile(join(folder, `${name}.schema.graphql`), sdl)
   await writeFile(join(folder, `${name}.${typeExt}`), types)
@@ -561,7 +561,7 @@ function getPackageJSON ({ name, generateImplementation, moduleFormat }) {
   const isESM = moduleFormat === 'esm'
   const obj = {
     name,
-    types: `./${name}.${isESM ? 'd.mts' : 'd.ts'}`
+    types: `./${name}.${isESM ? 'd.mts' : 'd.cts'}`
   }
 
   if (isESM) {

@@ -12,7 +12,7 @@ export function processOpenAPI ({
   validateResponse,
   typesComment,
   propsOptional,
-  moduleFormat = 'esm'
+  moduleFormat
 }) {
   return {
     types: generateTypesFromOpenAPI({
@@ -22,14 +22,13 @@ export function processOpenAPI ({
       fullRequest,
       optionalHeaders,
       typesComment,
-      propsOptional,
-      moduleFormat
+      propsOptional
     }),
     implementation: generateImplementationFromOpenAPI({ name, fullResponse, fullRequest, validateResponse, moduleFormat })
   }
 }
 
-function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, validateResponse, moduleFormat = 'esm' }) {
+function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, validateResponse, moduleFormat }) {
   const camelcasedName = toJavaScriptName(name)
   const isESM = moduleFormat === 'esm'
 
@@ -72,6 +71,7 @@ function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, v
   } else {
     writer.writeLine(`module.exports = ${functionName}`)
     writer.writeLine(`module.exports.default = ${functionName}`)
+    writer.writeLine(`module.exports.${functionName} = ${functionName}`)
   }
   return writer.toString()
 }
@@ -84,7 +84,6 @@ function generateTypesFromOpenAPI ({
   optionalHeaders,
   typesComment,
   propsOptional,
-  moduleFormat = 'esm'
 }) {
   const camelcasedName = toJavaScriptName(name)
   const capitalizedName = capitalize(camelcasedName)
