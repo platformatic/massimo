@@ -216,6 +216,9 @@ massimo <url> --name myclient --folder ./clients
 # Specify module format (valid values: esm, cjs)
 massimo <url> --name myclient --module esm
 massimo <url> --name myclient --module cjs
+
+# Force TypeScript declaration file extensions (.d.mts/.d.cts)
+massimo <url> --name myclient --type-extension
 ```
 
 ### Module Format Detection
@@ -255,6 +258,53 @@ This overrides any auto-detection and generates files in the specified format.
 |--------------|----------------|--------|--------------|
 | **ESM** | `.mjs` | `.d.mts` | `"type": "module"` |
 | **CommonJS** | `.cjs` | `.d.cts` | No `"type"` field |
+
+### TypeScript Declaration File Extensions
+
+Massimo uses intelligent logic to determine the appropriate TypeScript declaration file extension (`.d.ts`, `.d.mts`, or `.d.cts`):
+
+#### **Type Extension Determination Rules**
+
+1. **When `--type-extension` is specified**:
+   - Always generates module-specific extensions
+   - ESM format → `.d.mts`
+   - CommonJS format → `.d.cts`
+
+2. **When `--type-extension` is NOT specified**:
+   - If `--module` flag is provided:
+     - Compares the specified module format with the parent package.json type
+     - If they match → generates `.d.ts` (universal compatibility)
+     - If they differ → generates module-specific extension (`.d.mts` or `.d.cts`)
+   - If no `--module` flag is provided:
+     - Always generates `.d.ts` for maximum compatibility
+
+3. **Parent Package.json Detection**:
+   - Searches up the directory tree from the output location
+   - Stops at the first package.json found
+   - ESM parent: `"type": "module"`
+   - CommonJS parent: no `type` field or `"type": "commonjs"`
+
+#### **Examples**
+
+```bash
+# Always use module-specific extensions
+massimo <url> --name myclient --type-extension
+
+# Generate .d.ts when module format matches parent package.json
+massimo <url> --name myclient --module esm  # In ESM project → .d.ts
+massimo <url> --name myclient --module cjs  # In CommonJS project → .d.ts
+
+# Generate module-specific when formats differ
+massimo <url> --name myclient --module esm  # In CommonJS project → .d.mts
+massimo <url> --name myclient --module cjs  # In ESM project → .d.cts
+
+# Auto-detect everything (no module flag) → always .d.ts  
+massimo <url> --name myclient  # → .d.ts (maximum compatibility)
+
+# Explicit module generates module-specific when no parent package.json
+massimo <url> --name myclient --module esm  # No parent pkg → .d.mts
+massimo <url> --name myclient --module cjs  # No parent pkg → .d.cts
+```
 
 ### Client Options
 

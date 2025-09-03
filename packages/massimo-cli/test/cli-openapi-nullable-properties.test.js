@@ -17,7 +17,7 @@ test('generate types with nullable properties', async t => {
     '--full-request',
     '--full-response'
   ])
-  const typeFile = join(dir, 'nullable-props', 'nullable-props.d.mts')
+  const typeFile = join(dir, 'nullable-props', 'nullable-props.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`

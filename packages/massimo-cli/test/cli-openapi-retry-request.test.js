@@ -53,9 +53,9 @@ test('retry-request', async () => {
   ])
 
   ok(await isFileAccessible(join(dir, 'full', 'full.mjs')), 'Implementation file should be created')
-  ok(await isFileAccessible(join(dir, 'full', 'full.d.mts')), 'Type definition file should be created')
+  ok(await isFileAccessible(join(dir, 'full', 'full.d.ts')), 'Type definition file should be created')
 
-  const typeFile = join(dir, 'full', 'full.d.mts')
+  const typeFile = join(dir, 'full', 'full.d.ts')
   const data = await readFile(typeFile, 'utf-8')
 
   ok(data.includes('export type GetRetryRequest ='), 'Should contain GetRetryRequest type')

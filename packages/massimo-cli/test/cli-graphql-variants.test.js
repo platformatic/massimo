@@ -107,7 +107,7 @@ test('dashes in name (typescript)', async t => {
 
   const dir = await moveToTmpdir(after)
 
-  await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'uncanny-movies'])
+  await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'uncanny-movies', '--type-extension'])
 
   const toWrite = `
 import Fastify from 'fastify'

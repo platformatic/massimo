@@ -34,7 +34,7 @@ test(testName, async t => {
     '--props-optional'
   ])
 
-  const typeFile = join(dir, testName, `${testName}.d.mts`)
+  const typeFile = join(dir, testName, `${testName}.d.ts`)
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -51,7 +51,7 @@ export type PostHelloRequest = {
   // Checking default behavior
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapi, '--name', 'defaulted', '--full'])
   equal(
-    (await readFile(join(dir, 'defaulted', 'defaulted.d.mts'), 'utf-8')).includes(`
+    (await readFile(join(dir, 'defaulted', 'defaulted.d.ts'), 'utf-8')).includes(`
 export type PostHelloRequest = {
   body: {
     'name': string;

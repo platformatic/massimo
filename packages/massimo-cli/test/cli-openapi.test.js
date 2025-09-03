@@ -110,7 +110,8 @@ test('openapi client generation (typescript)', async t => {
     '--name',
     'movies',
     '--full',
-    'false'
+    'false',
+    '--type-extension'
   ])
 
   const toWrite = `
@@ -585,7 +586,7 @@ test('name with dashes', async t => {
     const pkg = JSON.parse(await fs.readFile(join(dir, 'uncanny-movies', 'package.json'), 'utf-8'))
     same(pkg, {
       name: 'uncanny-movies',
-      types: './uncanny-movies.d.mts',
+      types: './uncanny-movies.d.ts',
       type: 'module',
       main: './uncanny-movies.mjs'
     })
@@ -652,7 +653,8 @@ test('no dashes typescript', async t => {
     '--name',
     'uncanny-movies',
     '--full',
-    'false'
+    'false',
+    '--type-extension'
   ])
 
   const toWrite = `
@@ -751,7 +753,7 @@ test('name with tilde', async t => {
     const pkg = JSON.parse(await fs.readFile(join(dir, 'uncanny~movies', 'package.json'), 'utf-8'))
     same(pkg, {
       name: 'uncanny~movies',
-      types: './uncanny~movies.d.mts',
+      types: './uncanny~movies.d.ts',
       type: 'module',
       main: './uncanny~movies.mjs'
     })
@@ -813,7 +815,7 @@ test('openapi client generation from YAML file', async t => {
   same(json.openapi, '3.0.3')
 
   // Check operation names are correctly capitalized
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const typeData = await readFile(typeFile, 'utf-8')
 
   equal(match(typeData, 'getMovies(req: GetMoviesRequest): Promise<GetMoviesResponses>;'), true)
@@ -825,7 +827,7 @@ test('nested optional parameters are correctly identified', async t => {
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapiFile, '--name', 'movies', '--full', 'false'])
 
   // check the type file has the correct implementation for the request
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
 
   equal(
@@ -841,7 +843,7 @@ test('request with same parameter name in body/path/header/query', async t => {
   const openapiFile = join(import.meta.dirname, 'fixtures', 'same-parameter-name-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapiFile, '--name', 'movies', '--full', 'false'])
   // check the type file has the correct implementation for the request
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -881,7 +883,7 @@ test('openapi client generation (javascript) from file with fullRequest, fullRes
     ])
 
     // check the type file has the correct implementation for the request and the response
-    const typeFile = join(dir, 'full', 'full.d.mts')
+    const typeFile = join(dir, 'full', 'full.d.ts')
     const data = await readFile(typeFile, 'utf-8')
     equal(
       data.includes(`
@@ -966,7 +968,7 @@ test('do not generate implementation file if in @platformatic/service', async t 
     ])
 
     // check the type file has the correct implementation for the request and the response
-    const typeFile = join(dir, 'full', 'full.d.mts')
+    const typeFile = join(dir, 'full', 'full.d.ts')
     const data = await readFile(typeFile, 'utf-8')
     equal(
       data.includes(`
@@ -1014,7 +1016,7 @@ test('optional-headers option', async t => {
     'false'
   ])
 
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -1032,7 +1034,7 @@ test('common parameters in paths', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'common-parameters', 'openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--full-request'])
 
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -1164,7 +1166,7 @@ test('requestbody as array', async t => {
 
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'requestbody-as-array-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--full', 'false'])
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
 
   equal(
@@ -1188,7 +1190,7 @@ test('requestBody and params should generate a full request', async t => {
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapiFile, '--name', 'movies', '--full', 'false'])
 
   // check the type file has the correct implementation for the request
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -1206,7 +1208,7 @@ test('support formdata', async t => {
 
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'multipart-formdata-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--full', 'false'])
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   equal(
     data.includes(`
@@ -1234,7 +1236,7 @@ test('export formdata on full request object', async t => {
 
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'multipart-formdata-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--full-request'])
-  const typeFile = join(dir, 'movies', 'movies.d.mts')
+  const typeFile = join(dir, 'movies', 'movies.d.ts')
   const data = await readFile(typeFile, 'utf-8')
   equal(data.includes("import { type FormData } from 'undici"), true)
   equal(
@@ -1252,7 +1254,7 @@ test('client with watt.json and skipConfigUpdate', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'client-with-config', 'openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'client', '--full-request'])
 
-  const data = await readFile(join(dir, 'client', 'client.d.mts'), 'utf-8')
+  const data = await readFile(join(dir, 'client', 'client.d.ts'), 'utf-8')
   ok(data.includes("import { type FormData } from 'undici"))
 
   const wattConfig = JSON.parse(
@@ -1268,7 +1270,7 @@ test('tsdoc client operation descriptions', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'tsdoc-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'tsdoc', '--full', 'false'])
 
-  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.mts'), 'utf-8')
+  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.ts'), 'utf-8')
 
   // Description and summary on method
   ok(
@@ -1324,7 +1326,7 @@ test('tsdoc client request option descriptions', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'tsdoc-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'tsdoc', '--full', 'false'])
 
-  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.mts'), 'utf-8')
+  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.ts'), 'utf-8')
 
   // Description on title, not on id, built from requestBody scheme #ref
   ok(
@@ -1392,7 +1394,7 @@ test('tsdoc client request option descriptions (full-request)', async t => {
   const openAPIfile = join(import.meta.dirname, 'fixtures', 'tsdoc-openapi.json')
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'tsdoc', '--full-request'])
 
-  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.mts'), 'utf-8')
+  const data = await readFile(join(dir, 'tsdoc', 'tsdoc.d.ts'), 'utf-8')
 
   // Descriptions from mixed parameters and requestBody schema #ref
   ok(
