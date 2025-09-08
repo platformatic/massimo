@@ -750,7 +750,6 @@ export async function command (argv) {
     options.urlAuthHeaders = options['url-auth-headers']
     options.typesComment = options['types-comment']
     options.withCredentials = options['with-credentials']
-    options.skipConfigUpdate = options['skip-config-update']
     options.retryTimeoutMs = options['retry-timeout-ms']
     options.typeExtension = options['type-extension']
     options.explicitModuleFormat = !!options.module
