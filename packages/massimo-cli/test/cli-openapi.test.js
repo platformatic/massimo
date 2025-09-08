@@ -1225,7 +1225,7 @@ export type Movies = {
   equal(
     data.includes(`
 export type PostSampleRequest = {
-  'data': { 'description'?: string; 'endDate': string | Date; 'startDate': string | Date };
+  'data'?: { 'description'?: string; 'endDate': string | Date; 'startDate': string | Date };
 }`),
     true
   )

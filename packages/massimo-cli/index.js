@@ -687,7 +687,9 @@ export async function command (argv) {
     default: {
       typescript: false,
       language: 'js',
-      full: true
+      full: true,
+      'props-optional': true,
+      'skip-config-update': true
     },
     alias: {
       n: 'name',
@@ -729,7 +731,7 @@ export async function command (argv) {
 
     options.fullRequest = options['full-request']
     options.fullResponse = options['full-response']
-    options.propsOptional = options['props-optional'] ?? true
+    options.propsOptional = options['props-optional']
 
     options.optionalHeaders = options['optional-headers']
       ? options['optional-headers'].split(',').map((h) => h.trim())
@@ -748,7 +750,7 @@ export async function command (argv) {
     options.urlAuthHeaders = options['url-auth-headers']
     options.typesComment = options['types-comment']
     options.withCredentials = options['with-credentials']
-    options.skipConfigUpdate = options['skip-config-update'] ?? true
+    options.skipConfigUpdate = options['skip-config-update']
     options.retryTimeoutMs = options['retry-timeout-ms']
     options.typeExtension = options['type-extension']
     options.explicitModuleFormat = !!options.module
