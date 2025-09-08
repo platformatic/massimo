@@ -681,15 +681,13 @@ export async function command (argv) {
       'frontend',
       'validate-response',
       'props-optional',
-      'skip-config-update',
       'type-extension'
     ],
     default: {
       typescript: false,
       language: 'js',
       full: true,
-      'props-optional': true,
-      'skip-config-update': true
+      'props-optional': true
     },
     alias: {
       n: 'name',
