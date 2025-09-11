@@ -681,13 +681,13 @@ export async function command (argv) {
       'frontend',
       'validate-response',
       'props-optional',
-      'skip-config-update',
       'type-extension'
     ],
     default: {
       typescript: false,
       language: 'js',
-      full: true
+      full: true,
+      'props-optional': true
     },
     alias: {
       n: 'name',
@@ -729,7 +729,7 @@ export async function command (argv) {
 
     options.fullRequest = options['full-request']
     options.fullResponse = options['full-response']
-    options.propsOptional = options['props-optional'] ?? true
+    options.propsOptional = options['props-optional']
 
     options.optionalHeaders = options['optional-headers']
       ? options['optional-headers'].split(',').map((h) => h.trim())
@@ -748,7 +748,6 @@ export async function command (argv) {
     options.urlAuthHeaders = options['url-auth-headers']
     options.typesComment = options['types-comment']
     options.withCredentials = options['with-credentials']
-    options.skipConfigUpdate = options['skip-config-update'] ?? true
     options.retryTimeoutMs = options['retry-timeout-ms']
     options.typeExtension = options['type-extension']
     options.explicitModuleFormat = !!options.module

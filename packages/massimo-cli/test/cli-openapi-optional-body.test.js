@@ -49,7 +49,7 @@ export type PostHelloRequest = {
   )
 
   // Checking default behavior
-  await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapi, '--name', 'defaulted', '--full'])
+  await execa('node', [join(import.meta.dirname, '..', 'index.js'), openapi, '--name', 'defaulted', '--full', '--no-props-optional'])
   equal(
     (await readFile(join(dir, 'defaulted', 'defaulted.d.ts'), 'utf-8')).includes(`
 export type PostHelloRequest = {

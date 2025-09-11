@@ -1225,7 +1225,7 @@ export type Movies = {
   equal(
     data.includes(`
 export type PostSampleRequest = {
-  'data': { 'description'?: string; 'endDate': string | Date; 'startDate': string | Date };
+  'data'?: { 'description'?: string; 'endDate': string | Date; 'startDate': string | Date };
 }`),
     true
   )
@@ -1246,22 +1246,6 @@ export type PostSampleRequest = {
 }`),
     true
   )
-})
-
-test('client with watt.json and skipConfigUpdate', async t => {
-  const dir = await moveToTmpdir(after)
-
-  const openAPIfile = join(import.meta.dirname, 'fixtures', 'client-with-config', 'openapi.json')
-  await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'client', '--full-request'])
-
-  const data = await readFile(join(dir, 'client', 'client.d.ts'), 'utf-8')
-  ok(data.includes("import { type FormData } from 'undici"))
-
-  const wattConfig = JSON.parse(
-    await readFile(join(import.meta.dirname, 'fixtures', 'client-with-config', 'watt.json'), 'utf-8')
-  )
-  ok('$schema' in wattConfig)
-  ok(!('clients' in wattConfig), 'watt.json config has no clients')
 })
 
 test('tsdoc client operation descriptions', async t => {
