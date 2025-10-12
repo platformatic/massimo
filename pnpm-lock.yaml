@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@fastify/pre-commit':
         specifier: ^2.2.0
-        version: 2.2.0
+        version: 2.2.1
       markdownlint-cli2:
         specifier: ^0.18.1
         version: 0.18.1
@@ -583,8 +583,8 @@ packages:
   '@fastify/multipart@9.0.3':
     resolution: {integrity: sha512-pJogxQCrT12/6I5Fh6jr3narwcymA0pv4B0jbC7c6Bl9wnrxomEUnV0d26w6gUls7gSXmhG8JGRMmHFIPsxt1g==}
 
-  '@fastify/pre-commit@2.2.0':
-    resolution: {integrity: sha512-P/01iODIvntjCGKNGhCttCuW81Fi6RmU+n3uk0m1w5gr2t6gU/t9gyNJ1WalUmQgJBsJnK+CVAxoY4ugqQo03g==}
+  '@fastify/pre-commit@2.2.1':
+    resolution: {integrity: sha512-EluAZU4mFnCJfb6RyWFpWvEIAwdchipoiWMSRkQEaQ6ubbf6UVzYuXKSSZJR36SgtgZmKV5oRMxxwMNta5hskg==}
 
   '@fastify/proxy-addr@5.0.0':
     resolution: {integrity: sha512-37qVVA1qZ5sgH7KpHkkC4z9SK6StIsIcOmpjvMPXNb3vx2GQxhZocogVYbr2PbbeLCQxYIPDok307xEvRZOzGA==}
@@ -4713,7 +4713,7 @@ snapshots:
       fastify-plugin: 5.0.1
       secure-json-parse: 3.0.2
 
-  '@fastify/pre-commit@2.2.0':
+  '@fastify/pre-commit@2.2.1':
     dependencies:
       cross-spawn: 7.0.6
       which: 5.0.0
