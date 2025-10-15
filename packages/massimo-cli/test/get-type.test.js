@@ -275,20 +275,20 @@ test('support enum with nullable flag and null already in enum', async () => {
         type: 'string'
       },
       {
+        enum: ['null'],
+        nullable: true
+      },
+      {
         enum: ['bar'],
         type: 'string'
       },
       {
         enum: ['baz'],
         type: 'string'
-      },
-      {
-        enum: ['null'],
-        nullable: true
       }
     ]
   }
-  equal(getType(enumDef), '\'foo\' | \'bar\' | \'baz\' | null')
+  equal(getType(enumDef), '\'foo\' | null | \'bar\' | \'baz\'')
 })
 
 test('support enum with non nullable flag and null in enum', async () => {
@@ -299,17 +299,17 @@ test('support enum with non nullable flag and null in enum', async () => {
         type: 'string'
       },
       {
+        enum: ['null']
+      },
+      {
         enum: ['bar'],
         type: 'string'
       },
       {
         enum: ['baz'],
         type: 'string'
-      },
-      {
-        enum: ['null']
       }
     ]
   }
-  equal(getType(enumDef), '\'foo\' | \'bar\' | \'baz\' | null')
+  equal(getType(enumDef), '\'foo\' | null | \'bar\' | \'baz\'')
 })
