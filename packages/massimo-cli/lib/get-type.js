@@ -66,17 +66,16 @@ export function getType (typeDef, methodType, spec) {
   }
   if (typeDef.enum) {
     const nullable = typeDef.nullable
-    return (
-      typeDef.enum
-        .map(en => {
-          if (typeDef.type === 'string') {
-            return `'${en.replace(/'/g, "\\'")}'`
-          } else {
-            return en
-          }
-        })
-        .join(' | ') + (nullable === true ? ' | null' : '')
-    )
+    const chainedTypes = typeDef.enum
+      .map(en => {
+        if (typeDef.type === 'string') {
+          return `'${en.replace(/'/g, "\\'")}'`
+        } else {
+          return en
+        }
+      })
+      .join(' | ')
+    return (nullable === true && chainedTypes !== 'null') ? `${chainedTypes} | null` : chainedTypes
   }
   if (typeDef.type === 'object') {
     const additionalProps = typeDef?.additionalProperties
