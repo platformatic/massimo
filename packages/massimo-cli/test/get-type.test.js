@@ -313,3 +313,15 @@ test('support enum with non nullable flag and null in enum', async () => {
   }
   equal(getType(enumDef), '\'foo\' | null | \'bar\' | \'baz\'')
 })
+
+test('support enum with nullable flag and multiple null values', async () => {
+  const enumDef = {
+    anyOf: [
+      {
+        enum: ['value', 'null', 'other'],
+        nullable: true
+      }
+    ]
+  }
+  equal(getType(enumDef), 'value | null | other')
+})
