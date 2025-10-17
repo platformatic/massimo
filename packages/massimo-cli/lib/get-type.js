@@ -65,6 +65,9 @@ export function getType (typeDef, methodType, spec) {
     return `Array<${getType(typeDef.items, methodType, spec)}>${nullable === true ? ' | null' : ''}`
   }
   if (typeDef.enum) {
+    if (typeDef.type === undefined && typeDef.enum.includes('null')) {
+      return 'null'
+    }
     const nullable = typeDef.nullable
     const chainedTypes = typeDef.enum
       .map(en => {
@@ -75,7 +78,7 @@ export function getType (typeDef, methodType, spec) {
         }
       })
       .join(' | ')
-    return (nullable === true && !chainedTypes.includes(null)) ? `${chainedTypes} | null` : chainedTypes
+    return nullable === true ? `${chainedTypes} | null` : chainedTypes
   }
   if (typeDef.type === 'object') {
     const additionalProps = typeDef?.additionalProperties
