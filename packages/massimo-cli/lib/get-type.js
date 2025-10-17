@@ -65,7 +65,9 @@ export function getType (typeDef, methodType, spec) {
     return `Array<${getType(typeDef.items, methodType, spec)}>${nullable === true ? ' | null' : ''}`
   }
   if (typeDef.enum) {
+    // Note: null type represented with an enum have no types and single enum element 'null'
     if (typeDef.type === undefined && typeDef.enum.includes('null')) {
+      // Ignore `nullable` as it is implied by the enum
       return 'null'
     }
     const nullable = typeDef.nullable
@@ -139,6 +141,7 @@ function JSONSchemaToTsType ({ type, format, nullable }, methodType) {
       resultType = 'boolean'
       break
     case 'null':
+      // Remove duplication, no need to make it nullable later, return directly
       return 'null'
     // TODO what other types should we support here?
   }
