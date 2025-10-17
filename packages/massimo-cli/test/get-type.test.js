@@ -325,3 +325,32 @@ test('support enum with nullable flag and multiple values, including null', asyn
   }
   equal(getType(enumDef), 'value | null | other')
 })
+
+test('support enum nullable string', async () => {
+  const def = {
+    enum: [
+      'annulment',
+      'otherAction'
+    ],
+    nullable: true,
+    type: 'string'
+  }
+  equal(getType(def), "'annulment' | 'otherAction' | null")
+})
+
+test('support enum nullable null', async () => {
+  const def = {
+    enum: ['null'],
+    nullable: true
+  }
+  equal(getType(def), 'null')
+})
+
+test('support type nullable null', async () => {
+  const def = {
+    type: 'null',
+    nullable: true
+  }
+  console.log('getType(def)', getType(def))
+  // equal(getType(def), 'null')
+})

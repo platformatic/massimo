@@ -75,7 +75,7 @@ export function getType (typeDef, methodType, spec) {
         }
       })
       .join(' | ')
-    return (nullable === true && !chainedTypes.includes('null')) ? `${chainedTypes} | null` : chainedTypes
+    return (nullable === true && !chainedTypes.includes(null)) ? `${chainedTypes} | null` : chainedTypes
   }
   if (typeDef.type === 'object') {
     const additionalProps = typeDef?.additionalProperties
