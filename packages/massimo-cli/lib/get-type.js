@@ -65,18 +65,22 @@ export function getType (typeDef, methodType, spec) {
     return `Array<${getType(typeDef.items, methodType, spec)}>${nullable === true ? ' | null' : ''}`
   }
   if (typeDef.enum) {
+    // Note: null type represented with an enum have no types and single enum element 'null'
+    if (typeDef.type === undefined && typeDef.enum.includes('null')) {
+      // Ignore `nullable` as it is implied by the enum
+      return 'null'
+    }
     const nullable = typeDef.nullable
-    return (
-      typeDef.enum
-        .map(en => {
-          if (typeDef.type === 'string') {
-            return `'${en.replace(/'/g, "\\'")}'`
-          } else {
-            return en
-          }
-        })
-        .join(' | ') + (nullable === true ? ' | null' : '')
-    )
+    const chainedTypes = typeDef.enum
+      .map(en => {
+        if (typeDef.type === 'string') {
+          return `'${en.replace(/'/g, "\\'")}'`
+        } else {
+          return en
+        }
+      })
+      .join(' | ')
+    return nullable === true ? `${chainedTypes} | null` : chainedTypes
   }
   if (typeDef.type === 'object') {
     const additionalProps = typeDef?.additionalProperties
@@ -137,8 +141,8 @@ function JSONSchemaToTsType ({ type, format, nullable }, methodType) {
       resultType = 'boolean'
       break
     case 'null':
-      resultType = 'null'
-      break
+      // Remove duplication, no need to make it nullable later, return directly
+      return 'null'
     // TODO what other types should we support here?
   }
 

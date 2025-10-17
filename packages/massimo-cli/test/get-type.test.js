@@ -266,3 +266,90 @@ test('support null', async () => {
   }
   equal(getType(nullDef), 'null')
 })
+
+test('support enum with nullable flag and null already in enum', async () => {
+  const enumDef = {
+    anyOf: [
+      {
+        enum: ['foo'],
+        type: 'string'
+      },
+      {
+        enum: ['null'],
+        nullable: true
+      },
+      {
+        enum: ['bar'],
+        type: 'string'
+      },
+      {
+        enum: ['baz'],
+        type: 'string'
+      }
+    ]
+  }
+  equal(getType(enumDef), '\'foo\' | null | \'bar\' | \'baz\'')
+})
+
+test('support enum with non nullable flag and null in enum', async () => {
+  const enumDef = {
+    anyOf: [
+      {
+        enum: ['foo'],
+        type: 'string'
+      },
+      {
+        enum: ['null']
+      },
+      {
+        enum: ['bar'],
+        type: 'string'
+      },
+      {
+        enum: ['baz'],
+        type: 'string'
+      }
+    ]
+  }
+  equal(getType(enumDef), '\'foo\' | null | \'bar\' | \'baz\'')
+})
+
+test('support enum with nullable flag and multiple values, including null', async () => {
+  const enumDef = {
+    anyOf: [
+      {
+        enum: ['value', 'null', 'other'],
+        nullable: true
+      }
+    ]
+  }
+  equal(getType(enumDef), 'null')
+})
+
+test('support enum nullable string', async () => {
+  const def = {
+    enum: [
+      'annullment',
+      'otherAction'
+    ],
+    nullable: true,
+    type: 'string'
+  }
+  equal(getType(def), "'annullment' | 'otherAction' | null")
+})
+
+test('support enum nullable null', async () => {
+  const def = {
+    enum: ['null'],
+    nullable: true
+  }
+  equal(getType(def), 'null')
+})
+
+test('support type nullable null', async () => {
+  const def = {
+    type: 'null',
+    nullable: true
+  }
+  equal(getType(def), 'null')
+})
