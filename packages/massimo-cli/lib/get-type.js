@@ -139,8 +139,7 @@ function JSONSchemaToTsType ({ type, format, nullable }, methodType) {
       resultType = 'boolean'
       break
     case 'null':
-      resultType = 'null'
-      break
+      return 'null'
     // TODO what other types should we support here?
   }
 

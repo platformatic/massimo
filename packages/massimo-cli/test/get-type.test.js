@@ -351,6 +351,5 @@ test('support type nullable null', async () => {
     type: 'null',
     nullable: true
   }
-  console.log('aaa', getType(def))
-  // equal(getType(def), 'null')
+  equal(getType(def), 'null')
 })
