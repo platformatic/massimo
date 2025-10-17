@@ -314,7 +314,7 @@ test('support enum with non nullable flag and null in enum', async () => {
   equal(getType(enumDef), '\'foo\' | null | \'bar\' | \'baz\'')
 })
 
-test('support enum with nullable flag and multiple null values', async () => {
+test('support enum with nullable flag and multiple values, including null', async () => {
   const enumDef = {
     anyOf: [
       {
