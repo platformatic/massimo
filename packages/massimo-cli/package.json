@@ -46,7 +46,7 @@
     "yaml": "^2.4.1"
   },
   "devDependencies": {
-    "@platformatic/composer": "3.13.1",
+    "@platformatic/composer": "3.14.0",
     "@platformatic/db": "3.0.0-alpha.6",
     "@platformatic/foundation": "3.0.0-alpha.6",
     "@platformatic/runtime": "3.0.0-alpha.6",
