@@ -77,3 +77,4 @@ Options:
 * `--props-optional` - If `true`, properties will be defined as optional unless they're part of the `required` array. By default this option is `true`.
 * `--retry-timeout-ms` - If passed, the HTTP request to get an Open API schema will be retried (reference: https://undici.nodejs.org/#/docs/api/RetryHandler.md)
 * `--type-extension` - Force the use of module-specific type extensions (.d.mts for ESM, .d.cts for CJS) instead of the default logic.
+* `--skip-prefixed-url` - If passed, it will avoid unnecessary extra HTTP call to check if, for instance, the `/documentation/json` Open API URL exists
