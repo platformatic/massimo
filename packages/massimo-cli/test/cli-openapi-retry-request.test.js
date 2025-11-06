@@ -6,6 +6,55 @@ import { MockAgent, setGlobalDispatcher } from 'undici'
 import { command, isFileAccessible } from '../index.js'
 import { moveToTmpdir } from './helper.js'
 
+test('skip-prefixed-url', async () => {
+  const dir = await moveToTmpdir(after)
+
+  const mockDispatcher = new MockAgent({ keepAliveTimeout: 10, keepAliveMaxTimeout: 10 })
+
+  mockDispatcher.disableNetConnect()
+
+  setGlobalDispatcher(mockDispatcher)
+
+  // This is the endpoint the CLI will try to call
+  const mockPool = mockDispatcher.get('http://mock.platformatic.dev')
+
+  mockPool.intercept({ path: '/my.openapi.json' }).reply(200, {
+    openapi: '3.0.3',
+    info: {
+      title: 'Platformatic DB',
+      description: 'Testing HTTP REST skip prefixed url',
+      version: '1.0.0'
+    },
+    paths: {
+      '/foo': {
+        get: {
+          operationId: 'skipPrefixedURL',
+          responses: { 200: { description: 'Default Response' } }
+        }
+      }
+    }
+  })
+
+  await command([
+    'http://mock.platformatic.dev/my.openapi.json',
+    '--name',
+    'full',
+    '--validate-response',
+    '--optional-headers',
+    'headerId',
+    '--full',
+    '--skip-prefixed-url'
+  ])
+
+  ok(await isFileAccessible(join(dir, 'full', 'full.mjs')), 'Implementation file should be created')
+  ok(await isFileAccessible(join(dir, 'full', 'full.d.ts')), 'Type definition file should be created')
+
+  const typeFile = join(dir, 'full', 'full.d.ts')
+  const data = await readFile(typeFile, 'utf-8')
+  ok(data.includes('export type SkipPrefixedUrlRequest ='))
+  ok(data.includes('export type SkipPrefixedUrlResponseOK = unknown'))
+})
+
 test('retry-request', async () => {
   const dir = await moveToTmpdir(after)
 
