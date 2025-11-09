@@ -45,7 +45,7 @@
   "devDependencies": {
     "@fastify/multipart": "^9.0.1",
     "@platformatic/db": "3.0.0-alpha.6",
-    "@platformatic/foundation": "3.15.0",
+    "@platformatic/foundation": "3.17.0",
     "@platformatic/service": "3.0.0-alpha.6",
     "@platformatic/telemetry": "3.0.0-alpha.6",
     "c8": "^10.0.0",
