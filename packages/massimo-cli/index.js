@@ -428,7 +428,8 @@ async function downloadAndProcess (options) {
     retryTimeoutMs,
     moduleFormat,
     typeExtension,
-    explicitModuleFormat
+    explicitModuleFormat,
+    skipPrefixedUrl
   } = options
 
   const generateImplementation = options.generateImplementation
@@ -437,31 +438,33 @@ async function downloadAndProcess (options) {
   const toTry = []
   if (url.startsWith('http')) {
     if (type === 'openapi') {
-      toTry.push(
-        downloadAndWriteOpenAPI.bind(
-          null,
-          logger,
-          url + '/documentation/json',
-          folder,
-          name,
-          generateImplementation,
-          typesOnly,
-          fullRequest,
-          fullResponse,
-          optionalHeaders,
-          validateResponse,
-          isFrontend,
-          language,
-          urlAuthHeaders,
-          typesComment,
-          withCredentials,
-          propsOptional,
-          retryTimeoutMs,
-          moduleFormat,
-          typeExtension,
-          explicitModuleFormat
+      if (!skipPrefixedUrl) {
+        toTry.push(
+          downloadAndWriteOpenAPI.bind(
+            null,
+            logger,
+            url + '/documentation/json',
+            folder,
+            name,
+            generateImplementation,
+            typesOnly,
+            fullRequest,
+            fullResponse,
+            optionalHeaders,
+            validateResponse,
+            isFrontend,
+            language,
+            urlAuthHeaders,
+            typesComment,
+            withCredentials,
+            propsOptional,
+            retryTimeoutMs,
+            moduleFormat,
+            typeExtension,
+            explicitModuleFormat
+          )
         )
-      )
+      }
       toTry.push(
         downloadAndWriteOpenAPI.bind(
           null,
@@ -488,19 +491,21 @@ async function downloadAndProcess (options) {
         )
       )
     } else if (options.type === 'graphql') {
-      toTry.push(
-        downloadAndWriteGraphQL.bind(
-          null,
-          logger,
-          url + '/graphql',
-          folder,
-          name,
-          generateImplementation,
-          moduleFormat,
-          typeExtension,
-          explicitModuleFormat
+      if (!skipPrefixedUrl) {
+        toTry.push(
+          downloadAndWriteGraphQL.bind(
+            null,
+            logger,
+            url + '/graphql',
+            folder,
+            name,
+            generateImplementation,
+            moduleFormat,
+            typeExtension,
+            explicitModuleFormat
+          )
         )
-      )
+      }
       toTry.push(
         downloadAndWriteGraphQL.bind(
           null,
@@ -516,44 +521,46 @@ async function downloadAndProcess (options) {
       )
     } else {
       // add download functions only if it's an URL
-      toTry.push(
-        downloadAndWriteOpenAPI.bind(
-          null,
-          logger,
-          url + '/documentation/json',
-          folder,
-          name,
-          generateImplementation,
-          typesOnly,
-          fullRequest,
-          fullResponse,
-          optionalHeaders,
-          validateResponse,
-          isFrontend,
-          language,
-          urlAuthHeaders,
-          typesComment,
-          withCredentials,
-          propsOptional,
-          retryTimeoutMs,
-          moduleFormat,
-          typeExtension,
-          explicitModuleFormat
+      if (!skipPrefixedUrl) {
+        toTry.push(
+          downloadAndWriteOpenAPI.bind(
+            null,
+            logger,
+            url + '/documentation/json',
+            folder,
+            name,
+            generateImplementation,
+            typesOnly,
+            fullRequest,
+            fullResponse,
+            optionalHeaders,
+            validateResponse,
+            isFrontend,
+            language,
+            urlAuthHeaders,
+            typesComment,
+            withCredentials,
+            propsOptional,
+            retryTimeoutMs,
+            moduleFormat,
+            typeExtension,
+            explicitModuleFormat
+          )
         )
-      )
-      toTry.push(
-        downloadAndWriteGraphQL.bind(
-          null,
-          logger,
-          url + '/graphql',
-          folder,
-          name,
-          generateImplementation,
-          moduleFormat,
-          typeExtension,
-          explicitModuleFormat
+        toTry.push(
+          downloadAndWriteGraphQL.bind(
+            null,
+            logger,
+            url + '/graphql',
+            folder,
+            name,
+            generateImplementation,
+            moduleFormat,
+            typeExtension,
+            explicitModuleFormat
+          )
         )
-      )
+      }
       toTry.push(
         downloadAndWriteOpenAPI.bind(
           null,
@@ -681,7 +688,8 @@ export async function command (argv) {
       'frontend',
       'validate-response',
       'props-optional',
-      'type-extension'
+      'type-extension',
+      'skip-prefixed-url'
     ],
     default: {
       typescript: false,
@@ -750,6 +758,7 @@ export async function command (argv) {
     options.withCredentials = options['with-credentials']
     options.retryTimeoutMs = options['retry-timeout-ms']
     options.typeExtension = options['type-extension']
+    options.skipPrefixedUrl = options['skip-prefixed-url']
     options.explicitModuleFormat = !!options.module
     await downloadAndProcess({ url, ...options, logger })
     logger.info(`Client generated successfully into ${options.folder}`)
