@@ -40,8 +40,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(typescript@5.9.3)
       '@platformatic/foundation':
-        specifier: 3.27.0
-        version: 3.27.0
+        specifier: 3.29.1
+        version: 3.29.1
       '@platformatic/service':
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
@@ -119,8 +119,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(typescript@5.9.3)
       '@platformatic/foundation':
-        specifier: 3.27.0
-        version: 3.27.0
+        specifier: 3.29.1
+        version: 3.29.1
       '@platformatic/runtime':
         specifier: 3.28.2
         version: 3.28.2
@@ -992,10 +992,6 @@ packages:
   '@platformatic/foundation@3.0.0-alpha.6':
     resolution: {integrity: sha512-IVeBwVuCevWTv+YALoNImXU9h+2V8UXPwHslpIxf20ZsmYomWMEcLhGr3cUfFFAR9nWKHPmBF2CY3KLdI7CndQ==}
     engines: {node: '>=22.18.0'}
-
-  '@platformatic/foundation@3.27.0':
-    resolution: {integrity: sha512-NWtR+NlAeu6PDm+2FuODt0rws0BXIZ4vmvmJY68cgTqyafiGJaxuqvM5d89ZsAv44spj9CZKt+Lm4iVChq8A2g==}
-    engines: {node: '>=22.19.0'}
 
   '@platformatic/foundation@3.28.2':
     resolution: {integrity: sha512-GmxIR5bPhyHlqq22UyUcfBgQAZoL0kyR4KrBWdJwtKv6M8RfU8P6euY+wZCHrgPNKmKDKReDOyuSynhEXZZKAg==}
@@ -5654,24 +5650,6 @@ snapshots:
       boring-name-generator: 1.0.3
       colorette: 2.0.20
       dotenv: 16.6.1
-      fast-json-patch: 3.1.1
-      json5: 2.2.3
-      leven: 3.1.0
-      pino: 9.14.0
-      pino-pretty: 13.1.3
-      semver: 7.7.3
-      undici: 7.11.0
-      yaml: 2.8.2
-
-  '@platformatic/foundation@3.27.0':
-    dependencies:
-      '@fastify/deepmerge': 2.0.2
-      '@fastify/error': 4.2.0
-      '@iarna/toml': 2.2.5
-      '@watchable/unpromise': 1.0.2
-      ajv: 8.17.1
-      boring-name-generator: 1.0.3
-      colorette: 2.0.20
       fast-json-patch: 3.1.1
       json5: 2.2.3
       leven: 3.1.0
