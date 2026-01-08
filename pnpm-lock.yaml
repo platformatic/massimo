@@ -43,8 +43,8 @@ importers:
         specifier: 3.29.1
         version: 3.29.1
       '@platformatic/service':
-        specifier: 3.0.0-alpha.6
-        version: 3.0.0-alpha.6
+        specifier: 3.29.1
+        version: 3.29.1(typescript@5.9.3)
       '@platformatic/telemetry':
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
@@ -125,8 +125,8 @@ importers:
         specifier: 3.28.2
         version: 3.28.2
       '@platformatic/service':
-        specifier: 3.0.0-alpha.6
-        version: 3.0.0-alpha.6
+        specifier: 3.29.1
+        version: 3.29.1(typescript@5.9.3)
       '@platformatic/sql-graphql':
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
@@ -6462,7 +6462,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 22.19.3
+      '@types/node': 25.0.3
 
   '@typescript-eslint/eslint-plugin@8.51.0(@typescript-eslint/parser@8.51.0(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2)(typescript@5.9.3)':
     dependencies:
