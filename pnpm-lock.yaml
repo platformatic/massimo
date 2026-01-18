@@ -46,8 +46,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
       '@platformatic/telemetry':
-        specifier: 3.0.0-alpha.6
-        version: 3.0.0-alpha.6
+        specifier: 3.29.1
+        version: 3.29.1
       c8:
         specifier: ^10.0.0
         version: 10.1.3
