@@ -51,7 +51,7 @@
     "@platformatic/foundation": "3.29.1",
     "@platformatic/runtime": "3.28.2",
     "@platformatic/service": "3.0.0-alpha.6",
-    "@platformatic/sql-graphql": "3.0.0-alpha.6",
+    "@platformatic/sql-graphql": "3.30.0",
     "@platformatic/sql-mapper": "3.0.0-alpha.6",
     "@playwright/test": "^1.42.1",
     "@types/react": "^19.1.6",

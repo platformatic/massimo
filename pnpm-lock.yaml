@@ -128,8 +128,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
       '@platformatic/sql-graphql':
-        specifier: 3.0.0-alpha.6
-        version: 3.0.0-alpha.6
+        specifier: 3.30.0
+        version: 3.30.0
       '@platformatic/sql-mapper':
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(typescript@5.9.3)
@@ -1001,6 +1001,10 @@ packages:
     resolution: {integrity: sha512-6GQmWf8C8CrZUToyS+D1PxKNLqHAbvZ4nHbeukuaL4bjcPiXWeGCgOBV9/HyvQjrhgofSxOwq4VmEspe+vdT+A==}
     engines: {node: '>=22.19.0'}
 
+  '@platformatic/foundation@3.30.0':
+    resolution: {integrity: sha512-liTs1LrHxft3dMVDOeensFMkiesohIw+C2gcm+sN14o9pIn6ocTzYrkTJpXQlluWnN7Ogd7jnvOHk4jrs6eoOQ==}
+    engines: {node: '>=22.19.0'}
+
   '@platformatic/gateway@3.29.1':
     resolution: {integrity: sha512-ypkVjiZcNqRrxyNara04uILUWZNDgJ4NNLMI+b7NYfaONV8R4uOtGOZzDMz+FT7SiUxQ65YJNO4Ouszio5yRKA==}
     engines: {node: '>=22.19.0'}
@@ -1105,6 +1109,10 @@ packages:
   '@platformatic/sql-graphql@3.0.0-alpha.6':
     resolution: {integrity: sha512-qNBetkDiejkZopqMtyiw6meFDTKvIx8paagtBGxlHCRU6qpjKvsMlixaNlg42nc4XXaG6Ijuj3/HshevW0hPcQ==}
     engines: {node: '>=22.18.0'}
+
+  '@platformatic/sql-graphql@3.30.0':
+    resolution: {integrity: sha512-YvSQB4cWBwX0jFZ/R/fwNuVyPqusCMfzwrajDMZO6TxyXtijE7RT9SYbQV6s3YkT/yhuDJGiMLLO3UIUAq20Hw==}
+    engines: {node: '>=22.19.0'}
 
   '@platformatic/sql-json-schema-mapper@3.0.0-alpha.6':
     resolution: {integrity: sha512-Xk8r6u6eetM4YZ6GYolbvOKoVja4nn6DSt2AV1TrXZhsxXkvcEWBs6v7u9NIcjRMUP9Etvk8eu78zJL9XgutIQ==}
@@ -5714,6 +5722,24 @@ snapshots:
       undici: 7.11.0
       yaml: 2.8.2
 
+  '@platformatic/foundation@3.30.0':
+    dependencies:
+      '@fastify/deepmerge': 2.0.2
+      '@fastify/error': 4.2.0
+      '@iarna/toml': 2.2.5
+      '@watchable/unpromise': 1.0.2
+      ajv: 8.17.1
+      boring-name-generator: 1.0.3
+      colorette: 2.0.20
+      fast-json-patch: 3.1.1
+      json5: 2.2.3
+      leven: 3.1.0
+      pino: 9.14.0
+      pino-pretty: 13.1.3
+      semver: 7.7.3
+      undici: 7.18.2
+      yaml: 2.8.2
+
   '@platformatic/gateway@3.29.1(typescript@5.9.3)':
     dependencies:
       '@fastify/error': 4.2.0
@@ -6076,6 +6102,23 @@ snapshots:
       '@fastify/error': 4.2.0
       '@mercuriusjs/federation': 5.0.0
       '@platformatic/foundation': 3.0.0-alpha.6
+      camelcase: 6.3.0
+      fastify-plugin: 5.1.0
+      graphql: 16.12.0
+      graphql-scalars: 1.25.0(graphql@16.12.0)
+      graphql-type-json: 0.3.2(graphql@16.12.0)
+      inflected: 2.1.0
+      mercurius: 16.6.0(graphql@16.12.0)
+    transitivePeerDependencies:
+      - bufferutil
+      - monocart-coverage-reports
+      - utf-8-validate
+
+  '@platformatic/sql-graphql@3.30.0':
+    dependencies:
+      '@fastify/error': 4.2.0
+      '@mercuriusjs/federation': 5.0.0
+      '@platformatic/foundation': 3.30.0
       camelcase: 6.3.0
       fastify-plugin: 5.1.0
       graphql: 16.12.0
