@@ -62,7 +62,7 @@ importers:
         version: 9.6.1
       fastify:
         specifier: ^5.0.0
-        version: 5.7.1
+        version: 5.7.2
       neostandard:
         specifier: ^0.12.0
         version: 0.12.2(@typescript-eslint/utils@8.53.1(eslint@9.39.2)(typescript@5.9.3))(eslint@9.39.2)(typescript@5.9.3)
@@ -159,7 +159,7 @@ importers:
         version: 9.6.1
       fastify:
         specifier: ^5.0.0
-        version: 5.7.1
+        version: 5.7.2
       fastify-tsconfig:
         specifier: ^3.0.0
         version: 3.0.0
@@ -2436,8 +2436,8 @@ packages:
   fastify-user@1.4.0:
     resolution: {integrity: sha512-VqGa60xX3nFCz2gIJHfdVjDlJIsdJ9bwigDdazaKlZ/lSxsyeXOnxsyxtZ9XeMht2drc6WLUtJ0MMeo1BSvXCg==}
 
-  fastify@5.7.1:
-    resolution: {integrity: sha512-ZW7S4fxlZhE+tYWVokFzjh+i56R+buYKNGhrVl6DtN8sxkyMEzpJnzvO8A/ZZrsg5w6X37u6I4EOQikYS5DXpA==}
+  fastify@5.7.2:
+    resolution: {integrity: sha512-dBJolW+hm6N/yJVf6J5E1BxOBNkuXNl405nrfeR8SpvGWG3aCC2XDHyiFBdow8Win1kj7sjawQc257JlYY6M/A==}
 
   fastparallel@2.4.1:
     resolution: {integrity: sha512-qUmhxPgNHmvRjZKBFUNI0oZuuH9OlSIOXmJ98lhKPxMZZ7zS/Fi0wRHOihDSz0R1YiIOjxzOY4bq65YTcdBi2Q==}
@@ -3646,8 +3646,8 @@ packages:
   pino-std-serializers@7.1.0:
     resolution: {integrity: sha512-BndPH67/JxGExRgiX1dX0w1FvZck5Wa4aal9198SrRhZjH3GxKQUKIBnYJTdj2HDN3UQAS06HlfcSbQj2OHmaw==}
 
-  pino@10.2.1:
-    resolution: {integrity: sha512-Tjyv76gdUe2460dEhtcnA4fU/+HhGq2Kr7OWlo2R/Xxbmn/ZNKWavNWTD2k97IE+s755iVU7WcaOEIl+H3cq8w==}
+  pino@10.3.0:
+    resolution: {integrity: sha512-0GNPNzHXBKw6U/InGe79A3Crzyk9bcSyObF9/Gfo9DLEf5qj5RF50RSjsu0W1rZ6ZqRGdzDFCRBQvi9/rSGPtA==}
     hasBin: true
 
   pino@9.14.0:
@@ -5561,8 +5561,8 @@ snapshots:
       console-table-printer: 2.15.0
       env-schema: 6.1.0
       execa: 9.6.1
-      fastify: 5.7.1
-      fastify-metrics: 12.1.0(fastify@5.7.1)
+      fastify: 5.7.2
+      fastify-metrics: 12.1.0(fastify@5.7.2)
       fastify-plugin: 5.1.0
       fastify-print-routes: 4.1.0
       graphql: 16.12.0
@@ -5699,7 +5699,7 @@ snapshots:
       console-table-printer: 2.15.0
       execa: 9.6.1
       fast-deep-equal: 3.1.3
-      fastify: 5.7.1
+      fastify: 5.7.2
       fastify-plugin: 5.1.0
       graphql: 16.12.0
       help-me: 5.0.0
@@ -5727,7 +5727,7 @@ snapshots:
       '@platformatic/foundation': 3.0.0-alpha.5
       change-case-all: 2.1.0
       execa: 9.6.1
-      fastify: 5.7.1
+      fastify: 5.7.2
       pino: 9.14.0
       undici: 7.18.2
 
@@ -5737,7 +5737,7 @@ snapshots:
       '@platformatic/foundation': 3.0.0-alpha.6
       change-case-all: 2.1.0
       execa: 9.6.1
-      fastify: 5.7.1
+      fastify: 5.7.2
       pino: 9.14.0
       undici: 7.18.2
 
@@ -5747,7 +5747,7 @@ snapshots:
       '@platformatic/foundation': 3.30.0
       change-case-all: 2.1.0
       execa: 9.6.1
-      fastify: 5.7.1
+      fastify: 5.7.2
       pino: 9.14.0
       undici: 7.18.2
 
@@ -5757,14 +5757,14 @@ snapshots:
       '@platformatic/foundation': 3.31.0
       change-case-all: 2.1.0
       execa: 9.6.1
-      fastify: 5.7.1
+      fastify: 5.7.2
       pino: 9.14.0
       undici: 7.18.2
 
   '@platformatic/graphql-composer@0.10.1':
     dependencies:
       abstract-logger: 0.2.5
-      fastify: 5.7.1
+      fastify: 5.7.2
       graphql: 16.12.0
       mercurius: 16.7.0(graphql@16.12.0)
       metaline: 1.1.0
@@ -5869,7 +5869,7 @@ snapshots:
       dotenv: 16.6.1
       dotenv-tool: 0.1.1
       fastest-levenshtein: 1.0.16
-      fastify: 5.7.1
+      fastify: 5.7.2
       graphql: 16.12.0
       help-me: 5.0.0
       minimist: 1.2.8
@@ -5908,7 +5908,7 @@ snapshots:
       cron: 4.4.0
       debounce: 2.2.0
       fastest-levenshtein: 1.0.16
-      fastify: 5.7.1
+      fastify: 5.7.2
       graphql: 16.12.0
       help-me: 5.0.0
       minimist: 1.2.8
@@ -5957,7 +5957,7 @@ snapshots:
       env-schema: 6.1.0
       execa: 9.6.1
       fast-json-patch: 3.1.1
-      fastify: 5.7.1
+      fastify: 5.7.2
       fastify-plugin: 5.1.0
       graphql: 16.12.0
       help-me: 5.0.0
@@ -6003,7 +6003,7 @@ snapshots:
       env-schema: 6.1.0
       execa: 9.6.1
       fast-json-patch: 3.1.1
-      fastify: 5.7.1
+      fastify: 5.7.2
       fastify-plugin: 5.1.0
       graphql: 16.12.0
       help-me: 5.0.0
@@ -7654,9 +7654,9 @@ snapshots:
     dependencies:
       reusify: 1.1.0
 
-  fastify-metrics@12.1.0(fastify@5.7.1):
+  fastify-metrics@12.1.0(fastify@5.7.2):
     dependencies:
-      fastify: 5.7.1
+      fastify: 5.7.2
       fastify-plugin: 5.1.0
       prom-client: 15.1.3
 
@@ -7678,11 +7678,11 @@ snapshots:
     dependencies:
       '@fastify/error': 4.2.0
       '@fastify/jwt': 9.1.0
-      fastify: 5.7.1
+      fastify: 5.7.2
       fastify-plugin: 5.1.0
       get-jwks: 11.0.3
 
-  fastify@5.7.1:
+  fastify@5.7.2:
     dependencies:
       '@fastify/ajv-compiler': 4.0.5
       '@fastify/error': 4.2.0
@@ -7693,7 +7693,7 @@ snapshots:
       fast-json-stringify: 6.2.0
       find-my-way: 9.4.0
       light-my-request: 6.6.0
-      pino: 10.2.1
+      pino: 10.3.0
       process-warning: 5.0.0
       rfdc: 1.4.1
       secure-json-parse: 4.1.0
@@ -9078,7 +9078,7 @@ snapshots:
 
   pino-std-serializers@7.1.0: {}
 
-  pino@10.2.1:
+  pino@10.3.0:
     dependencies:
       '@pinojs/redact': 0.4.0
       atomic-sleep: 1.0.0
