@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@platformatic/composer": "3.31.0",
-    "@platformatic/db": "3.0.0-alpha.6",
+    "@platformatic/db": "3.37.0",
     "@platformatic/foundation": "3.29.1",
     "@platformatic/runtime": "3.30.0",
     "@platformatic/service": "3.0.0-alpha.6",
