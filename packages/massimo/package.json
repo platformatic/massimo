@@ -46,7 +46,7 @@
     "@fastify/multipart": "^9.0.1",
     "@platformatic/db": "3.0.0-alpha.6",
     "@platformatic/foundation": "3.29.1",
-    "@platformatic/service": "3.0.0-alpha.6",
+    "@platformatic/service": "3.37.0",
     "@platformatic/telemetry": "3.29.1",
     "c8": "^10.0.0",
     "cleaner-spec-reporter": "^0.5.0",
