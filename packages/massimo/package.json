@@ -44,7 +44,7 @@
   "homepage": "https://github.com/platformatic/massimo#readme",
   "devDependencies": {
     "@fastify/multipart": "^9.0.1",
-    "@platformatic/db": "3.0.0-alpha.6",
+    "@platformatic/db": "3.37.0",
     "@platformatic/foundation": "3.29.1",
     "@platformatic/service": "3.0.0-alpha.6",
     "@platformatic/telemetry": "3.29.1",
