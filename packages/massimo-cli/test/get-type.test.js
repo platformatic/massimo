@@ -353,3 +353,69 @@ test('support type nullable null', async () => {
   }
   equal(getType(def), 'null')
 })
+
+test('support additionalProperties with recursive types', async () => {
+  const schema = {
+    type: 'object',
+    additionalProperties: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: ['READ', 'UPDATE']
+      }
+    }
+  }
+  const type = getType(schema)
+  equal(type, "Record<string, Array<'READ' | 'UPDATE'>>")
+})
+
+test('support additionalProperties combined with properties', async () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: { type: 'string' }
+    },
+    additionalProperties: {
+      type: 'number'
+    }
+  }
+  const type = getType(schema)
+  equal(type, "{ 'foo'?: string; [key: string]: number }")
+})
+
+test('support additionalProperties: true combined with properties', async () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: { type: 'string' }
+    },
+    additionalProperties: true
+  }
+  const type = getType(schema)
+  equal(type, "{ 'foo'?: string; [key: string]: unknown }")
+})
+
+test('support multi-level $ref resolution', async () => {
+  const spec = {
+    components: {
+      schemas: {
+        ActualObject: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' }
+          }
+        },
+        Alias1: {
+          $ref: '#/components/schemas/ActualObject'
+        },
+        Alias2: {
+          $ref: '#/components/schemas/Alias1'
+        }
+      }
+    }
+  }
+
+  const typeDef = { $ref: '#/components/schemas/Alias2' }
+  const type = getType(typeDef, 'req', spec)
+  equal(type, "{ 'id'?: string }")
+})
