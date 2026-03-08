@@ -26,8 +26,8 @@ test('scan collects refs and names referenced definitions', async () => {
     '#/definitions/CommandType'
   ])
 
-  equal(state.nameRegistry.getPathName({ path: '#/definitions/CommandData' }), 'Data')
-  equal(state.nameRegistry.getPathName({ path: '#/definitions/CommandType' }), 'Type')
+  equal(state.nameRegistry.getPathName({ path: '#/definitions/CommandData' }), 'CommandData')
+  equal(state.nameRegistry.getPathName({ path: '#/definitions/CommandType' }), 'CommandType')
 })
 
 test('scan keeps generated names unique', () => {

@@ -1,6 +1,10 @@
 import { normalizeTypeName } from './core/naming.js'
 
 export function getCommentLines ({ schema, name }) {
+  if (!schema || typeof schema !== 'object') {
+    return null
+  }
+
   const lines = []
 
   if (schema.title && normalizeTypeName(schema.title) !== name) {

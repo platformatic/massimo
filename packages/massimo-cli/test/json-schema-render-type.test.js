@@ -44,6 +44,35 @@ test('renderType handles refs through the scanned registry', () => {
   equal(renderType({ context }), 'Payload')
 })
 
+test('renderType inlines direct array properties when the item type is already named', () => {
+  const state = scanJSONSchema({
+    schema: {
+      title: 'Envelope',
+      type: 'object',
+      properties: {
+        payloads: {
+          type: 'array',
+          items: {
+            title: 'Payload',
+            type: 'object',
+            properties: {
+              id: { type: 'string' }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  const context = createRenderContext({
+    schema: state.rootSchema.properties.payloads,
+    state,
+    path: '#/properties/payloads'
+  })
+
+  equal(renderType({ context }), 'Array<Payload>')
+})
+
 test('renderType handles arrays and tuples', () => {
   equal(renderInlineType({
     schema: {
@@ -114,7 +143,7 @@ test('renderType handles object index signatures', () => {
         enum: ['A', 'B']
       }
     }
-  }), "{\n  [key: string]: 'A' | 'B';\n}")
+  }), "Record<string, 'A' | 'B'>")
 
   equal(renderInlineType({
     schema: {
@@ -125,7 +154,7 @@ test('renderType handles object index signatures', () => {
         }
       }
     }
-  }), '{\n  [key: string]: string;\n}')
+  }), 'Record<string, string>')
 })
 
 test('renderType handles oneOf and anyOf unions', () => {

@@ -18,8 +18,12 @@ export function renderEnumType ({ values }) {
   return values.map(value => renderEnumLiteralType({ value })).join(' | ')
 }
 
-export function renderPrimitiveType ({ schema }) {
+export function renderPrimitiveType ({ schema, singleQuoteConst = false }) {
   if (schema.const !== undefined) {
+    if (singleQuoteConst && typeof schema.const === 'string') {
+      return renderEnumLiteralType({ value: schema.const })
+    }
+
     return renderConstLiteralType({ value: schema.const })
   }
 

@@ -13,6 +13,7 @@ export function scanJSONSchema ({ schema, rootName = undefined }) {
   })
 
   registerReferencedSchemas({ state })
+  registerReferenceAliases({ state })
 
   return state
 }
@@ -23,8 +24,11 @@ export function createScanState ({ schema, rootName = undefined }) {
     rootName: getDefaultRootName({ schema, rootName }),
     nameRegistry: createNameRegistry(),
     schemasByPath: new Map([['#', schema]]),
+    aliasTargetByPath: new Map(),
+    aliasSourceSchemaByPath: new Map(),
     references: new Set(),
-    expandedReferencePaths: new Set()
+    expandedReferencePaths: new Set(),
+    refByPath: new Map()
   }
 }
 
@@ -39,6 +43,15 @@ function traverseSchema ({ schema, path, suggestedName, state }) {
 
   if (schema.$ref) {
     state.references.add(schema.$ref)
+    if (!state.refByPath.has(path)) {
+      state.refByPath.set(path, schema.$ref)
+    }
+    if (isNestedPropertyPath(path) && !shouldExpandNestedReference({
+      path,
+      targetPath: toRefPath(schema.$ref)
+    })) {
+      return
+    }
     expandReferenceSchema({
       ref: schema.$ref,
       path,
@@ -57,6 +70,50 @@ function traverseSchema ({ schema, path, suggestedName, state }) {
 
 export function getScannedSchemaAtPath ({ path, state }) {
   return state.schemasByPath.get(path) || getSchemaAtPath({ schema: state.rootSchema, path })
+}
+
+export function getAliasTargetName ({ path, state }) {
+  return state.aliasTargetByPath?.get(path) || null
+}
+
+export function getAliasSourceSchema ({ path, state }) {
+  return state.aliasSourceSchemaByPath?.get(path) || null
+}
+
+export function hasReferenceAtPath ({ path, state }) {
+  return state.refByPath?.has(path) || false
+}
+
+export function shouldInlineArrayPropertyType ({ path, schema, state }) {
+  if (!isPropertyPath(path) || !isArraySchema({ schema }) || hasReferenceAtPath({ path, state })) {
+    return false
+  }
+
+  if (!isDirectPropertyPath(path) && !isSimpleArrayItemSchema({ schema: schema.items })) {
+    return false
+  }
+
+  return state.nameRegistry.hasPathName({ path: `${path}/items` })
+}
+
+export function shouldInlineNamedScalarPropertyType ({ path, schema, state }) {
+  if (
+    !isPropertyPath(path) ||
+    !isUnionBranchPropertyPath(path) ||
+    hasReferenceAtPath({ path, state }) ||
+    !isInlineFormattedScalarSchema({ schema })
+  ) {
+    return false
+  }
+
+  const parentPath = path.replace(/\/properties\/[^/]+$/, '')
+  const parentName = state.nameOverrides?.get(parentPath) || state.nameRegistry.getPathName({ path: parentPath })
+  if (!parentName) {
+    return false
+  }
+
+  const propertyName = path.slice(path.lastIndexOf('/') + 1)
+  return parentName.endsWith(normalizeTypeName(propertyName))
 }
 
 function traverseDefinitions ({ schema, path, state }) {
@@ -227,6 +284,77 @@ function expandReferenceSchema ({ ref, path, suggestedName, state }) {
   })
 }
 
+function registerReferenceAliases ({ state }) {
+  for (const [path, ref] of state.refByPath.entries()) {
+    if (!state.nameRegistry.hasPathName({ path })) {
+      continue
+    }
+
+    const aliasTargetName = resolveReferenceTargetName({ path, ref, state })
+    if (!aliasTargetName) {
+      continue
+    }
+
+    const localName = state.nameRegistry.getPathName({ path })
+    if (localName !== aliasTargetName) {
+      state.aliasTargetByPath.set(path, aliasTargetName)
+    }
+
+    const sourceSchema = getSchemaAtPath({ schema: state.rootSchema, path: toRefPath(ref) })
+    if (isSchemaObject(sourceSchema)) {
+      state.aliasSourceSchemaByPath.set(path, sourceSchema)
+    }
+  }
+}
+
+function resolveReferenceTargetName ({ path, ref, state, visitedRefs = new Set() }) {
+  const refPath = toRefPath(ref)
+  if (visitedRefs.has(refPath)) {
+    return state.nameRegistry.getPathName({ path: refPath }) || null
+  }
+
+  visitedRefs.add(refPath)
+
+  const isWithinBoundary = isPathWithinBoundary({
+    path: refPath,
+    boundaryPath: getReferenceBoundaryPath({ path })
+  })
+  const nestedRef = state.refByPath.get(refPath)
+
+  if (isWithinBoundary) {
+    if (!nestedRef) {
+      return null
+    }
+
+    const nestedTargetName = resolveReferenceTargetName({
+      path,
+      ref: nestedRef,
+      state,
+      visitedRefs
+    })
+    return nestedTargetName || null
+  }
+
+  const aliasTargetName = state.aliasTargetByPath.get(refPath)
+  if (aliasTargetName) {
+    return aliasTargetName
+  }
+
+  if (nestedRef) {
+    const nestedTargetName = resolveReferenceTargetName({
+      path,
+      ref: nestedRef,
+      state,
+      visitedRefs
+    })
+    if (nestedTargetName) {
+      return nestedTargetName
+    }
+  }
+
+  return state.nameRegistry.getPathName({ path: refPath }) || null
+}
+
 function getRegisteredName ({ schema, path, suggestedName, state }) {
   if (state.nameRegistry.hasPathName({ path })) {
     const existingName = state.nameRegistry.getPathName({ path })
@@ -241,11 +369,14 @@ function getRegisteredName ({ schema, path, suggestedName, state }) {
 
   const reuseKey = getSchemaReuseKey({ schema })
   if (reuseKey && isDefinitionPath(path) && state.nameRegistry.hasStructureName({ key: reuseKey })) {
-    return state.nameRegistry.linkPathName({
+    const aliasTargetName = state.nameRegistry.getStructureName({ key: reuseKey })
+    const aliasName = state.nameRegistry.registerPathName({
       path,
-      name: state.nameRegistry.getStructureName({ key: reuseKey }),
-      baseName: resolvedName
+      name: resolvedName
     })
+
+    state.aliasTargetByPath.set(path, aliasTargetName)
+    return aliasName
   }
 
   const name = state.nameRegistry.registerPathName({
@@ -261,6 +392,10 @@ function getRegisteredName ({ schema, path, suggestedName, state }) {
 function resolveScanName ({ schema, path, suggestedName, state }) {
   if (path === '#') {
     return state.rootName
+  }
+
+  if (schema?.$ref && isNestedPropertyPath(path)) {
+    return null
   }
 
   if (suggestedName) {
@@ -286,6 +421,10 @@ function getFallbackNameFromPath ({ path }) {
 
 function getArrayItemSuggestedName ({ schema, path, parentName }) {
   const propertyName = getPropertyNameFromPath({ path })
+  if (isInlineArrayItemSchema({ schema })) {
+    return ''
+  }
+
   if (propertyName) {
     return singularizeTypeName(propertyName)
   }
@@ -329,12 +468,107 @@ function getDiscriminatorConstValue ({ schema }) {
   return null
 }
 
+function isNestedPropertyPath (path) {
+  return /^#\/properties\/[^/]+\/properties\//.test(path) || /\/properties\/[^/]+\/properties\//.test(path)
+}
+
+function isInlineArrayItemSchema ({ schema }) {
+  if (!schema || typeof schema !== 'object') {
+    return true
+  }
+
+  if (schema.$ref) {
+    return false
+  }
+
+  if (Array.isArray(schema.enum)) {
+    return false
+  }
+
+  if (schema.const !== undefined) {
+    return true
+  }
+
+  return ['string', 'integer', 'number', 'boolean', 'null'].includes(schema.type)
+}
+
+function isSimpleArrayItemSchema ({ schema }) {
+  if (!schema || typeof schema !== 'object') {
+    return false
+  }
+
+  if (schema.const !== undefined || Array.isArray(schema.enum)) {
+    return true
+  }
+
+  return ['string', 'integer', 'number', 'boolean', 'null'].includes(schema.type)
+}
+
+function isUnionBranchPropertyPath (path) {
+  return /\/(?:oneOf|anyOf)\/\d+\/properties\/[^/]+$/.test(path)
+}
+
+function isInlineFormattedScalarSchema ({ schema }) {
+  if (!schema || typeof schema !== 'object') {
+    return false
+  }
+
+  return schema.type === 'string' && (Boolean(schema.format) || Boolean(schema.pattern))
+}
+
+function isArraySchema ({ schema }) {
+  return schema?.type === 'array' || Array.isArray(schema?.items)
+}
+
 function isDefinitionPath (path) {
   return /\/(definitions|\$defs)\/[^/]+$/.test(path)
 }
 
 function isItemPath (path) {
   return /\/items(\/\d+)?$/.test(path)
+}
+
+function isDirectPropertyPath (path) {
+  return /^#(?:\/(?:definitions|\$defs)\/[^/]+)*\/properties\/[^/]+$/.test(path)
+}
+
+function isPropertyPath (path) {
+  return /\/properties\/[^/]+$/.test(path)
+}
+
+function getReferenceBoundaryPath ({ path }) {
+  const definitionMatch = path.match(/^#\/(definitions|\$defs)\/[^/]+/)
+  if (definitionMatch) {
+    return definitionMatch[0]
+  }
+
+  const branchMatch = path.match(/^#\/(?:oneOf|anyOf|allOf)\/\d+/)
+  if (branchMatch) {
+    return branchMatch[0]
+  }
+
+  const arrayItemMatch = path.match(/^#\/properties\/[^/]+\/items/)
+  if (arrayItemMatch) {
+    return arrayItemMatch[0]
+  }
+
+  const rootPropertyMatch = path.match(/^#\/properties\/[^/]+/)
+  if (rootPropertyMatch) {
+    return rootPropertyMatch[0]
+  }
+
+  return '#'
+}
+
+function isPathWithinBoundary ({ path, boundaryPath }) {
+  return path === boundaryPath || path.startsWith(`${boundaryPath}/`)
+}
+
+function shouldExpandNestedReference ({ path, targetPath }) {
+  return isPathWithinBoundary({
+    path: targetPath,
+    boundaryPath: getReferenceBoundaryPath({ path })
+  })
 }
 
 function isSchemaObject (value) {

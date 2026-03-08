@@ -35,7 +35,7 @@ test('createChildRenderContext preserves shared render state', () => {
   equal(childContext.lookupChildPathNames, rootContext.lookupChildPathNames)
 })
 
-test('renderReferenceType uses scanned registry names for internal refs', () => {
+test('renderReferenceType prefers the canonical scanned name for internal refs', () => {
   const state = scanJSONSchema({
     schema: {
       title: 'Envelope',
@@ -111,4 +111,46 @@ test('renderReferenceType falls back to inline rendering when registry has no na
       return inlineContext.schema.type
     }
   }), 'boolean')
+})
+
+test('renderReferenceType does not alias refs that stay within the same logical scope', () => {
+  const state = scanJSONSchema({
+    schema: {
+      title: 'Envelope',
+      type: 'object',
+      properties: {
+        items: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              status: {
+                $ref: '#/properties/items/items/definitions/Status'
+              }
+            },
+            definitions: {
+              Status: {
+                type: 'string',
+                enum: ['ACTIVE', 'INACTIVE']
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  const context = createRenderContext({
+    schema: state.rootSchema.properties.items.items.properties.status,
+    state,
+    path: '#/properties/items/items/properties/status'
+  })
+
+  equal(renderReferenceType({
+    ref: '#/properties/items/items/definitions/Status',
+    context,
+    renderType () {
+      return 'should-inline'
+    }
+  }), 'ItemStatus')
 })

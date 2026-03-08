@@ -26,8 +26,7 @@ export function renderArrayType ({ context, renderType }) {
     context: createChildRenderContext({
       context,
       schema: schema.items,
-      pathSuffix: 'items',
-      lookupPathName: false
+      pathSuffix: 'items'
     })
   })
 

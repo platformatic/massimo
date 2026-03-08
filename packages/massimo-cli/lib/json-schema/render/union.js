@@ -22,10 +22,10 @@ export function renderIntersectionType ({ context, renderType }) {
 
 function renderCombinatorMembers ({ context, members, separator, keyword, renderType }) {
   if (!Array.isArray(members) || members.length === 0) {
-    return 'unknown'
+    return null
   }
 
-  return members.map((schema, index) => {
+  const renderedMembers = members.map((schema, index) => {
     const memberType = renderType({
       context: createChildRenderContext({
         context,
@@ -36,7 +36,13 @@ function renderCombinatorMembers ({ context, members, separator, keyword, render
     })
 
     return wrapCombinatorMember({ memberType, separator })
-  }).join(separator)
+  }).filter(memberType => memberType !== 'unknown')
+
+  if (renderedMembers.length === 0) {
+    return null
+  }
+
+  return renderedMembers.join(separator)
 }
 
 function wrapCombinatorMember ({ memberType, separator }) {

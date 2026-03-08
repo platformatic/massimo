@@ -1,11 +1,22 @@
-export function createRenderContext ({ schema, state, path = '#', lookupPathName = true, lookupChildPathNames = lookupPathName }) {
+export function createRenderContext ({
+  schema,
+  state,
+  path = '#',
+  lookupPathName = true,
+  lookupChildPathNames = lookupPathName,
+  inlineConstPathNames = false
+}) {
   return {
     schema,
     rootSchema: state.rootSchema,
     nameRegistry: state.nameRegistry,
+    aliasTargetByPath: state.aliasTargetByPath,
+    refByPath: state.refByPath,
+    nameOverrides: state.nameOverrides,
     path,
     lookupPathName,
-    lookupChildPathNames
+    lookupChildPathNames,
+    inlineConstPathNames
   }
 }
 
@@ -14,8 +25,12 @@ export function createChildRenderContext ({ context, schema, pathSuffix, lookupP
     schema,
     rootSchema: context.rootSchema,
     nameRegistry: context.nameRegistry,
+    aliasTargetByPath: context.aliasTargetByPath,
+    refByPath: context.refByPath,
+    nameOverrides: context.nameOverrides,
     path: `${context.path}/${pathSuffix}`,
     lookupPathName,
-    lookupChildPathNames: context.lookupChildPathNames
+    lookupChildPathNames: context.lookupChildPathNames,
+    inlineConstPathNames: context.inlineConstPathNames
   }
 }
