@@ -1,9 +1,15 @@
-import { getSchemaAtPath, toRefPath } from './pointer.js'
+import { getSchemaAtPath, toRefPath } from '../core/pointer.js'
 import { createRenderContext } from './render-context.js'
+import { getAliasTargetName } from '../core/scanner.js'
 
 export function renderReferenceType ({ ref, context, renderType }) {
   const path = toRefPath(ref)
-  const registeredName = context.nameRegistry.getPathName({ path })
+  const aliasTargetName = getAliasTargetName({ path, state: context })
+  if (aliasTargetName) {
+    return aliasTargetName
+  }
+
+  const registeredName = context.nameOverrides?.get(path) || context.nameRegistry.getPathName({ path })
   if (registeredName) {
     return registeredName
   }

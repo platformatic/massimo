@@ -1,8 +1,7 @@
 import { equal } from 'node:assert/strict'
 import { test } from 'node:test'
-import { createRenderContext } from '../lib/json-schema/render-context.js'
-import { renderType } from '../lib/json-schema/render-type.js'
-import { scanJSONSchema } from '../lib/json-schema/scanner.js'
+import { createRenderContext, renderType } from '../lib/json-schema/render/index.js'
+import { scanJSONSchema } from '../lib/json-schema/core/index.js'
 
 test('renderType handles primitive schema types', () => {
   equal(renderInlineType({ schema: { type: 'string' } }), 'string')

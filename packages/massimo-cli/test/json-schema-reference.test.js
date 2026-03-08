@@ -1,8 +1,7 @@
 import { equal } from 'node:assert/strict'
 import { test } from 'node:test'
-import { renderReferenceType } from '../lib/json-schema/reference.js'
-import { createRenderContext, createChildRenderContext } from '../lib/json-schema/render-context.js'
-import { scanJSONSchema } from '../lib/json-schema/scanner.js'
+import { renderReferenceType, createRenderContext, createChildRenderContext } from '../lib/json-schema/render/index.js'
+import { scanJSONSchema } from '../lib/json-schema/core/index.js'
 
 test('createChildRenderContext preserves shared render state', () => {
   const state = scanJSONSchema({

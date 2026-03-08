@@ -33,6 +33,15 @@ export function createNameRegistry () {
       return namesByPath.get(path)?.name
     },
 
+    linkPathName ({ path, name, baseName = name }) {
+      namesByPath.set(path, {
+        name,
+        baseName
+      })
+
+      return name
+    },
+
     hasPathName ({ path }) {
       return namesByPath.has(path)
     },

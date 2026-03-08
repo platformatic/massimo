@@ -1,4 +1,4 @@
-import { normalizeTypeName } from './naming.js'
+import { normalizeTypeName } from './core/naming.js'
 
 export function getCommentLines ({ schema, name }) {
   const lines = []

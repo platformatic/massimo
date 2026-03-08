@@ -2,14 +2,19 @@ import { renderArrayType } from './array.js'
 import { renderObjectType } from './object.js'
 import { renderPrimitiveType } from './primitive.js'
 import { renderReferenceType } from './reference.js'
+import { shouldInlineArrayPropertyType, shouldInlineNamedScalarPropertyType } from '../core/scanner.js'
 import { renderIntersectionType, renderUnionType } from './union.js'
 
 export function renderType ({ context }) {
-  const { schema, nameRegistry, path, lookupPathName } = context
+  const { schema, nameRegistry, path, lookupPathName, nameOverrides } = context
 
-  if (lookupPathName) {
-    const registeredName = nameRegistry.getPathName({ path })
-    if (registeredName) {
+  if (
+    lookupPathName &&
+    !(schema.const !== undefined && context.inlineConstPathNames) &&
+    !shouldInlineNamedScalarPropertyType({ path, schema, state: context })
+  ) {
+    const registeredName = nameOverrides?.get(path) || nameRegistry.getPathName({ path })
+    if (registeredName && !shouldInlineArrayPropertyType({ path, schema, state: context })) {
       return registeredName
     }
   }
@@ -47,7 +52,10 @@ export function renderType ({ context }) {
   }
 
   if (schema.const !== undefined || Array.isArray(schema.enum) || Array.isArray(schema.type) || isPrimitiveSchemaType({ schema })) {
-    return renderPrimitiveType({ schema })
+    return renderPrimitiveType({
+      schema,
+      singleQuoteConst: context.inlineConstPathNames
+    })
   }
 
   return 'unknown'

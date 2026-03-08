@@ -1,14 +1,19 @@
-import { buildDeclarations, renderDeclarations } from './declarations.js'
-import { scanJSONSchema } from './scanner.js'
+import {
+  buildDeclarations,
+  canonicalizeDeclarationState,
+  renderDeclarations
+} from './declarations/index.js'
+import { scanJSONSchema } from './core/index.js'
 
 export function generateJSONSchemaTypes ({ schema, rootName }) {
-  const state = scanJSONSchema({ schema, rootName })
-  const declarations = buildDeclarations({ state })
+  const scannedState = scanJSONSchema({ schema, rootName })
+  const canonicalState = canonicalizeDeclarationState({ state: scannedState })
+  const declarations = buildDeclarations({ state: canonicalState })
 
   return {
     types: renderDeclarations({
       declarations,
-      rootName: state.rootName
+      rootName: canonicalState.rootName
     })
   }
 }
