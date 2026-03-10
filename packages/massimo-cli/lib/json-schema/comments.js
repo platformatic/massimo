@@ -1,5 +1,8 @@
 import { normalizeTypeName } from './core/naming.js'
 
+/**
+ * Collect comment lines for a schema node from the metadata that should be exposed in the output.
+ */
 export function getCommentLines ({ schema, name }) {
   if (!schema || typeof schema !== 'object') {
     return null
@@ -30,6 +33,9 @@ export function getCommentLines ({ schema, name }) {
   return lines.length > 0 ? lines : null
 }
 
+/**
+ * Render a JSDoc block from precomputed comment lines.
+ */
 export function renderCommentBlock ({ lines, indent = '' }) {
   return [
     `${indent}/**`,

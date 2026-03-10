@@ -2,6 +2,9 @@ import { getCommentLines, renderCommentBlock } from '../comments.js'
 import { createChildRenderContext } from './render-context.js'
 import { shouldInlineNamedScalarPropertyType } from '../core/scanner.js'
 
+/**
+ * Render an object-like schema as either an interface body, a record, or an open object fallback.
+ */
 export function renderObjectType ({ context, renderType }) {
   if (isRecordObjectSchema({ schema: context.schema })) {
     return renderRecordType({ context, renderType })
@@ -22,6 +25,9 @@ ${lines.join('\n')}
 }`
 }
 
+/**
+ * Identify object schemas that are better represented as `Record<string, T>`.
+ */
 export function isRecordObjectSchema ({ schema }) {
   const hasProperties = isSchemaObject(schema.properties) && Object.keys(schema.properties).length > 0
   const hasPatternProperties = isSchemaObject(schema.patternProperties) && Object.keys(schema.patternProperties).length > 0
@@ -30,6 +36,9 @@ export function isRecordObjectSchema ({ schema }) {
   return !hasProperties && (hasPatternProperties || hasAdditionalPropertiesObject)
 }
 
+/**
+ * Identify open object schemas with no explicit members that should fall back to a generic record.
+ */
 export function isOpenObjectSchema ({ schema }) {
   if (schema?.type !== 'object') {
     return false
@@ -72,6 +81,9 @@ function renderRecordType ({ context, renderType }) {
   return `Record<string, ${valueType}>`
 }
 
+/**
+ * Build the property and index-signature lines that make up an object declaration body.
+ */
 export function buildObjectTypeLines ({ context, renderType }) {
   const propertyLines = renderPropertyLines({ context, renderType })
   const indexLines = renderIndexSignatureLines({ context, renderType })

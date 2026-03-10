@@ -3,14 +3,23 @@ import { getSchemaAtPath, toRefPath } from '../core/pointer.js'
 import { getScannedSchemaAtPath } from '../core/scanner.js'
 import { isOpenObjectSchema, isRecordObjectSchema } from '../render/object.js'
 
+/**
+ * Resolve the public declaration name for a path after canonical overrides have been applied.
+ */
 export function getPreferredPathName ({ path, state }) {
   return state.nameOverrides?.get(path) || state.nameRegistry.getPathName({ path }) || null
 }
 
+/**
+ * Sort canonical paths deterministically so path processing never depends on traversal order.
+ */
 export function compareCanonicalPaths (left, right) {
   return left.length - right.length || left.localeCompare(right)
 }
 
+/**
+ * Resolve `$ref` chains to the concrete schema used for declaration decisions.
+ */
 export function resolveDeclarationSchema ({ schema, state }) {
   let currentSchema = schema
   const visitedRefs = new Set()
@@ -28,6 +37,9 @@ export function resolveDeclarationSchema ({ schema, state }) {
   return currentSchema || schema
 }
 
+/**
+ * Decide whether a schema should emit as an interface instead of a type alias.
+ */
 export function shouldUseInterface ({ schema }) {
   return hasObjectMembers({ schema }) &&
     !hasCombinator({ schema }) &&
@@ -35,14 +47,23 @@ export function shouldUseInterface ({ schema }) {
     !isOpenObjectSchema({ schema })
 }
 
+/**
+ * Check whether a schema has any object-like structure that can emit members.
+ */
 export function hasObjectMembers ({ schema }) {
   return schema.type === 'object' || schema.properties || schema.additionalProperties !== undefined || schema.patternProperties
 }
 
+/**
+ * Check whether a schema contains a union or intersection combinator.
+ */
 export function hasCombinator ({ schema }) {
   return Array.isArray(schema.oneOf) || Array.isArray(schema.anyOf) || Array.isArray(schema.allOf)
 }
 
+/**
+ * Compute the owner scope used when reusing declarations inside union branches.
+ */
 export function getDeclarationOwnerScopePath ({ path }) {
   const valueMatch = path.match(/^(.*\/properties\/value)\/properties\/[^/]+$/)
   if (valueMatch) {
@@ -57,10 +78,16 @@ export function getDeclarationOwnerScopePath ({ path }) {
   return path.replace(/\/properties\/[^/]+$/, '')
 }
 
+/**
+ * Collapse branch-specific paths into a wildcard form so sibling branches share the same scope.
+ */
 export function normalizeUnionBranchScopePath ({ path }) {
   return path.replace(/\/(oneOf|anyOf)\/\d+/g, '/$1/*')
 }
 
+/**
+ * Return metadata for object-like unions whose branches can be emitted as named interfaces.
+ */
 export function getObjectUnionInfo ({ path, schema, state }) {
   const resolvedSchema = resolveDeclarationSchema({ schema, state })
   const members = resolvedSchema.oneOf || resolvedSchema.anyOf
@@ -88,10 +115,16 @@ export function getObjectUnionInfo ({ path, schema, state }) {
   }
 }
 
+/**
+ * Check whether a path points at a property that lives inside a oneOf/anyOf branch.
+ */
 export function isUnionBranchPropertyPath ({ path }) {
   return /\/(?:oneOf|anyOf)\/\d+\/properties\/[^/]+$/.test(path)
 }
 
+/**
+ * Check whether an array path has both a named array type and a separately named item type.
+ */
 export function isNamedArrayPath ({ path, state, schema }) {
   if (!state.nameRegistry.hasPathName({ path }) || !schema?.items || Array.isArray(schema.items)) {
     return false
@@ -100,6 +133,9 @@ export function isNamedArrayPath ({ path, state, schema }) {
   return state.nameRegistry.hasPathName({ path: `${path}/items` })
 }
 
+/**
+ * Apply the declaration layer's simple singularization rules to an already-normalized name.
+ */
 export function singularizeName ({ name }) {
   if (!name) {
     return name
@@ -120,6 +156,9 @@ export function singularizeName ({ name }) {
   return name
 }
 
+/**
+ * Pick the local name prefix used when renaming nested union branch declarations.
+ */
 export function getUnionLocalPrefix ({ path, localRootName, state }) {
   if (isItemPath(path)) {
     return localRootName
@@ -133,19 +172,31 @@ export function getUnionLocalPrefix ({ path, localRootName, state }) {
   return localRootName
 }
 
+/**
+ * Extract the final property segment from a schema path.
+ */
 export function getPropertyNameFromPath ({ path }) {
   const match = path.match(/\/properties\/([^/]+)$/)
   return match ? match[1] : null
 }
 
+/**
+ * Check whether a path represents an array item schema.
+ */
 export function isItemPath (path) {
   return /\/items$/.test(path)
 }
 
+/**
+ * Check whether a path is the top-level item type for a root array property.
+ */
 export function isTopLevelArrayItemPath ({ path }) {
   return /^#\/properties\/[^/]+\/items$/.test(path)
 }
 
+/**
+ * Decide whether an omitted base-union property still needs its own public declaration.
+ */
 export function shouldEmitOmittedUnionPropertyDeclaration ({ path, propertyName, hasBaseProperties = false }) {
   if (propertyName !== 'type') {
     return true
@@ -154,6 +205,9 @@ export function shouldEmitOmittedUnionPropertyDeclaration ({ path, propertyName,
   return path === '#' || (!hasBaseProperties && isTopLevelArrayItemPath({ path }))
 }
 
+/**
+ * Build the deterministic structural reuse key used for conservative declaration aliasing.
+ */
 export function getDeclarationSchemaReuseKey ({ schema }) {
   if (!schema || typeof schema !== 'object' || schema.$ref) {
     return null
@@ -162,6 +216,9 @@ export function getDeclarationSchemaReuseKey ({ schema }) {
   return JSON.stringify(simplifyDeclarationSchema({ schema }))
 }
 
+/**
+ * Check whether a schema is represented as a scalar literal or primitive alias.
+ */
 export function isScalarSchema ({ schema }) {
   if (!schema || typeof schema !== 'object') {
     return false
@@ -174,6 +231,9 @@ export function isScalarSchema ({ schema }) {
   return ['string', 'integer', 'number', 'boolean', 'null'].includes(schema.type)
 }
 
+/**
+ * Check whether a schema is an array of scalar values that can still carry a named item type.
+ */
 export function isNamedScalarArraySchema ({ schema }) {
   if (!schema || typeof schema !== 'object' || Array.isArray(schema.items)) {
     return false
@@ -182,14 +242,23 @@ export function isNamedScalarArraySchema ({ schema }) {
   return schema.type === 'array' && isScalarSchema({ schema: schema.items })
 }
 
+/**
+ * Limit structural alias reuse to scalar schemas that are safe to collapse globally.
+ */
 export function isReusableScalarSchema ({ schema }) {
   return Array.isArray(schema?.enum)
 }
 
+/**
+ * Check whether a path points at a scalar field inside a union branch `value` object.
+ */
 export function isValueBranchScalarPath ({ path }) {
   return /\/(?:oneOf|anyOf)\/\d+\/properties\/value\/properties\/[^/]+$/.test(path)
 }
 
+/**
+ * Derive a deterministic nested array item name from the owning branch and property name.
+ */
 export function getNestedArrayItemName ({ branchName, propertyName }) {
   const propertyTypeName = normalizeTypeName(propertyName)
 
@@ -200,6 +269,9 @@ export function getNestedArrayItemName ({ branchName, propertyName }) {
   return `${branchName}${singularizeName({ name: propertyTypeName })}`
 }
 
+/**
+ * Decide whether repeated root-branch properties should collapse to a shared owner-level name.
+ */
 export function shouldUseRootUnionPropertyName ({ entries }) {
   if (entries.length === 0) {
     return false
@@ -217,6 +289,9 @@ export function shouldUseRootUnionPropertyName ({ entries }) {
   return entries.every(entry => !entry.schema?.title && !entry.schema?.description)
 }
 
+/**
+ * Reduce a schema to the fields that influence declaration identity and structural reuse.
+ */
 export function simplifyDeclarationSchema ({ schema }) {
   if (!schema || typeof schema !== 'object') {
     return schema
@@ -273,6 +348,9 @@ export function simplifyDeclarationSchema ({ schema }) {
   return simplified
 }
 
+/**
+ * Compute the prefix used when flattening child container names under an owner declaration.
+ */
 export function getCollapsedOwnerPrefix ({ typeName, propertyName }) {
   if (!typeName || !propertyName) {
     return null
@@ -287,6 +365,9 @@ export function getCollapsedOwnerPrefix ({ typeName, propertyName }) {
   return typeName
 }
 
+/**
+ * Decide whether a container property's direct children should inherit a flatter owner-prefixed name.
+ */
 export function shouldCollapseDirectContainerChildren ({ propertyName, schema }) {
   if (!schema?.properties || schema.type !== 'object') {
     return false
@@ -302,6 +383,9 @@ export function shouldCollapseDirectContainerChildren ({ propertyName, schema })
   })
 }
 
+/**
+ * Build a flattened child declaration name for container-owned helper types.
+ */
 export function buildCollapsedChildName ({ ownerPrefix, propertyName, schema, fallbackName, singular = false }) {
   if (!ownerPrefix || !propertyName) {
     return fallbackName || null
@@ -315,6 +399,9 @@ export function buildCollapsedChildName ({ ownerPrefix, propertyName, schema, fa
   return `${ownerPrefix}${suffix}` || fallbackName || null
 }
 
+/**
+ * Compute the suffix appended to a flattened container child declaration name.
+ */
 export function getCollapsedChildSuffix ({ ownerPrefix, propertyName, schema }) {
   let suffix = normalizeTypeName(propertyName)
   if (hasObjectMembers({ schema }) && suffix.startsWith('Default') && suffix.length > 'Default'.length) {
@@ -329,11 +416,17 @@ export function getCollapsedChildSuffix ({ ownerPrefix, propertyName, schema }) 
   return suffix
 }
 
+/**
+ * Check whether a property name represents a generic container that should flatten its children.
+ */
 export function isContainerPropertyName ({ propertyName }) {
   const normalizedName = normalizeTypeName(propertyName || '')
   return normalizedName.endsWith('Config') || normalizedName.endsWith('Category')
 }
 
+/**
+ * Return a property map without the names that were omitted from a union base schema.
+ */
 export function omitProperties ({ properties, omittedPropertyNames }) {
   if (!properties) {
     return properties

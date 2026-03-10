@@ -2,9 +2,14 @@ import { createNameRegistry } from './name-registry.js'
 import { getDefaultRootName, joinTypeName, normalizeTypeName, singularizeTypeName } from './naming.js'
 import { getSchemaAtPath, toRefPath } from './pointer.js'
 
+/**
+ * Scan a JSON Schema document into the path-indexed state consumed by the later generation phases.
+ */
 export function scanJSONSchema ({ schema, rootName = undefined }) {
   const state = createScanState({ schema, rootName })
 
+  // The scan pass builds the stable path-indexed state that later phases rely on for
+  // canonical naming, aliasing, and declaration emission.
   traverseSchema({
     schema,
     path: '#',
@@ -18,6 +23,9 @@ export function scanJSONSchema ({ schema, rootName = undefined }) {
   return state
 }
 
+/**
+ * Create the mutable scan state that accumulates schemas, names, refs, and alias metadata.
+ */
 export function createScanState ({ schema, rootName = undefined }) {
   return {
     rootSchema: schema,
@@ -32,6 +40,9 @@ export function createScanState ({ schema, rootName = undefined }) {
   }
 }
 
+/**
+ * Walk a schema node, register its public name if needed, and recurse into nested child schemas.
+ */
 function traverseSchema ({ schema, path, suggestedName, state }) {
   if (!isSchemaObject(schema)) {
     return
@@ -68,22 +79,37 @@ function traverseSchema ({ schema, path, suggestedName, state }) {
   traverseDefinitions({ schema, path, state })
 }
 
+/**
+ * Read the scanned schema for a path, falling back to direct pointer lookup when needed.
+ */
 export function getScannedSchemaAtPath ({ path, state }) {
   return state.schemasByPath.get(path) || getSchemaAtPath({ schema: state.rootSchema, path })
 }
 
+/**
+ * Look up the public alias target name chosen for a scanned reference path.
+ */
 export function getAliasTargetName ({ path, state }) {
   return state.aliasTargetByPath?.get(path) || null
 }
 
+/**
+ * Return the schema used as the comment source for a reference alias declaration.
+ */
 export function getAliasSourceSchema ({ path, state }) {
   return state.aliasSourceSchemaByPath?.get(path) || null
 }
 
+/**
+ * Check whether a scanned path originated from a `$ref`.
+ */
 export function hasReferenceAtPath ({ path, state }) {
   return state.refByPath?.has(path) || false
 }
 
+/**
+ * Decide whether a named array property should render inline while still emitting its item type.
+ */
 export function shouldInlineArrayPropertyType ({ path, schema, state }) {
   if (!isPropertyPath(path) || !isArraySchema({ schema }) || hasReferenceAtPath({ path, state })) {
     return false
@@ -96,6 +122,9 @@ export function shouldInlineArrayPropertyType ({ path, schema, state }) {
   return state.nameRegistry.hasPathName({ path: `${path}/items` })
 }
 
+/**
+ * Decide whether a named scalar property should render inline instead of as a separate alias.
+ */
 export function shouldInlineNamedScalarPropertyType ({ path, schema, state }) {
   if (
     !isPropertyPath(path) ||
@@ -107,6 +136,8 @@ export function shouldInlineNamedScalarPropertyType ({ path, schema, state }) {
   }
 
   const parentPath = path.replace(/\/properties\/[^/]+$/, '')
+  // If a branch-local scalar already matches the parent-owned public name, emit it inline
+  // instead of generating a redundant alias declaration.
   const parentName = state.nameOverrides?.get(parentPath) || state.nameRegistry.getPathName({ path: parentPath })
   if (!parentName) {
     return false
@@ -116,6 +147,9 @@ export function shouldInlineNamedScalarPropertyType ({ path, schema, state }) {
   return parentName.endsWith(normalizeTypeName(propertyName))
 }
 
+/**
+ * Traverse `definitions` and `$defs` containers and register their members as named schemas.
+ */
 function traverseDefinitions ({ schema, path, state }) {
   for (const [containerName, definitions] of Object.entries({
     definitions: schema.definitions,
@@ -136,6 +170,9 @@ function traverseDefinitions ({ schema, path, state }) {
   }
 }
 
+/**
+ * Traverse object properties and derive child type names from the owning schema name.
+ */
 function traverseProperties ({ schema, path, parentName, state }) {
   if (!isSchemaObject(schema.properties)) {
     return
@@ -155,6 +192,9 @@ function traverseProperties ({ schema, path, parentName, state }) {
   }
 }
 
+/**
+ * Traverse array items, handling both tuple and homogeneous array forms.
+ */
 function traverseItems ({ schema, path, parentName, state }) {
   if (!schema.items) {
     return
@@ -183,6 +223,9 @@ function traverseItems ({ schema, path, parentName, state }) {
   })
 }
 
+/**
+ * Traverse object-valued `additionalProperties` schemas.
+ */
 function traverseAdditionalProperties ({ schema, path, parentName, state }) {
   if (!isSchemaObject(schema.additionalProperties)) {
     return
@@ -196,6 +239,9 @@ function traverseAdditionalProperties ({ schema, path, parentName, state }) {
   })
 }
 
+/**
+ * Traverse all JSON Schema combinator members for the current node.
+ */
 function traverseCombinators ({ schema, path, parentName, state }) {
   traverseCombinatorMembers({
     members: schema.oneOf,
@@ -225,6 +271,9 @@ function traverseCombinators ({ schema, path, parentName, state }) {
   })
 }
 
+/**
+ * Traverse each member in a specific combinator array with a deterministic suggested name.
+ */
 function traverseCombinatorMembers ({ members, path, parentName, kind, keyword, state }) {
   if (!Array.isArray(members)) {
     return
@@ -240,6 +289,9 @@ function traverseCombinatorMembers ({ members, path, parentName, kind, keyword, 
   }
 }
 
+/**
+ * Register names for referenced schemas that were never visited directly during traversal.
+ */
 function registerReferencedSchemas ({ state }) {
   for (const reference of state.references) {
     const path = toRefPath(reference)
@@ -262,6 +314,9 @@ function registerReferencedSchemas ({ state }) {
   }
 }
 
+/**
+ * Expand a reference into the current path when the scanner needs local visibility into its shape.
+ */
 function expandReferenceSchema ({ ref, path, suggestedName, state }) {
   const refPath = toRefPath(ref)
   const expansionKey = `${path}=>${refPath}`
@@ -284,6 +339,9 @@ function expandReferenceSchema ({ ref, path, suggestedName, state }) {
   })
 }
 
+/**
+ * Resolve scanned `$ref` paths into alias targets once all referenced names are known.
+ */
 function registerReferenceAliases ({ state }) {
   for (const [path, ref] of state.refByPath.entries()) {
     if (!state.nameRegistry.hasPathName({ path })) {
@@ -307,6 +365,9 @@ function registerReferenceAliases ({ state }) {
   }
 }
 
+/**
+ * Follow nested references until the scanner finds the public alias target for a referenced path.
+ */
 function resolveReferenceTargetName ({ path, ref, state, visitedRefs = new Set() }) {
   const refPath = toRefPath(ref)
   if (visitedRefs.has(refPath)) {
@@ -355,6 +416,9 @@ function resolveReferenceTargetName ({ path, ref, state, visitedRefs = new Set()
   return state.nameRegistry.getPathName({ path: refPath }) || null
 }
 
+/**
+ * Register the stable name for a path, reusing compatible definition structures when allowed.
+ */
 function getRegisteredName ({ schema, path, suggestedName, state }) {
   if (state.nameRegistry.hasPathName({ path })) {
     const existingName = state.nameRegistry.getPathName({ path })
@@ -389,6 +453,9 @@ function getRegisteredName ({ schema, path, suggestedName, state }) {
   return name
 }
 
+/**
+ * Decide the initial scan-time name for a path before conflict resolution happens later.
+ */
 function resolveScanName ({ schema, path, suggestedName, state }) {
   if (path === '#') {
     return state.rootName
@@ -415,10 +482,16 @@ function resolveScanName ({ schema, path, suggestedName, state }) {
   return null
 }
 
+/**
+ * Derive a fallback type name from the tail of a schema path.
+ */
 function getFallbackNameFromPath ({ path }) {
   return normalizeTypeName(path.split('/').at(-1) || 'Schema')
 }
 
+/**
+ * Suggest a public type name for array item schemas based on the owner path and item shape.
+ */
 function getArrayItemSuggestedName ({ schema, path, parentName }) {
   const propertyName = getPropertyNameFromPath({ path })
   if (isInlineArrayItemSchema({ schema })) {
@@ -436,6 +509,9 @@ function getArrayItemSuggestedName ({ schema, path, parentName }) {
   return joinTypeName({ prefix: singularizeTypeName(parentName), suffix: 'Item' })
 }
 
+/**
+ * Suggest a stable member name for oneOf/anyOf/allOf branches.
+ */
 function getCombinatorSuggestedName ({ memberSchema, parentName, kind, index }) {
   if (memberSchema?.$ref) {
     return getFallbackNameFromPath({ path: toRefPath(memberSchema.$ref) })

@@ -5,10 +5,17 @@ import { validateDeclarationGraph } from './validate.js'
 
 export { canonicalizeDeclarationState }
 
+/**
+ * Build the final declaration list from scan state by canonicalizing names, building a graph,
+ * validating it, and then rendering it into declaration records.
+ */
 export function buildDeclarations ({ state }) {
   const canonicalState = state.nameOverrides && state.structuralAliasTargets
     ? state
     : canonicalizeDeclarationState({ state })
+
+  // Declaration emission is intentionally split into canonicalize -> graph -> validate -> render
+  // so emitted names and ordering never depend on traversal side effects.
   const graph = buildDeclarationGraph({ state: canonicalState })
 
   validateDeclarationGraph({ graph })
@@ -16,6 +23,9 @@ export function buildDeclarations ({ state }) {
   return renderDeclarationGraph({ graph })
 }
 
+/**
+ * Render declaration records into the final `.d.ts` text output.
+ */
 export function renderDeclarations ({ declarations, rootName }) {
   const lines = []
 

@@ -1,5 +1,8 @@
 import { createChildRenderContext } from './render-context.js'
 
+/**
+ * Render an array or tuple schema into a TypeScript array or tuple type.
+ */
 export function renderArrayType ({ context, renderType }) {
   const { schema } = context
 

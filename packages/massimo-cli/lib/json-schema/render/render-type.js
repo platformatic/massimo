@@ -5,6 +5,9 @@ import { renderReferenceType } from './reference.js'
 import { shouldInlineArrayPropertyType, shouldInlineNamedScalarPropertyType } from '../core/scanner.js'
 import { renderIntersectionType, renderUnionType } from './union.js'
 
+/**
+ * Dispatch a schema node to the correct TypeScript type renderer.
+ */
 export function renderType ({ context }) {
   const { schema, nameRegistry, path, lookupPathName, nameOverrides } = context
 
@@ -61,14 +64,23 @@ export function renderType ({ context }) {
   return 'unknown'
 }
 
+/**
+ * Check whether a schema uses one of the direct JSON Schema primitive type keywords.
+ */
 function isPrimitiveSchemaType ({ schema }) {
   return ['string', 'integer', 'number', 'boolean', 'null'].includes(schema.type)
 }
 
+/**
+ * Check whether a schema should be treated as object-like during rendering.
+ */
 function hasObjectShape ({ schema }) {
   return schema.type === 'object' || schema.properties || schema.additionalProperties !== undefined || schema.patternProperties
 }
 
+/**
+ * Render the active combinator expression for a schema, if any.
+ */
 function renderCombinatorType ({ context, renderType }) {
   if (Array.isArray(context.schema.oneOf) || Array.isArray(context.schema.anyOf)) {
     return renderUnionType({ context, renderType })

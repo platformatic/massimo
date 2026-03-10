@@ -1,3 +1,6 @@
+/**
+ * Validate the declaration graph before text rendering so invalid output fails fast.
+ */
 export function validateDeclarationGraph ({ graph }) {
   const nameSignatures = new Map()
 
@@ -23,6 +26,9 @@ export function validateDeclarationGraph ({ graph }) {
   validateDeclarationGraphCycles({ graph })
 }
 
+/**
+ * Reject declaration graphs that contain dependency cycles.
+ */
 function validateDeclarationGraphCycles ({ graph }) {
   const visiting = new Set()
   const visited = new Set()
@@ -50,6 +56,9 @@ function validateDeclarationGraphCycles ({ graph }) {
   }
 }
 
+/**
+ * Build a comparable signature for duplicate-declaration detection.
+ */
 function getDeclarationSignature ({ declaration }) {
   return JSON.stringify({
     ...declaration,
@@ -58,6 +67,9 @@ function getDeclarationSignature ({ declaration }) {
   })
 }
 
+/**
+ * Detect alias declarations that directly point back to themselves.
+ */
 function isSelfReferentialAliasDeclaration ({ declaration }) {
   if (!declaration || declaration.kind !== 'type') {
     return false

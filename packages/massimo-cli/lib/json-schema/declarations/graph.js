@@ -20,8 +20,14 @@ import {
   shouldUseInterface
 } from './helpers.js'
 
+/**
+ * Build the intermediate declaration graph used for deterministic ordering and validation.
+ */
 export function buildDeclarationGraph ({ state }) {
   const nodes = new Map()
+
+  // Graph construction happens before rendering so that dependency ordering and duplicate detection
+  // is based on explicit structure, instead of the order during recursive emission.
   const entryIds = collectDeclarationGraphForPath({
     path: '#',
     state,
@@ -35,6 +41,9 @@ export function buildDeclarationGraph ({ state }) {
   }
 }
 
+/**
+ * Render the declaration graph into the ordered declaration list consumed by the final text renderer.
+ */
 export function renderDeclarationGraph ({ graph }) {
   const declarations = []
   const emittedIds = new Set()
@@ -51,6 +60,9 @@ export function renderDeclarationGraph ({ graph }) {
   return declarations
 }
 
+/**
+ * Build the declaration record for a single named schema path.
+ */
 function buildDeclaration ({ path, name, schema, state, inlineConstPathNames = false }) {
   const unionPropertyDeclaration = buildObjectUnionPropertyDeclaration({ path, name, schema, state })
   if (unionPropertyDeclaration) {
@@ -106,6 +118,9 @@ function buildDeclaration ({ path, name, schema, state, inlineConstPathNames = f
   }
 }
 
+/**
+ * Collect the declaration graph nodes reachable from a named schema path.
+ */
 function collectDeclarationGraphForPath ({ path, state, nodes, visitedPaths }) {
   if (visitedPaths.has(path) || !state.nameRegistry.hasPathName({ path })) {
     return []
@@ -161,6 +176,9 @@ function collectDeclarationGraphForPath ({ path, state, nodes, visitedPaths }) {
   return [path]
 }
 
+/**
+ * Expand an object-like union into its base, branch, omitted-property, and union alias nodes.
+ */
 function collectObjectUnionGraphNodes ({ path, schema, state, nodes, visitedPaths, unionInfo }) {
   const unionName = getPreferredPathName({ path, state }) || unionInfo.name
   const omittedPropertyNames = getOmittedBasePropertyNames({ path, schema, state, unionInfo })
@@ -179,6 +197,8 @@ function collectObjectUnionGraphNodes ({ path, schema, state, nodes, visitedPath
   }
 
   if (unionInfo.branchPaths.length === 1) {
+    // collapse trivial object unions early so single-branch shapes do not leak unnecessary
+    // base/union declarations into the public surface.
     const branchPath = unionInfo.branchPaths[0]
     const branchSchema = getScannedSchemaAtPath({ path: branchPath, state })
     if (branchSchema) {
@@ -350,6 +370,9 @@ function collectObjectUnionGraphNodes ({ path, schema, state, nodes, visitedPath
   return entryIds
 }
 
+/**
+ * Collect declarations that must still emit for properties omitted from an object-union base.
+ */
 function collectObjectUnionBaseEntryIds ({
   path,
   schema,
@@ -420,6 +443,9 @@ function collectObjectUnionBaseEntryIds ({
   return entryIds
 }
 
+/**
+ * Create a graph node with normalized dependency ids and self-dependencies removed.
+ */
 function createDeclarationNode ({ id, path, declaration, dependencyIds }) {
   return {
     id,
@@ -429,6 +455,9 @@ function createDeclarationNode ({ id, path, declaration, dependencyIds }) {
   }
 }
 
+/**
+ * Emit a declaration node and then its dependencies in graph order.
+ */
 function emitDeclarationNode ({ id, graph, declarations, emittedIds }) {
   if (emittedIds.has(id)) {
     return
@@ -452,6 +481,9 @@ function emitDeclarationNode ({ id, graph, declarations, emittedIds }) {
   }
 }
 
+/**
+ * Resolve the graph node id used for a declaration path.
+ */
 function getDeclarationNodeIdForPath ({ path, state }) {
   const schema = getScannedSchemaAtPath({ path, state })
   if (!schema) {
@@ -466,6 +498,9 @@ function getDeclarationNodeIdForPath ({ path, state }) {
   return path
 }
 
+/**
+ * Look up a precomputed structural alias target for a declaration path when one is allowed.
+ */
 function getStructuralAliasTargetName ({ path, schema, state }) {
   if (!isReusableScalarSchema({ schema }) || !isValueBranchScalarPath({ path })) {
     return null
@@ -474,6 +509,9 @@ function getStructuralAliasTargetName ({ path, schema, state }) {
   return state.structuralAliasTargets?.get(path) || null
 }
 
+/**
+ * Collect every named dependency that must emit before a declaration can render correctly.
+ */
 function collectDependencyPaths ({ schema, path, state }) {
   const resolvedSchema = resolveDeclarationSchema({ schema, state })
   const dependencyPaths = []
@@ -485,6 +523,9 @@ function collectDependencyPaths ({ schema, path, state }) {
   return [...new Set(dependencyPaths)].filter(dependencyPath => dependencyPath !== path)
 }
 
+/**
+ * Collect declaration dependencies introduced by object members.
+ */
 function collectObjectDependencyPaths ({ schema, path, state, dependencyPaths }) {
   if (!hasObjectMembers({ schema })) {
     return
@@ -515,6 +556,9 @@ function collectObjectDependencyPaths ({ schema, path, state, dependencyPaths })
   }
 }
 
+/**
+ * Collect declaration dependencies introduced by array items.
+ */
 function collectArrayDependencyPaths ({ schema, path, state, dependencyPaths }) {
   if (!schema.items) {
     return
@@ -537,6 +581,9 @@ function collectArrayDependencyPaths ({ schema, path, state, dependencyPaths }) 
   }
 }
 
+/**
+ * Collect declaration dependencies introduced by union and intersection combinators.
+ */
 function collectCombinatorDependencyPaths ({ schema, path, state, dependencyPaths }) {
   for (const keyword of ['oneOf', 'anyOf', 'allOf']) {
     if (!Array.isArray(schema[keyword])) {
@@ -557,6 +604,9 @@ function collectCombinatorDependencyPaths ({ schema, path, state, dependencyPath
   }
 }
 
+/**
+ * Synthesize a property-level union alias when the base property cannot render a concrete type itself.
+ */
 function buildObjectUnionPropertyDeclaration ({ path, name, schema, state }) {
   const propertyInfo = getObjectUnionPropertyInfo({ path, state })
   if (!propertyInfo) {
@@ -577,6 +627,9 @@ function buildObjectUnionPropertyDeclaration ({ path, name, schema, state }) {
   }
 }
 
+/**
+ * Resolve the branch property declarations that contribute to a property-level object union.
+ */
 function getObjectUnionPropertyInfo ({ path, state }) {
   const match = path.match(/^(.*)\/properties\/([^/]+)$/)
   if (!match) {
@@ -605,6 +658,9 @@ function getObjectUnionPropertyInfo ({ path, state }) {
   }
 }
 
+/**
+ * Determine which properties should be removed from an object-union base declaration.
+ */
 function getOmittedBasePropertyNames ({ path, schema, state, unionInfo }) {
   const resolvedSchema = resolveDeclarationSchema({ schema, state })
   const propertyNames = Object.keys(resolvedSchema.properties || {})
@@ -640,6 +696,9 @@ function getOmittedBasePropertyNames ({ path, schema, state, unionInfo }) {
   return omitted
 }
 
+/**
+ * Merge inherited required properties from the union parent into one branch schema.
+ */
 function mergeUnionBranchSchema ({ path, branchPath, branchSchema, state }) {
   const parentSchema = getScannedSchemaAtPath({ path, state })
   const parentRequired = new Set(parentSchema?.required || [])
@@ -657,13 +716,16 @@ function mergeUnionBranchSchema ({ path, branchPath, branchSchema, state }) {
   }
 }
 
+/**
+ * Merge a union base schema with a single branch when collapsing trivial object unions.
+ */
 function mergeObjectUnionSchemas ({ baseSchema, branchSchema }) {
   return {
     ...baseSchema,
     ...branchSchema,
     properties: {
-      ...(baseSchema.properties || {}),
-      ...(branchSchema.properties || {})
+      ...baseSchema.properties,
+      ...branchSchema.properties
     },
     required: [...new Set([...(baseSchema.required || []), ...(branchSchema.required || [])])],
     oneOf: undefined,
@@ -672,6 +734,9 @@ function mergeObjectUnionSchemas ({ baseSchema, branchSchema }) {
   }
 }
 
+/**
+ * Decide whether a property should disappear from a non-root union base because every branch narrows it.
+ */
 function shouldOmitObjectUnionBaseProperty ({ path, propertyName, propertySchema, state, unionInfo }) {
   if (path === '#' || propertySchema?.const !== undefined) {
     return false
@@ -687,6 +752,9 @@ function shouldOmitObjectUnionBaseProperty ({ path, propertyName, propertySchema
   })
 }
 
+/**
+ * Render the raw TypeScript type for a schema path without going through named declaration emission.
+ */
 function renderDeclarationValue ({ path, schema, state }) {
   return renderType({
     context: createRenderContext({

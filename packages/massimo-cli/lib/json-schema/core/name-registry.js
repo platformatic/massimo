@@ -1,3 +1,6 @@
+/**
+ * Create the registry that owns stable schema-path and structural-name assignments for a scan run.
+ */
 export function createNameRegistry () {
   const namesByPath = new Map()
   const namesByStructure = new Map()

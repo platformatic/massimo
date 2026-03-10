@@ -1,3 +1,6 @@
+/**
+ * Create the rendering context object shared by all nested render helpers.
+ */
 export function createRenderContext ({
   schema,
   state,
@@ -20,6 +23,9 @@ export function createRenderContext ({
   }
 }
 
+/**
+ * Create a child rendering context for a nested schema path.
+ */
 export function createChildRenderContext ({ context, schema, pathSuffix, lookupPathName = context.lookupChildPathNames }) {
   return {
     schema,

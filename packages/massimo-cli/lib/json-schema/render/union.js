@@ -1,5 +1,8 @@
 import { createChildRenderContext } from './render-context.js'
 
+/**
+ * Render a `oneOf` or `anyOf` schema as a TypeScript union.
+ */
 export function renderUnionType ({ context, renderType }) {
   return renderCombinatorMembers({
     context,
@@ -10,6 +13,9 @@ export function renderUnionType ({ context, renderType }) {
   })
 }
 
+/**
+ * Render an `allOf` schema as a TypeScript intersection.
+ */
 export function renderIntersectionType ({ context, renderType }) {
   return renderCombinatorMembers({
     context,
@@ -20,6 +26,9 @@ export function renderIntersectionType ({ context, renderType }) {
   })
 }
 
+/**
+ * Render the members of a JSON Schema combinator with the correct child paths and grouping.
+ */
 function renderCombinatorMembers ({ context, members, separator, keyword, renderType }) {
   if (!Array.isArray(members) || members.length === 0) {
     return null
@@ -45,6 +54,9 @@ function renderCombinatorMembers ({ context, members, separator, keyword, render
   return renderedMembers.join(separator)
 }
 
+/**
+ * Parenthesize combinator members when needed to preserve TypeScript precedence.
+ */
 function wrapCombinatorMember ({ memberType, separator }) {
   if (separator === ' & ' && memberType.includes(' | ')) {
     return `(${memberType})`

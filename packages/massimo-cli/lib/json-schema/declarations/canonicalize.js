@@ -21,6 +21,10 @@ import {
   singularizeName
 } from './helpers.js'
 
+/**
+ * Produce the declaration state used for emission by adding stable public-name overrides and
+ * precomputed structural alias targets to the scan state.
+ */
 export function canonicalizeDeclarationState ({ state }) {
   const nameOverrides = buildDeclarationNameOverrides({ state })
   const stateWithOverrides = {
@@ -28,6 +32,8 @@ export function canonicalizeDeclarationState ({ state }) {
     nameOverrides
   }
 
+  // Apply deterministic naming "repairs" after the first override pass so later phases can rely
+  // on a single stable public name for every emitted path.
   enforceStableArrayItemNames({ state: stateWithOverrides, nameOverrides })
   enforceStableNameConflicts({ state: stateWithOverrides, nameOverrides })
 
@@ -43,6 +49,9 @@ export function canonicalizeDeclarationState ({ state }) {
   }
 }
 
+/**
+ * Build the deterministic name-override map applied before declaration graph construction.
+ */
 function buildDeclarationNameOverrides ({ state }) {
   const overrides = new Map()
   const paths = [...state.nameRegistry.getPathEntries().keys()].sort((left, right) => left.length - right.length)
@@ -76,6 +85,9 @@ function buildDeclarationNameOverrides ({ state }) {
   return overrides
 }
 
+/**
+ * Ensure named arrays never reuse the exact same public name for both the array and its item type.
+ */
 function enforceStableArrayItemNames ({ state, nameOverrides }) {
   const paths = [...state.nameRegistry.getPathEntries().keys()].sort(compareCanonicalPaths)
 
@@ -102,6 +114,9 @@ function enforceStableArrayItemNames ({ state, nameOverrides }) {
   }
 }
 
+/**
+ * Resolve public-name collisions with deterministic suffixes based on canonical path order.
+ */
 function enforceStableNameConflicts ({ state, nameOverrides }) {
   const countsByName = new Map()
   const paths = [...state.nameRegistry.getPathEntries().keys()].sort(compareCanonicalPaths)
@@ -128,10 +143,15 @@ function enforceStableNameConflicts ({ state, nameOverrides }) {
   }
 }
 
+/**
+ * Precompute the small set of structural alias targets that are safe to reuse deterministically.
+ */
 function buildStructuralAliasTargets ({ state }) {
   const targets = new Map()
   const candidatePaths = [...state.nameRegistry.getPathEntries().keys()].sort(compareCanonicalPaths)
 
+  // Structural alias reuse is conservative on purpose - if a candidate is ambiguous, prefer
+  // a distinct deterministic name over a surprising alias collapse.
   for (const path of candidatePaths) {
     const schema = resolveDeclarationSchema({
       schema: getScannedSchemaAtPath({ path, state }),
@@ -187,6 +207,9 @@ function buildStructuralAliasTargets ({ state }) {
   return targets
 }
 
+/**
+ * Rename repeated root-union properties when every branch contributes the same object-like shape.
+ */
 function applyRootUnionBranchPropertyOverrides ({ path, unionInfo, overrides, state }) {
   if (path !== '#') {
     return
@@ -241,6 +264,9 @@ function applyRootUnionBranchPropertyOverrides ({ path, unionInfo, overrides, st
   }
 }
 
+/**
+ * Normalize helper names nested under root-union branch properties to reduce redundant prefixes.
+ */
 function applyRootUnionBranchChildOverrides ({ path, unionInfo, overrides, state }) {
   if (path !== '#') {
     return
@@ -323,6 +349,9 @@ function applyRootUnionBranchChildOverrides ({ path, unionInfo, overrides, state
   }
 }
 
+/**
+ * Flatten child declarations under container-like properties that should share the same owner prefix.
+ */
 function applyCollapsedContainerChildOverrides ({ containerPath, containerSchema, ownerPrefix, overrides, state }) {
   if (!containerSchema?.properties) {
     return
@@ -374,6 +403,9 @@ function applyCollapsedContainerChildOverrides ({ containerPath, containerSchema
   }
 }
 
+/**
+ * Collapse repeated branch property types to one shared owner-level name when their shapes match.
+ */
 function applySharedUnionBranchPropertyOverrides ({ path, unionInfo, overrides, state }) {
   const ownerName = getPreferredPathName({ path, state: { ...state, nameOverrides: overrides } })
   if (!ownerName) {
@@ -423,6 +455,9 @@ function applySharedUnionBranchPropertyOverrides ({ path, unionInfo, overrides, 
   }
 }
 
+/**
+ * Rename nested union-typed properties so branch-owned helper names stay deterministic and scoped.
+ */
 function applyPropertyUnionBranchOverrides ({ path, unionInfo, overrides, state }) {
   const ownerName = getPreferredPathName({ path, state: { ...state, nameOverrides: overrides } })
   if (!ownerName) {
@@ -463,6 +498,9 @@ function applyPropertyUnionBranchOverrides ({ path, unionInfo, overrides, state 
   }
 }
 
+/**
+ * Rename non-root union branches relative to their owner type instead of their raw scan-time names.
+ */
 function applyNestedUnionBranchOverrides ({ path, unionInfo, overrides, state }) {
   if (path === '#' || isTopLevelArrayItemPath({ path })) {
     return
@@ -494,6 +532,9 @@ function applyNestedUnionBranchOverrides ({ path, unionInfo, overrides, state })
   }
 }
 
+/**
+ * Apply deterministic overrides for leaf helper types that hang directly off union branches.
+ */
 function applyBranchLeafOverrides ({ path, unionInfo, overrides, state }) {
   if (path === '#' || isTopLevelArrayItemPath({ path })) {
     return
@@ -546,6 +587,9 @@ function applyBranchLeafOverrides ({ path, unionInfo, overrides, state }) {
   }
 }
 
+/**
+ * Rename a path and every named descendant that currently derives its name from that path root.
+ */
 function applySubtreeNameOverride ({ rootPath, nextRootName, overrides, state }) {
   const currentRootName = overrides.get(rootPath) || state.nameRegistry.getPathName({ path: rootPath })
   if (!currentRootName || !nextRootName || currentRootName === nextRootName) {
@@ -566,6 +610,9 @@ function applySubtreeNameOverride ({ rootPath, nextRootName, overrides, state })
   }
 }
 
+/**
+ * Look up object-union metadata for a property path so declaration naming can reason about branches.
+ */
 function getObjectUnionPropertyInfo ({ path, state }) {
   const match = path.match(/^(.*)\/properties\/([^/]+)$/)
   if (!match) {
