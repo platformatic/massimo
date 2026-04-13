@@ -1,0 +1,94 @@
+import { renderArrayType } from './array.js'
+import { renderObjectType } from './object.js'
+import { renderPrimitiveType } from './primitive.js'
+import { renderReferenceType } from './reference.js'
+import { shouldInlineArrayPropertyType, shouldInlineNamedScalarPropertyType } from '../core/scanner.js'
+import { renderIntersectionType, renderUnionType } from './union.js'
+
+/**
+ * Dispatch a schema node to the correct TypeScript type renderer.
+ */
+export function renderType ({ context }) {
+  const { schema, nameRegistry, path, lookupPathName, nameOverrides } = context
+
+  if (
+    lookupPathName &&
+    !(schema.const !== undefined && context.inlineConstPathNames) &&
+    !shouldInlineNamedScalarPropertyType({ path, schema, state: context })
+  ) {
+    const registeredName = nameOverrides?.get(path) || nameRegistry.getPathName({ path })
+    if (registeredName && !shouldInlineArrayPropertyType({ path, schema, state: context })) {
+      return registeredName
+    }
+  }
+
+  if (schema.$ref) {
+    return renderReferenceType({
+      ref: schema.$ref,
+      context,
+      renderType
+    })
+  }
+
+  const combinatorType = renderCombinatorType({ context, renderType })
+  const objectType = hasObjectShape({ schema })
+    ? renderObjectType({ context, renderType })
+    : null
+
+  if (objectType && combinatorType) {
+    return `${objectType} & (${combinatorType})`
+  }
+
+  if (combinatorType) {
+    return combinatorType
+  }
+
+  if (schema.type === 'array' || Array.isArray(schema.items)) {
+    return renderArrayType({
+      context,
+      renderType
+    })
+  }
+
+  if (objectType) {
+    return objectType
+  }
+
+  if (schema.const !== undefined || Array.isArray(schema.enum) || Array.isArray(schema.type) || isPrimitiveSchemaType({ schema })) {
+    return renderPrimitiveType({
+      schema,
+      singleQuoteConst: context.inlineConstPathNames
+    })
+  }
+
+  return 'unknown'
+}
+
+/**
+ * Check whether a schema uses one of the direct JSON Schema primitive type keywords.
+ */
+function isPrimitiveSchemaType ({ schema }) {
+  return ['string', 'integer', 'number', 'boolean', 'null'].includes(schema.type)
+}
+
+/**
+ * Check whether a schema should be treated as object-like during rendering.
+ */
+function hasObjectShape ({ schema }) {
+  return schema.type === 'object' || schema.properties || schema.additionalProperties !== undefined || schema.patternProperties
+}
+
+/**
+ * Render the active combinator expression for a schema, if any.
+ */
+function renderCombinatorType ({ context, renderType }) {
+  if (Array.isArray(context.schema.oneOf) || Array.isArray(context.schema.anyOf)) {
+    return renderUnionType({ context, renderType })
+  }
+
+  if (Array.isArray(context.schema.allOf)) {
+    return renderIntersectionType({ context, renderType })
+  }
+
+  return null
+}
