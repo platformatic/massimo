@@ -49,7 +49,7 @@
     "@platformatic/composer": "3.52.2",
     "@platformatic/db": "3.0.0-alpha.6",
     "@platformatic/foundation": "3.52.2",
-    "@platformatic/runtime": "3.52.1",
+    "@platformatic/runtime": "3.52.3",
     "@platformatic/service": "3.0.0-alpha.6",
     "@platformatic/sql-graphql": "3.42.0",
     "@platformatic/sql-mapper": "3.30.0",
