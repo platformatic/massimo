@@ -40,8 +40,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(@types/node@25.6.0)(typescript@5.9.3)
       '@platformatic/foundation':
-        specifier: 3.52.2
-        version: 3.52.2
+        specifier: 3.52.4
+        version: 3.52.4
       '@platformatic/service':
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
@@ -119,8 +119,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(@types/node@25.6.0)(typescript@5.9.3)
       '@platformatic/foundation':
-        specifier: 3.52.2
-        version: 3.52.2
+        specifier: 3.52.4
+        version: 3.52.4
       '@platformatic/runtime':
         specifier: 3.52.3
         version: 3.52.3
@@ -1061,12 +1061,12 @@ packages:
     resolution: {integrity: sha512-liTs1LrHxft3dMVDOeensFMkiesohIw+C2gcm+sN14o9pIn6ocTzYrkTJpXQlluWnN7Ogd7jnvOHk4jrs6eoOQ==}
     engines: {node: '>=22.19.0'}
 
-  '@platformatic/foundation@3.52.2':
-    resolution: {integrity: sha512-A0CP0W6CNN/6t8+aSnV34e+4JmqRmuxoZCBLNB9LoFCPP1GlMMxk+12AEe85hvLXq1ZVv0CILi2IrAVgfA3poA==}
-    engines: {node: '>=22.19.0'}
-
   '@platformatic/foundation@3.52.3':
     resolution: {integrity: sha512-OmfdXD37XedoX0Cxydwuw6DoM3NvO+Q1CB+1CGGboHLDkD2L9Jw/0Tmg1hwC+8HNRaR1wgY0xlZg7bvKDBBbzQ==}
+    engines: {node: '>=22.19.0'}
+
+  '@platformatic/foundation@3.52.4':
+    resolution: {integrity: sha512-SN/fHYxln7vKy7YEiK0wf8wWE9Gh/uZ4CDIXJG6Ya3pCkbkPXfIRvWppntJLfxiNqHfPmUUMgXhEcPyw9mzX6Q==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/gateway@3.52.3':
@@ -5845,7 +5845,7 @@ snapshots:
       undici: 7.18.2
       yaml: 2.8.3
 
-  '@platformatic/foundation@3.52.2':
+  '@platformatic/foundation@3.52.3':
     dependencies:
       '@fastify/deepmerge': 2.0.2
       '@fastify/error': 4.2.0
@@ -5866,7 +5866,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@platformatic/foundation@3.52.3':
+  '@platformatic/foundation@3.52.4':
     dependencies:
       '@fastify/deepmerge': 2.0.2
       '@fastify/error': 4.2.0
@@ -5897,7 +5897,7 @@ snapshots:
       '@fastify/view': 10.0.2
       '@platformatic/basic': 3.52.3
       '@platformatic/fastify-openapi-glue': 5.1.0
-      '@platformatic/foundation': 3.52.3
+      '@platformatic/foundation': 3.52.4
       '@platformatic/graphql-composer': 0.10.1
       '@platformatic/scalar-theme': 3.52.3
       '@platformatic/service': 3.52.3(typescript@5.9.3)
