@@ -40,8 +40,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(@types/node@25.6.0)(typescript@5.9.3)
       '@platformatic/foundation':
-        specifier: 3.52.4
-        version: 3.52.4
+        specifier: 3.54.0
+        version: 3.54.0
       '@platformatic/service':
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
@@ -119,8 +119,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(@types/node@25.6.0)(typescript@5.9.3)
       '@platformatic/foundation':
-        specifier: 3.52.4
-        version: 3.52.4
+        specifier: 3.54.0
+        version: 3.54.0
       '@platformatic/runtime':
         specifier: 3.52.4
         version: 3.52.4
