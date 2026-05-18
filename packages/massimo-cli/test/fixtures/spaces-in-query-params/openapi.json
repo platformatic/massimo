@@ -1,0 +1,32 @@
+{
+  "openapi": "3.0.0",
+  "info": { "title": "Spaces test", "version": "1.0.0" },
+  "paths": {
+    "/search": {
+      "get": {
+        "operationId": "getSearch",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "received": { "type": "string" } }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

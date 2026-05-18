@@ -248,7 +248,7 @@ function generateFrontendImplementationFromOpenAPI ({
       writer.blankLine()
 
       /* eslint-disable-next-line no-template-curly-in-string */
-      const searchString = queryParams.length > 0 ? '?${searchParams.toString()}' : ''
+      const searchString = queryParams.length > 0 ? "?${searchParams.toString().replace(/\\+/g, '%20')}" : ''
       if (!isGetMethod) {
         writer
           .write(`const response = await fetch(\`\${url}${stringLiteralPath}${searchString}\`, `)
