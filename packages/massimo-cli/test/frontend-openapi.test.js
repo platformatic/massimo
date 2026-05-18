@@ -1291,11 +1291,11 @@ test('add credentials: include in client implementation from file', async t => {
     const implementationFile = join(dir, 'movies', 'movies.mts')
     const implementation = await readFile(implementationFile, 'utf-8')
     const expectedGetMethod = `
-  const response = await fetch(\`\${url}/hello/\${request['name']}\`, {
-    credentials: 'include',
-    headers,
-    ...defaultFetchParams
-  })`
+const response = await fetch(\`\${url}/hello/\${request['name']}\`, {
+credentials: 'include',
+headers,
+...defaultFetchParams
+})`
     const expectedPostMethod = `
   const response = await fetch(\`\${url}/movies/\${request['id']}?\${searchParams.toString().replace(/\\+/g, '%20')}\`, {
     method: 'POST',
