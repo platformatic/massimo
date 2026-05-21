@@ -1,6 +1,6 @@
 {
   "name": "massimo",
-  "version": "1.2.0",
+  "version": "minor",
   "private": true,
   "type": "module",
   "workspaces": [

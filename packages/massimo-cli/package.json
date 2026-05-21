@@ -1,6 +1,6 @@
 {
   "name": "massimo-cli",
-  "version": "1.2.0",
+  "version": "minor",
   "description": "A client for HTTP services.",
   "main": "index.js",
   "types": "index.d.ts",
