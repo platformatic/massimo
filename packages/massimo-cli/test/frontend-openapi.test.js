@@ -8,6 +8,74 @@ import { request } from 'undici'
 import { processFrontendOpenAPI } from '../lib/frontend-openapi-generator.js'
 import { cliPath, moveToTmpdir } from './helper.js'
 
+test('encode spaces as %20 (not +) in query string parameters', async () => {
+  const schema = {
+    openapi: '3.0.0',
+    info: { title: 'Test', version: '1.0.0' },
+    paths: {
+      '/search': {
+        get: {
+          operationId: 'getSearch',
+          parameters: [
+            {
+              name: 'query',
+              in: 'query',
+              schema: { type: 'string' }
+            }
+          ],
+          responses: {
+            200: {
+              description: 'OK',
+              content: { 'application/json': { schema: { type: 'object' } } }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const warn = mock.fn()
+  const { implementation } = processFrontendOpenAPI({
+    schema,
+    name: 'search',
+    language: 'ts',
+    fullResponse: true,
+    fullRequest: false,
+    withCredentials: false,
+    propsOptional: false,
+    logger: { warn }
+  })
+
+  ok(
+    implementation.includes("searchParams.toString().replace(/\\+/g, '%20')"),
+    'generated code should use .replace(/\\+/g, \'%20\') on searchParams.toString()'
+  )
+})
+
+test('integration: spaces in query params are sent as %20 not +', async t => {
+  const { buildApp } = await import('./fixtures/spaces-in-query-params/server.js')
+  const app = await buildApp()
+  t.after(() => app.close())
+  await app.listen({ port: 0 })
+  const address = app.server.address()
+  const port = typeof address === 'string' ? address : address.port
+  const baseUrl = `http://localhost:${port}`
+
+  const dir = await moveToTmpdir(after)
+  const openAPIfile = join(import.meta.dirname, 'fixtures', 'spaces-in-query-params', 'openapi.json')
+  await execa('node', [cliPath, openAPIfile, '--frontend', '--name', 'search', '--full', 'false'])
+
+  const testFile = `
+import build from './search.mjs'
+const client = build('${baseUrl}')
+const result = await client.getSearch({ query: 'New York' })
+console.log(result.received)
+`
+  await writeFile(join(dir, 'search', 'test.js'), testFile)
+  const output = await execa('node', [join(dir, 'search', 'test.js')])
+  equal(output.stdout.trim(), 'New York')
+})
+
 test('build basic client from url', async t => {
   try {
     await fs.unlink(join(import.meta.dirname, 'fixtures', 'sample', 'db.sqlite'))
@@ -360,7 +428,7 @@ const _postRoot = async (url: string, request: Types.PostRootRequest): Promise<T
     ...(isFormData || body === undefined) ? {} : defaultJsonType
   }
 
-  const response = await fetch(\`\${url}/?\${searchParams.toString()}\`, {
+  const response = await fetch(\`\${url}/?\${searchParams.toString().replace(/\\+/g, '%20')}\`, {
     method: 'POST',
     body: isFormData ? body : JSON.stringify(body),
     headers,
@@ -1223,13 +1291,13 @@ test('add credentials: include in client implementation from file', async t => {
     const implementationFile = join(dir, 'movies', 'movies.mts')
     const implementation = await readFile(implementationFile, 'utf-8')
     const expectedGetMethod = `
-  const response = await fetch(\`\${url}/hello/\${request['name']}\`, {
-    credentials: 'include',
-    headers,
-    ...defaultFetchParams
-  })`
+const response = await fetch(\`\${url}/hello/\${request['name']}\`, {
+credentials: 'include',
+headers,
+...defaultFetchParams
+})`
     const expectedPostMethod = `
-  const response = await fetch(\`\${url}/movies/\${request['id']}?\${searchParams.toString()}\`, {
+  const response = await fetch(\`\${url}/movies/\${request['id']}?\${searchParams.toString().replace(/\\+/g, '%20')}\`, {
     method: 'POST',
     body: isFormData ? body : JSON.stringify(body),
     credentials: 'include',
