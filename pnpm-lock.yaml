@@ -128,8 +128,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
       '@platformatic/sql-graphql':
-        specifier: 3.53.0
-        version: 3.53.0
+        specifier: 3.55.0
+        version: 3.55.0
       '@platformatic/sql-mapper':
         specifier: 3.52.4
         version: 3.52.4(@types/node@25.9.1)(typescript@5.9.3)
@@ -1238,10 +1238,6 @@ packages:
     resolution: {integrity: sha512-SN/fHYxln7vKy7YEiK0wf8wWE9Gh/uZ4CDIXJG6Ya3pCkbkPXfIRvWppntJLfxiNqHfPmUUMgXhEcPyw9mzX6Q==}
     engines: {node: '>=22.19.0'}
 
-  '@platformatic/foundation@3.53.0':
-    resolution: {integrity: sha512-Kus685d24/f2dX9VfTgta4lJYhTyt8MsGwBV8aBorhycpbgu5XYLKxMjYuPBzUvEPGQyPdjfO+75l9yR8XwYMg==}
-    engines: {node: '>=22.19.0'}
-
   '@platformatic/foundation@3.54.0':
     resolution: {integrity: sha512-ogOGPTI1JrUHiYCeQqxeG7Ljb34udAsOdOhOaHV22FZNOcQhcJF5kR1Tf15n8cH4VLRYFgktX/BcyX/YG+Yptg==}
     engines: {node: '>=22.19.0'}
@@ -1355,8 +1351,8 @@ packages:
     resolution: {integrity: sha512-qNBetkDiejkZopqMtyiw6meFDTKvIx8paagtBGxlHCRU6qpjKvsMlixaNlg42nc4XXaG6Ijuj3/HshevW0hPcQ==}
     engines: {node: '>=22.18.0'}
 
-  '@platformatic/sql-graphql@3.53.0':
-    resolution: {integrity: sha512-J/1dE+ua6zDExqLj3KmrtzrbRegoFp1EQLK2yUMRRrpjtoM2a50oip+u957FwQpxTh4spt6sE6WOWHsuXuiIgA==}
+  '@platformatic/sql-graphql@3.55.0':
+    resolution: {integrity: sha512-CdUa5EUCKH1SjIuSew74MrEJLhtJ4Lo0oY4HkgvnkNNZLh2us6BBJVKf6A3ID7EIUXDTnvkuY27X26qWNY86/Q==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/sql-json-schema-mapper@3.0.0-alpha.6':
@@ -6248,7 +6244,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@platformatic/foundation@3.53.0':
+  '@platformatic/foundation@3.54.0':
     dependencies:
       '@fastify/deepmerge': 2.0.2
       '@fastify/error': 4.2.0
@@ -6269,7 +6265,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@platformatic/foundation@3.54.0':
+  '@platformatic/foundation@3.55.0':
     dependencies:
       '@fastify/deepmerge': 2.0.2
       '@fastify/error': 4.2.0
@@ -6687,11 +6683,11 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@platformatic/sql-graphql@3.53.0':
+  '@platformatic/sql-graphql@3.55.0':
     dependencies:
       '@fastify/error': 4.2.0
       '@mercuriusjs/federation': 5.1.1
-      '@platformatic/foundation': 3.53.0
+      '@platformatic/foundation': 3.55.0
       camelcase: 6.3.0
       fastify-plugin: 5.1.0
       graphql: 16.14.0
