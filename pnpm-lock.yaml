@@ -67,8 +67,8 @@ importers:
         specifier: ^0.13.0
         version: 0.13.0(eslint@9.39.4)(typescript@5.9.3)
       tsd:
-        specifier: ^0.32.0
-        version: 0.32.0
+        specifier: ^0.33.0
+        version: 0.33.0
       typescript:
         specifier: ^5.4.2
         version: 5.9.3
@@ -182,8 +182,8 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       tsd:
-        specifier: ^0.32.0
-        version: 0.32.0
+        specifier: ^0.33.0
+        version: 0.33.0
       typescript:
         specifier: ^5.5.4
         version: 5.9.3
@@ -1525,8 +1525,8 @@ packages:
     peerDependencies:
       eslint: '>=8.40.0'
 
-  '@tsd/typescript@5.8.3':
-    resolution: {integrity: sha512-oKarNCN1QUhG148M88mtZdOlBZWWGcInquef+U8QL7gwJkRuNo5WS45Fjsd+3hM9cDJWGpqSZ4Oo097KDx4IWA==}
+  '@tsd/typescript@5.9.3':
+    resolution: {integrity: sha512-JSSdNiS0wgd8GHhBwnMAI18Y8XPhLVN+dNelPfZCXFhy9Lb3NbnFyp9JKxxr54jSUkEJPk3cidvCoHducSaRMQ==}
     engines: {node: '>=14.17'}
 
   '@types/babel__core@7.20.5':
@@ -4304,8 +4304,8 @@ packages:
     peerDependencies:
       typescript: '>=4.0.0'
 
-  tsd@0.32.0:
-    resolution: {integrity: sha512-R5lBZCbxGBowOcW0gpQaiIjGYrG5NmU+PfFDKcc3zbtzWjML1o/zAwzdDnS2ZheSlPu9GW51azpFqEPUBq9DoQ==}
+  tsd@0.33.0:
+    resolution: {integrity: sha512-/PQtykJFVw90QICG7zyPDMIyueOXKL7jOJVoX5pILnb3Ux+7QqynOxfVvarE+K+yi7BZyOSY4r+OZNWSWRiEwQ==}
     engines: {node: '>=14.16'}
     hasBin: true
 
@@ -6742,7 +6742,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@tsd/typescript@5.8.3': {}
+  '@tsd/typescript@5.9.3': {}
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -10038,9 +10038,9 @@ snapshots:
       picomatch: 4.0.4
       typescript: 5.9.3
 
-  tsd@0.32.0:
+  tsd@0.33.0:
     dependencies:
-      '@tsd/typescript': 5.8.3
+      '@tsd/typescript': 5.9.3
       eslint-formatter-pretty: 4.1.0
       globby: 11.1.0
       jest-diff: 29.7.0
