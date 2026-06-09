@@ -18,6 +18,12 @@ Instead of an URL, you can also use a local file:
 $ massimo path/to/schema -n myclient
 ```
 
+To generate only TypeScript types from a local JSON Schema file, use:
+
+```bash
+$ massimo path/to/schema.json --type json-schema -n mytypes --types-only
+```
+
 All the above commands will create a Fastify plugin that exposes a client in the `request` object for the remote API in a folder `myclient` and a file named myclient.js inside it.
 
 If platformatic config file is specified, it will be edited and a `clients` section will be added.
@@ -78,3 +84,4 @@ Options:
 * `--retry-timeout-ms` - If passed, the HTTP request to get an Open API schema will be retried (reference: https://undici.nodejs.org/#/docs/api/RetryHandler.md)
 * `--type-extension` - Force the use of module-specific type extensions (.d.mts for ESM, .d.cts for CJS) instead of the default logic.
 * `--skip-prefixed-url` - If passed, it will avoid unnecessary extra HTTP call to check if, for instance, the `/documentation/json` Open API URL exists
+* `--type json-schema` - Generate types from a local JSON Schema file. This mode currently supports local files only and emits types only.
