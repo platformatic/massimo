@@ -131,8 +131,8 @@ importers:
         specifier: 3.55.0
         version: 3.55.0
       '@platformatic/sql-mapper':
-        specifier: 3.52.4
-        version: 3.52.4(@types/node@25.9.2)(typescript@5.9.3)
+        specifier: 3.57.0
+        version: 3.57.0(@types/node@25.9.2)(typescript@5.9.3)
       '@playwright/test':
         specifier: ^1.42.1
         version: 1.60.0
@@ -697,6 +697,9 @@ packages:
   '@matteo.collina/sqlite-pool@0.6.0':
     resolution: {integrity: sha512-6FW+Mph48XnaXJg/7EL4tMHq9hmLvlQD43Ad+eZCMK921qTcGYLkl2PaZxBiyt5w+5ZeZOdzgN87dVsoJ/cPfg==}
 
+  '@matteo.collina/sqlite-pool@0.7.0':
+    resolution: {integrity: sha512-9zu7ZcDYGw89Num8sbQzx43AUyyFZ3kBFB3VzFuDwfO3JfzX/bXcBzezzZ6wtvLe2N5fVCacy69ScWIpAYJ/MQ==}
+
   '@mercuriusjs/federation@5.1.1':
     resolution: {integrity: sha512-7Ch2vS4t6jwnu2qE6MHaGDRmv+zeywuzLQAdVyoH5HtLOSI/8BcRvoFme3uL+6YCMMioLXcN02ewSP8zxNVRCQ==}
 
@@ -1158,16 +1161,16 @@ packages:
     resolution: {integrity: sha512-IVeBwVuCevWTv+YALoNImXU9h+2V8UXPwHslpIxf20ZsmYomWMEcLhGr3cUfFFAR9nWKHPmBF2CY3KLdI7CndQ==}
     engines: {node: '>=22.18.0'}
 
-  '@platformatic/foundation@3.52.4':
-    resolution: {integrity: sha512-SN/fHYxln7vKy7YEiK0wf8wWE9Gh/uZ4CDIXJG6Ya3pCkbkPXfIRvWppntJLfxiNqHfPmUUMgXhEcPyw9mzX6Q==}
-    engines: {node: '>=22.19.0'}
-
   '@platformatic/foundation@3.54.0':
     resolution: {integrity: sha512-ogOGPTI1JrUHiYCeQqxeG7Ljb34udAsOdOhOaHV22FZNOcQhcJF5kR1Tf15n8cH4VLRYFgktX/BcyX/YG+Yptg==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/foundation@3.55.0':
     resolution: {integrity: sha512-Ij+Yoz8lJRQawIKVEUuUmkRfc13wB4ngytCzr8zEq/MXMWjLISvnoMvBOSvoYaDHGYAI0Hcf0GItsl9Hr8c16Q==}
+    engines: {node: '>=22.19.0'}
+
+  '@platformatic/foundation@3.57.0':
+    resolution: {integrity: sha512-9BZ1Vs2h0XM928wtnPDYkaEBLwH+8Q+xafAxII1TO/P7lZ5vVDXqjG3xZHWzVwLu1IJBoPbFy2mIkMtRIRS2Rw==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/gateway@3.55.0':
@@ -1184,6 +1187,10 @@ packages:
 
   '@platformatic/generators@3.55.0':
     resolution: {integrity: sha512-c+OH4Q9ZeYJeWCJp1q8ehLTvSb7WyR/9i8PbtZGX6rdC+555jKuRRyHEEOZ0t0nP5Moxc85Qu9CSXD0IS1b9dA==}
+    engines: {node: '>=22.19.0'}
+
+  '@platformatic/globals@3.57.0':
+    resolution: {integrity: sha512-hKtBmRxbezjUlCf2ucEjvr3xUdOQEugjBEsmbdVoqtHTpsGvrRIh2jQdQ2zzVr80Nf1sRhXeCYlAElBKtLqzFg==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/graphql-composer@0.10.1':
@@ -1275,8 +1282,8 @@ packages:
     resolution: {integrity: sha512-OUW0FZJg0F6yh8KjItHBF6rqipaAv7BzLiXh87nWd6ZgIHJ3gdZgSPTiOH3IBfOpwh1eqqaRojcpo6YTBmVSTw==}
     engines: {node: '>=22.18.0'}
 
-  '@platformatic/sql-mapper@3.52.4':
-    resolution: {integrity: sha512-fgBg/2Av79d6Asfcu82WCo5uFQECj1EFK9yoUjHwYnE/hvMIx9HEgfHuBv+x7/SO4fsG7wjK7NfkK6j1dz0BkA==}
+  '@platformatic/sql-mapper@3.57.0':
+    resolution: {integrity: sha512-lFiDjB3gEujgU9jLtnbkPY16qQ/WTZ27f3ri49fgZdRcl4dThDEQjHRURnFERX6wwijUJFw8NfaX8qOYRFxbNg==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/sql-openapi@3.0.0-alpha.6':
@@ -1291,12 +1298,12 @@ packages:
     resolution: {integrity: sha512-Gq79y5Hi25x2wEBOwGPCL7QF+RM5IFH499MvOApUPBEh1GiuHwIYVvu7rBmBNPqLXukusV2Qr1bB2av8P2c28Q==}
     engines: {node: '>=22.18.0'}
 
-  '@platformatic/telemetry@3.52.4':
-    resolution: {integrity: sha512-vzP4UdormMh7prdrqL+ru47UXAN404N/aRTJJ6cp+dvDMUciRDm7lAZcRaLiT1bQS973VG5xG5W2l8ziqCA2lw==}
-    engines: {node: '>=22.19.0'}
-
   '@platformatic/telemetry@3.55.0':
     resolution: {integrity: sha512-DxrBo55EKC3EqH6A9LkzWemld2kbr7Gs4R7cBCo3SFhDKkrfkTLyQ5433XYD9NkDj0u3BvJM3vXwqhBqA0jTrQ==}
+    engines: {node: '>=22.19.0'}
+
+  '@platformatic/telemetry@3.57.0':
+    resolution: {integrity: sha512-OrA32yh32aoe+0cnG7+qk3O9uo23HSjqzmf30TNkRnbNgLLFHDPTosdvf/91dKX8YTe03GO1KzCY4hQn6Ofvxg==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/undici-cache-memory@0.8.4':
@@ -1868,6 +1875,10 @@ packages:
 
   better-sqlite3@11.10.0:
     resolution: {integrity: sha512-EwhOpyXiOEL/lKzHz9AW1msWFNzGc/z+LzeB3/jnFJpxu+th2yqvzsSWas1v9jgs9+xiXJcD5A8CJxAG2TaghQ==}
+
+  better-sqlite3@12.10.0:
+    resolution: {integrity: sha512-CyzaZRQKyHkB2ZInfTTl2nvT33EbDpjkLEbE8/Zck3Ll6O0qqvuGdrJ45HgtH+HykRg88ITY3AdreBGN70aBSQ==}
+    engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x || 26.x}
 
   bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
@@ -5180,6 +5191,15 @@ snapshots:
       '@databases/sql': 3.3.0
       '@databases/sqlite-sync': 3.0.0
 
+  '@matteo.collina/sqlite-pool@0.7.0':
+    dependencies:
+      '@databases/connection-pool': 1.1.0
+      '@databases/escape-identifier': 1.0.3
+      '@databases/split-sql-query': 1.0.4(@databases/sql@3.3.0)
+      '@databases/sql': 3.3.0
+      '@types/better-sqlite3': 7.6.13
+      better-sqlite3: 12.10.0
+
   '@mercuriusjs/federation@5.1.1':
     dependencies:
       '@fastify/error': 4.2.0
@@ -5232,7 +5252,7 @@ snapshots:
   '@opentelemetry/core@2.0.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/semantic-conventions': 1.36.0
+      '@opentelemetry/semantic-conventions': 1.41.1
 
   '@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5470,7 +5490,7 @@ snapshots:
       '@opentelemetry/core': 2.0.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.0.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.36.0
+      '@opentelemetry/semantic-conventions': 1.41.1
 
   '@opentelemetry/exporter-zipkin@2.7.1(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5633,7 +5653,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.0.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.36.0
+      '@opentelemetry/semantic-conventions': 1.41.1
 
   '@opentelemetry/resources@2.7.1(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5740,7 +5760,7 @@ snapshots:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.0.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.0.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.36.0
+      '@opentelemetry/semantic-conventions': 1.41.1
 
   '@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5973,27 +5993,6 @@ snapshots:
       undici: 7.11.0
       yaml: 2.9.0
 
-  '@platformatic/foundation@3.52.4':
-    dependencies:
-      '@fastify/deepmerge': 2.0.2
-      '@fastify/error': 4.2.0
-      '@iarna/toml': 2.2.5
-      '@watchable/unpromise': 1.0.2
-      ajv: 8.20.0
-      boring-name-generator: 1.0.3
-      colorette: 2.0.20
-      debug: 4.4.3
-      fast-json-patch: 3.1.1
-      json5: 2.2.3
-      leven: 3.1.0
-      pino: 9.14.0
-      pino-pretty: 13.1.3
-      semver: 7.8.2
-      undici: 7.24.0
-      yaml: 2.9.0
-    transitivePeerDependencies:
-      - supports-color
-
   '@platformatic/foundation@3.54.0':
     dependencies:
       '@fastify/deepmerge': 2.0.2
@@ -6032,6 +6031,27 @@ snapshots:
       pino-pretty: 13.1.3
       semver: 7.8.2
       undici: 7.24.0
+      yaml: 2.9.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@platformatic/foundation@3.57.0':
+    dependencies:
+      '@fastify/deepmerge': 3.2.1
+      '@fastify/error': 4.2.0
+      '@iarna/toml': 2.2.5
+      '@watchable/unpromise': 1.0.2
+      ajv: 8.20.0
+      boring-name-generator: 1.0.3
+      colorette: 2.0.20
+      debug: 4.4.3
+      fast-json-patch: 3.1.1
+      json5: 2.2.3
+      leven: 3.1.0
+      pino: 9.14.0
+      pino-pretty: 13.1.3
+      semver: 7.8.2
+      undici: 7.27.2
       yaml: 2.9.0
     transitivePeerDependencies:
       - supports-color
@@ -6109,6 +6129,12 @@ snapshots:
       undici: 7.27.2
     transitivePeerDependencies:
       - supports-color
+
+  '@platformatic/globals@3.57.0':
+    dependencies:
+      '@opentelemetry/api': 1.9.1
+      '@platformatic/prom-client': 1.0.0
+      pino: 9.14.0
 
   '@platformatic/graphql-composer@0.10.1':
     dependencies:
@@ -6430,16 +6456,16 @@ snapshots:
       - supports-color
       - typescript
 
-  '@platformatic/sql-mapper@3.52.4(@types/node@25.9.2)(typescript@5.9.3)':
+  '@platformatic/sql-mapper@3.57.0(@types/node@25.9.2)(typescript@5.9.3)':
     dependencies:
       '@databases/mysql': 7.0.0(@types/node@25.9.2)(typescript@5.9.3)
       '@databases/pg': 5.5.0(typescript@5.9.3)
       '@databases/sql': 3.3.0
       '@fastify/error': 4.2.0
       '@hapi/topo': 6.0.2
-      '@matteo.collina/sqlite-pool': 0.6.0
-      '@platformatic/foundation': 3.52.4
-      '@platformatic/telemetry': 3.52.4
+      '@matteo.collina/sqlite-pool': 0.7.0
+      '@platformatic/foundation': 3.57.0
+      '@platformatic/telemetry': 3.57.0
       async-cache-dedupe: 2.2.0
       camelcase: 6.3.0
       fastify-plugin: 5.1.0
@@ -6505,26 +6531,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@platformatic/telemetry@3.52.4':
-    dependencies:
-      '@fastify/swagger': 9.7.0
-      '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-trace-otlp-proto': 0.203.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-zipkin': 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.203.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation-http': 0.203.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation-undici': 0.14.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-node': 0.203.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.36.0
-      '@platformatic/foundation': 3.52.4
-      fast-uri: 3.1.2
-      fastify-plugin: 5.1.0
-    transitivePeerDependencies:
-      - supports-color
-
   '@platformatic/telemetry@3.55.0':
     dependencies:
       '@fastify/swagger': 9.7.0
@@ -6540,6 +6546,28 @@ snapshots:
       '@opentelemetry/sdk-trace-base': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.41.1
       '@platformatic/foundation': 3.55.0
+      fast-uri: 3.1.2
+      fastify-plugin: 5.1.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@platformatic/telemetry@3.57.0':
+    dependencies:
+      '@fastify/swagger': 9.7.0
+      '@opentelemetry/api': 1.9.1
+      '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-trace-otlp-grpc': 0.218.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-trace-otlp-proto': 0.218.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-zipkin': 2.7.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.218.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation-http': 0.218.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation-undici': 0.28.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.7.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-node': 0.218.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base': 2.7.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/semantic-conventions': 1.41.1
+      '@platformatic/foundation': 3.57.0
+      '@platformatic/globals': 3.57.0
       fast-uri: 3.1.2
       fastify-plugin: 5.1.0
     transitivePeerDependencies:
@@ -7154,6 +7182,11 @@ snapshots:
   baseline-browser-mapping@2.10.34: {}
 
   better-sqlite3@11.10.0:
+    dependencies:
+      bindings: 1.5.0
+      prebuild-install: 7.1.3
+
+  better-sqlite3@12.10.0:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
