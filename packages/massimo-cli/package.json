@@ -72,7 +72,7 @@
     "tsd": "^0.33.0",
     "typescript": "^5.5.4",
     "vite": "^5.1.6",
-    "wattpm": "3.0.0-alpha.5",
+    "wattpm": "3.57.0",
     "why-is-node-running": "^2.2.2"
   },
   "engines": {
