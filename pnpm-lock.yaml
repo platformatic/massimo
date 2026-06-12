@@ -40,8 +40,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(@types/node@25.9.2)(typescript@5.9.3)
       '@platformatic/foundation':
-        specifier: 3.54.0
-        version: 3.54.0
+        specifier: 3.57.0
+        version: 3.57.0
       '@platformatic/service':
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6
@@ -119,8 +119,8 @@ importers:
         specifier: 3.0.0-alpha.6
         version: 3.0.0-alpha.6(@types/node@25.9.2)(typescript@5.9.3)
       '@platformatic/foundation':
-        specifier: 3.54.0
-        version: 3.54.0
+        specifier: 3.57.0
+        version: 3.57.0
       '@platformatic/runtime':
         specifier: 3.55.0
         version: 3.55.0
@@ -1162,12 +1162,12 @@ packages:
     resolution: {integrity: sha512-SN/fHYxln7vKy7YEiK0wf8wWE9Gh/uZ4CDIXJG6Ya3pCkbkPXfIRvWppntJLfxiNqHfPmUUMgXhEcPyw9mzX6Q==}
     engines: {node: '>=22.19.0'}
 
-  '@platformatic/foundation@3.54.0':
-    resolution: {integrity: sha512-ogOGPTI1JrUHiYCeQqxeG7Ljb34udAsOdOhOaHV22FZNOcQhcJF5kR1Tf15n8cH4VLRYFgktX/BcyX/YG+Yptg==}
-    engines: {node: '>=22.19.0'}
-
   '@platformatic/foundation@3.55.0':
     resolution: {integrity: sha512-Ij+Yoz8lJRQawIKVEUuUmkRfc13wB4ngytCzr8zEq/MXMWjLISvnoMvBOSvoYaDHGYAI0Hcf0GItsl9Hr8c16Q==}
+    engines: {node: '>=22.19.0'}
+
+  '@platformatic/foundation@3.57.0':
+    resolution: {integrity: sha512-9BZ1Vs2h0XM928wtnPDYkaEBLwH+8Q+xafAxII1TO/P7lZ5vVDXqjG3xZHWzVwLu1IJBoPbFy2mIkMtRIRS2Rw==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/gateway@3.55.0':
@@ -5994,27 +5994,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@platformatic/foundation@3.54.0':
-    dependencies:
-      '@fastify/deepmerge': 2.0.2
-      '@fastify/error': 4.2.0
-      '@iarna/toml': 2.2.5
-      '@watchable/unpromise': 1.0.2
-      ajv: 8.20.0
-      boring-name-generator: 1.0.3
-      colorette: 2.0.20
-      debug: 4.4.3
-      fast-json-patch: 3.1.1
-      json5: 2.2.3
-      leven: 3.1.0
-      pino: 9.14.0
-      pino-pretty: 13.1.3
-      semver: 7.8.2
-      undici: 7.24.0
-      yaml: 2.9.0
-    transitivePeerDependencies:
-      - supports-color
-
   '@platformatic/foundation@3.55.0':
     dependencies:
       '@fastify/deepmerge': 2.0.2
@@ -6036,6 +6015,27 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@platformatic/foundation@3.57.0':
+    dependencies:
+      '@fastify/deepmerge': 3.2.1
+      '@fastify/error': 4.2.0
+      '@iarna/toml': 2.2.5
+      '@watchable/unpromise': 1.0.2
+      ajv: 8.20.0
+      boring-name-generator: 1.0.3
+      colorette: 2.0.20
+      debug: 4.4.3
+      fast-json-patch: 3.1.1
+      json5: 2.2.3
+      leven: 3.1.0
+      pino: 9.14.0
+      pino-pretty: 13.1.3
+      semver: 7.8.2
+      undici: 7.27.2
+      yaml: 2.9.0
+    transitivePeerDependencies:
+      - supports-color
+
   '@platformatic/gateway@3.55.0(typescript@5.9.3)':
     dependencies:
       '@fastify/error': 4.2.0
@@ -6046,7 +6046,7 @@ snapshots:
       '@fastify/view': 10.0.2
       '@platformatic/basic': 3.55.0
       '@platformatic/fastify-openapi-glue': 5.1.0
-      '@platformatic/foundation': 3.55.0
+      '@platformatic/foundation': 3.57.0
       '@platformatic/graphql-composer': 0.10.1
       '@platformatic/scalar-theme': 3.55.0
       '@platformatic/service': 3.55.0(typescript@5.9.3)
