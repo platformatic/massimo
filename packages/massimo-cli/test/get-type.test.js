@@ -353,3 +353,47 @@ test('support type nullable null', async () => {
   }
   equal(getType(def), 'null')
 })
+
+test('support array type with string and null (OpenAPI 3.1 nullable syntax)', async () => {
+  const def = {
+    type: ['string', 'null'],
+    maxLength: 255
+  }
+  equal(getType(def), 'string | null')
+})
+
+test('support array type with number and null', async () => {
+  const def = {
+    type: ['number', 'null']
+  }
+  equal(getType(def), 'number | null')
+})
+
+test('support array type inside object properties', async () => {
+  const def = {
+    type: 'object',
+    properties: {
+      description: { type: ['string', 'null'] }
+    },
+    required: ['description']
+  }
+  equal(getType(def), '{ \'description\': string | null }')
+})
+
+test('support array type with object and null', async () => {
+  const def = {
+    type: ['object', 'null'],
+    properties: {
+      foo: { type: 'string' }
+    }
+  }
+  equal(getType(def), '{ \'foo\'?: string } | null')
+})
+
+test('support array type with array and null', async () => {
+  const def = {
+    type: ['array', 'null'],
+    items: { type: 'string' }
+  }
+  equal(getType(def), 'Array<string> | null')
+})
