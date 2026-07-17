@@ -57,6 +57,9 @@ export interface StatusCode204 {
    */
   putMartello(req: PutMartelloRequest): Promise<PutMartelloResponses>;
 }
+export declare const setBaseUrl: StatusCode204['setBaseUrl'];
+export declare const setDefaultHeaders: StatusCode204['setDefaultHeaders'];
+export declare const setDefaultFetchParams: StatusCode204['setDefaultFetchParams'];
 type PlatformaticFrontendClient = Omit<StatusCode204, 'setBaseUrl'>
 type BuildOptions = {
   headers?: object
