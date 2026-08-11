@@ -346,6 +346,21 @@ test('support enum nullable null', async () => {
   equal(getType(def), 'null')
 })
 
+test('support enum without type', async () => {
+  // string members must be quoted even when the schema omits `type`
+  equal(getType({ enum: ['a', 'b'] }), "'a' | 'b'")
+  equal(getType({ enum: [1, 2] }), '1 | 2')
+  equal(getType({ enum: [true, false] }), 'true | false')
+  equal(getType({ enum: ["it's"] }), "'it\\'s'")
+  equal(getType({ enum: ['a', null] }), "'a' | null")
+  equal(getType({ type: 'number', enum: [1, 2] }), '1 | 2')
+  equal(getType({
+    type: 'object',
+    required: ['field'],
+    properties: { field: { enum: ['a', 'b'] } }
+  }), "{ 'field': 'a' | 'b' }")
+})
+
 test('support type nullable null', async () => {
   const def = {
     type: 'null',
