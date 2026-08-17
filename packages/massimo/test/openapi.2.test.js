@@ -504,6 +504,9 @@ test('do not set bodies for methods that should not have them', async t => {
   const optionsResult = await client.optionsHello(requestBody)
   deepEqual(optionsResult, requestBody)
 
+  const queryResult = await client.queryHello(requestBody)
+  deepEqual(queryResult, requestBody)
+
   // https://www.rfc-editor.org/rfc/rfc9110
   // MUST NOT send content
   const traceResult = await client.traceHello(requestBody)
