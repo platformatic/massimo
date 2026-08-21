@@ -73,11 +73,10 @@ export function getType (typeDef, methodType, spec) {
     const nullable = typeDef.nullable
     const chainedTypes = typeDef.enum
       .map(en => {
-        if (typeDef.type === 'string') {
-          return `'${en.replace(/'/g, "\\'")}'`
-        } else {
-          return en
-        }
+        // Quote by the runtime type of the value: the schema may omit `type`
+        if (en === null) return 'null'
+        if (typeof en === 'string') return `'${en.replace(/'/g, "\\'")}'`
+        return en
       })
       .join(' | ')
     return nullable === true ? `${chainedTypes} | null` : chainedTypes
