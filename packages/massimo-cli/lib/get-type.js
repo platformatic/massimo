@@ -1,7 +1,7 @@
 import jsonpointer from 'jsonpointer'
 
 export function getType (typeDef, methodType, spec) {
-  if (typeDef.$ref) {
+  while (typeDef.$ref) {
     typeDef = jsonpointer.get(spec, typeDef.$ref.replace('#', ''))
   }
   if (typeDef.schema) {
@@ -84,37 +84,40 @@ export function getType (typeDef, methodType, spec) {
   }
   if (typeDef.type === 'object') {
     const additionalProps = typeDef?.additionalProperties
-    const additionalPropsObj = additionalProps?.properties
-    const additionalPropsType = additionalProps?.type
-    const additionalPropsRequired = additionalProps?.required
     const nullable = typeDef.nullable
-    const objProperties = typeDef.properties || additionalPropsObj
+    const objProperties = typeDef.properties
     if (!objProperties || Object.keys(objProperties).length === 0) {
       // Object without properties
-      const resultType = additionalPropsType
-        ? `Record<string, ${JSONSchemaToTsType({ type: additionalPropsType })}>`
-        : 'object'
+      let resultType = 'object'
+      if (additionalProps) {
+        if (typeof additionalProps === 'object') {
+          resultType = `Record<string, ${getType(additionalProps, methodType, spec)}>`
+        } else if (additionalProps === true) {
+          resultType = 'Record<string, unknown>'
+        }
+      }
       return nullable === true ? `${resultType} | null` : resultType
     }
 
-    let output = additionalPropsObj && additionalPropsType === 'object' ? 'Record<string, { ' : '{ '
-    // TODO: add a test for objects without properties
-    /* c8 ignore next 1 */
-    const props = Object.keys(objProperties || {}).map(prop => {
+    let output = '{ '
+    const props = Object.keys(objProperties).map(prop => {
       let required = false
       if (typeDef.required) {
         required = !!typeDef.required.includes(prop)
       }
-      if (additionalPropsRequired) {
-        required = required || !!additionalPropsRequired.includes(prop)
-      }
       return `'${prop}'${required ? '' : '?'}: ${getType(objProperties[prop], methodType, spec)}`
     })
-    if (additionalProps === true) {
-      props.push('[key: string]: unknown')
+
+    if (additionalProps) {
+      if (typeof additionalProps === 'object') {
+        props.push(`[key: string]: ${getType(additionalProps, methodType, spec)}`)
+      } else if (additionalProps === true) {
+        props.push('[key: string]: unknown')
+      }
     }
+
     output += props.join('; ')
-    output += additionalPropsObj ? ' }>' : ' }'
+    output += ' }'
     if (nullable === true) {
       output += ' | null'
     }

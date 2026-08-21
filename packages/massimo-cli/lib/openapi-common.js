@@ -264,7 +264,7 @@ export function writeObjectProperties (writer, schema, spec, addedProps, methodT
     }
   }
 
-  if (schema.$ref) {
+  while (schema.$ref) {
     schema = jsonpointer.get(spec, schema.$ref.replace('#', ''))
   }
   if (schema.type === 'object') {
@@ -272,8 +272,14 @@ export function writeObjectProperties (writer, schema, spec, addedProps, methodT
       _writeObjectProps(schema.properties)
     }
 
-    if (schema.additionalProperties && typeof schema.additionalProperties === 'object') {
-      _writeObjectProps(schema.additionalProperties)
+    if (schema.additionalProperties) {
+      if (typeof schema.additionalProperties === 'object') {
+        writer.write(`[key: string]: ${getType(schema.additionalProperties, methodType, spec)};`)
+        writer.newLine()
+      } else if (schema.additionalProperties === true) {
+        writer.write('[key: string]: unknown;')
+        writer.newLine()
+      }
     }
   } else {
     throw new TypeNotSupportedError(schema.type)
