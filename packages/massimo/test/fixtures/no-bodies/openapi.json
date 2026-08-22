@@ -134,6 +134,24 @@
           }
         }
       },
+      "query": {
+        "operationId": "queryHello",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "foo": { "type": "string" },
+                    "bar": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "trace": {
         "operationId": "traceHello",
         "parameters": [],

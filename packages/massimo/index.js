@@ -62,7 +62,8 @@ async function buildCallFunction (
   method = method.toUpperCase()
   path = join(url.pathname, path)
 
-  const canHaveBody = method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'OPTIONS'
+  const bodyMethods = ['POST', 'PUT', 'PATCH', 'OPTIONS', 'QUERY']
+  const canHaveBody = bodyMethods.includes(method)
   const pathParams = methodMeta.parameters?.filter(p => p.in === 'path') || []
   const queryParams = methodMeta.parameters?.filter(p => p.in === 'query') || []
   const headerParams = methodMeta.parameters?.filter(p => p.in === 'header') || []
