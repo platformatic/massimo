@@ -87,7 +87,7 @@ app.listen({ port: 0 })
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -186,7 +186,7 @@ app.listen({ port: 0 });
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -251,7 +251,7 @@ app.listen({ port: 0 })
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -347,7 +347,7 @@ app.listen({ port: 0 })
   const body = await res.body.json()
   equal(
     match(body, {
-      id: 1,
+      id: '1',
       title: 'foo'
     }),
     true
@@ -478,13 +478,13 @@ app.listen({ port: 0 })
         headers: {
           location: '/movies/1',
           'content-type': 'application/json; charset=utf-8',
-          'content-length': '22',
+          'content-length': '24',
           date: matchDate,
           connection: 'keep-alive',
           'keep-alive': matchKeepAlive
         },
         body: {
-          id: 1,
+          id: '1',
           title: 'foo'
         }
       }),
@@ -556,7 +556,7 @@ app.listen({ port: 0 })
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -631,7 +631,7 @@ app.listen({ port: 0 })
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -723,7 +723,7 @@ app.listen({ port: 0 });
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -798,7 +798,7 @@ app.listen({ port: 0 })
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })

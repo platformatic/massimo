@@ -9,7 +9,8 @@
     "cors": {
       "origin": {
         "regexp": "/*/"
-      }
+      },
+      "methods": ["GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"]
     }
   },
   "db": {

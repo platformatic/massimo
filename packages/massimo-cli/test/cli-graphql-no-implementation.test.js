@@ -68,7 +68,7 @@ export default async function (app) {
 
   process.env.PLT_MOVIES_URL = app.url
 
-  const app2 = await createService('./platformatic.service.json')
+  const app2 = await createService(join(dir, 'platformatic.service.json'))
   await app2.start()
 
   t.after(async () => {
@@ -161,7 +161,7 @@ export default myPlugin
 
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), app.url + '/graphql', '--name', 'movies'])
 
-  const app2 = await createService('./platformatic.service.json')
+  const app2 = await createService(join(dir, 'platformatic.service.json'))
   await app2.start()
 
   t.after(async () => {
