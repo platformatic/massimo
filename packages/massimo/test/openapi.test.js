@@ -64,7 +64,7 @@ test('build basic client from url', async t => {
   })
 
   deepEqual(movie, {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 
@@ -72,7 +72,7 @@ test('build basic client from url', async t => {
 
   deepEqual(movies, [
     {
-      id: 1,
+      id: '1',
       title: 'The Matrix'
     }
   ])
@@ -83,7 +83,7 @@ test('build basic client from url', async t => {
   })
 
   deepEqual(updatedMovie, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Reloaded'
   })
 
@@ -92,7 +92,7 @@ test('build basic client from url', async t => {
   })
 
   deepEqual(movie2, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Reloaded'
   })
 
@@ -105,7 +105,7 @@ test('build basic client from url', async t => {
   })
 
   deepEqual(movie3, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Revolutions'
   })
 
@@ -178,20 +178,20 @@ test('build full response client from url', async t => {
   equal(movie.statusCode, 200)
   equal(movie.headers.location, '/movies/1')
   equal(movie.headers['content-type'], 'application/json; charset=utf-8')
-  equal(movie.headers['content-length'], '29')
+  equal(movie.headers['content-length'], '31')
   equal(movie.headers.connection, 'keep-alive')
   match(movie.headers.date, matchDate)
   match(movie.headers['keep-alive'], matchKeepAlive)
-  deepEqual(movie.body, { id: 1, title: 'The Matrix' })
+  deepEqual(movie.body, { id: '1', title: 'The Matrix' })
 
   const movies = await client.getMovies()
   equal(movies.statusCode, 200)
   equal(movies.headers['content-type'], 'application/json; charset=utf-8')
-  equal(movies.headers['content-length'], '31')
+  equal(movies.headers['content-length'], '33')
   equal(movies.headers.connection, 'keep-alive')
   match(movies.headers.date, matchDate)
   match(movies.headers['keep-alive'], matchKeepAlive)
-  deepEqual(movies.body, [{ id: 1, title: 'The Matrix' }])
+  deepEqual(movies.body, [{ id: '1', title: 'The Matrix' }])
 
   const updatedMovie = await client.updateMovie({
     id: 1,
@@ -200,24 +200,24 @@ test('build full response client from url', async t => {
   equal(updatedMovie.statusCode, 200)
   equal(updatedMovie.headers.location, '/movies/1')
   equal(updatedMovie.headers['content-type'], 'application/json; charset=utf-8')
-  equal(updatedMovie.headers['content-length'], '38')
+  equal(updatedMovie.headers['content-length'], '40')
   equal(updatedMovie.headers.connection, 'keep-alive')
   match(updatedMovie.headers.date, matchDate)
   match(updatedMovie.headers['keep-alive'], matchKeepAlive)
   deepEqual(updatedMovie.body, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Reloaded'
   })
 
   const movie2 = await client.getMovieById({ id: 1 })
   equal(movie2.statusCode, 200)
   equal(movie2.headers['content-type'], 'application/json; charset=utf-8')
-  equal(movie2.headers['content-length'], '38')
+  equal(movie2.headers['content-length'], '40')
   equal(movie2.headers.connection, 'keep-alive')
   match(movie2.headers.date, matchDate)
   match(movie2.headers['keep-alive'], matchKeepAlive)
   deepEqual(movie2.body, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Reloaded'
   })
 
@@ -231,12 +231,12 @@ test('build full response client from url', async t => {
   const movie3 = await client.getMovieById({ id: 1 })
   equal(movie3.statusCode, 200)
   equal(movie3.headers['content-type'], 'application/json; charset=utf-8')
-  equal(movie3.headers['content-length'], '41')
+  equal(movie3.headers['content-length'], '43')
   equal(movie3.headers.connection, 'keep-alive')
   match(movie3.headers.date, matchDate)
   match(movie3.headers['keep-alive'], matchKeepAlive)
   deepEqual(movie3.body, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Revolutions'
   })
 
@@ -666,7 +666,7 @@ test('build basic client from file', async t => {
   })
 
   deepEqual(movie, {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 
@@ -674,7 +674,7 @@ test('build basic client from file', async t => {
 
   deepEqual(movies, [
     {
-      id: 1,
+      id: '1',
       title: 'The Matrix'
     }
   ])
@@ -685,7 +685,7 @@ test('build basic client from file', async t => {
   })
 
   deepEqual(updatedMovie, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Reloaded'
   })
 
@@ -694,7 +694,7 @@ test('build basic client from file', async t => {
   })
 
   deepEqual(movie2, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Reloaded'
   })
 
@@ -760,7 +760,7 @@ test('build basic client from url with custom headers', async t => {
   })
 
   deepEqual(movie, {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 
@@ -768,7 +768,7 @@ test('build basic client from url with custom headers', async t => {
 
   deepEqual(movies, [
     {
-      id: 1,
+      id: '1',
       title: 'The Matrix'
     }
   ])
@@ -779,7 +779,7 @@ test('build basic client from url with custom headers', async t => {
   })
 
   deepEqual(updatedMovie, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Reloaded'
   })
 
@@ -788,7 +788,7 @@ test('build basic client from url with custom headers', async t => {
   })
 
   deepEqual(movie2, {
-    id: 1,
+    id: '1',
     title: 'The Matrix Reloaded'
   })
 

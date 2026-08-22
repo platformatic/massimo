@@ -66,7 +66,7 @@ test('openapi client generation (javascript)', async t => {
 
   await app.start()
 
-  await moveToTmpdir(after)
+  const dir = await moveToTmpdir(after)
 
   const pltServiceConfig = {
     $schema: 'https://schemas.platformatic.dev/@platformatic/service/1.52.0.json',
@@ -111,7 +111,7 @@ export default async function (app) {
 
   process.env.PLT_MOVIES_URL = app.url
 
-  const app2 = await buildService('./platformatic.service.json')
+  const app2 = await buildService(join(dir, 'platformatic.service.json'))
   await app2.start()
   t.after(async () => {
     await app2.close()
@@ -122,7 +122,7 @@ export default async function (app) {
   })
   const { body } = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -203,7 +203,7 @@ export default myPlugin
 
   process.env.PLT_MOVIES_URL = app.url
 
-  const app2 = await buildService('./platformatic.service.json')
+  const app2 = await buildService(join(dir, 'platformatic.service.json'))
   await app2.start()
   t.after(async () => {
     await app.close()
@@ -217,7 +217,7 @@ export default myPlugin
   })
   const { body } = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -304,7 +304,7 @@ export default myPlugin
 
   process.env.PLT_MOVIES_URL = app.url
 
-  const app2 = await buildService('./platformatic.service.json')
+  const app2 = await buildService(join(dir, 'platformatic.service.json'))
   await app2.start()
   t.after(async () => {
     await app.close()
@@ -318,7 +318,7 @@ export default myPlugin
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })
@@ -407,7 +407,7 @@ export default myPlugin
 
   process.env.PLT_MOVIES_URL = app.url
 
-  const app2 = await buildService('./platformatic.service.json')
+  const app2 = await buildService(join(dir, 'platformatic.service.json'))
   await app2.start()
   t.after(async () => {
     await app.close()
@@ -421,7 +421,7 @@ export default myPlugin
   })
   const body = await res.body.json()
   same(body, {
-    id: 1,
+    id: '1',
     title: 'foo'
   })
 })

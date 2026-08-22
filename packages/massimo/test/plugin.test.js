@@ -68,7 +68,7 @@ test('default decorator', async t => {
   })
 
   deepEqual(movie.json(), {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 
@@ -79,7 +79,7 @@ test('default decorator', async t => {
 
   deepEqual(movies.json(), [
     {
-      id: 1,
+      id: '1',
       title: 'The Matrix'
     }
   ])
@@ -134,7 +134,7 @@ test('req decorator with OpenAPI and auth', async t => {
 
   equal(res.statusCode, 200)
   deepEqual(res.json(), {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 })
@@ -183,7 +183,7 @@ test('app decorator with OpenAPI', async t => {
   })
 
   deepEqual(movie.json(), {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 
@@ -194,7 +194,7 @@ test('app decorator with OpenAPI', async t => {
 
   deepEqual(movies.json(), [
     {
-      id: 1,
+      id: '1',
       title: 'The Matrix'
     }
   ])
@@ -263,7 +263,7 @@ test('req decorator with OpenAPI', async t => {
 
   equal(res.statusCode, 200)
   deepEqual(response, {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 })
@@ -322,7 +322,7 @@ test('validate response', async t => {
   equal(res.statusCode, 200)
   deepEqual(res.json(), [
     {
-      id: 1,
+      id: '1',
       title: 'The Matrix'
     }
   ])
@@ -442,7 +442,7 @@ test('configureClient getHeaders', async t => {
 
   equal(res.statusCode, 200)
   deepEqual(res.json(), {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 })
@@ -469,7 +469,7 @@ test('applicationId', async t => {
       })
     })
     .reply(200, {
-      id: 1,
+      id: '1',
       title: 'The Matrix'
     })
 
@@ -496,7 +496,7 @@ test('applicationId', async t => {
   })
 
   deepEqual(movie.json(), {
-    id: 1,
+    id: '1',
     title: 'The Matrix'
   })
 })
