@@ -95,7 +95,7 @@ test('telemetry correctly propagates from an application client to a server for 
   equal(httpSpans.length, 2)
   // The first span is the client call to `/documentation/json`, the second is the server call to `/movies/
   const serverSpan = httpSpans[1]
-  equal(serverSpan.name, 'POST /movies/')
+  equal(serverSpan.name, 'POST /movies')
   const serverTraceId = serverSpan.spanContext().traceId
   const serverParentSpanId = serverSpan.parentSpanContext.spanId
   // The propagation works
@@ -182,7 +182,7 @@ test('telemetry correctly propagates from a generic client through an applicatio
   equal(httpSpans.length, 2)
   // The first span is the client call to `/documentation/json`, the second is the server call to `/movies/
   const serverSpan = httpSpans[1]
-  equal(serverSpan.name, 'POST /movies/')
+  equal(serverSpan.name, 'POST /movies')
   const serverTraceId = serverSpan.spanContext().traceId
   const serverParentSpanId = serverSpan.parentSpanContext.spanId
   // The propagation works. Note that the `parentSpan` is changed, but the traceId is the same
