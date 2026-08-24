@@ -13,7 +13,7 @@ importers:
         version: 2.2.1
       markdownlint-cli2:
         specifier: ^0.23.0
-        version: 0.23.2
+        version: 0.23.2(supports-color@7.2.0)
 
   packages/massimo:
     dependencies:
@@ -38,16 +38,16 @@ importers:
         version: 10.1.1
       '@platformatic/db':
         specifier: 3.67.0
-        version: 3.67.0(@types/node@26.2.0)(typescript@5.9.3)
+        version: 3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)
       '@platformatic/foundation':
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       '@platformatic/service':
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       '@platformatic/telemetry':
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       c8:
         specifier: ^10.0.0
         version: 10.1.3
@@ -56,7 +56,7 @@ importers:
         version: 0.5.0
       eslint:
         specifier: '9'
-        version: 9.39.5
+        version: 9.39.5(supports-color@7.2.0)
       execa:
         specifier: ^9.0.0
         version: 9.6.1
@@ -65,7 +65,7 @@ importers:
         version: 5.12.1
       neostandard:
         specifier: ^0.13.0
-        version: 0.13.0(eslint@9.39.5)(typescript@5.9.3)
+        version: 0.13.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       tsd:
         specifier: ^0.33.0
         version: 0.33.0
@@ -114,25 +114,25 @@ importers:
     devDependencies:
       '@platformatic/composer':
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       '@platformatic/db':
         specifier: 3.67.0
-        version: 3.67.0(@types/node@26.2.0)(typescript@5.9.3)
+        version: 3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)
       '@platformatic/foundation':
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       '@platformatic/runtime':
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       '@platformatic/service':
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       '@platformatic/sql-graphql':
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       '@platformatic/sql-mapper':
         specifier: 3.67.0
-        version: 3.67.0(@types/node@26.2.0)(typescript@5.9.3)
+        version: 3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)
       '@playwright/test':
         specifier: ^1.42.1
         version: 1.62.1
@@ -144,7 +144,7 @@ importers:
         version: 19.2.4(@types/react@19.2.18)
       '@vitejs/plugin-react':
         specifier: ^4.5.2
-        version: 4.7.0(vite@5.4.21(@types/node@26.2.0))
+        version: 4.7.0(supports-color@7.2.0)(vite@5.4.21(@types/node@26.2.0))
       cleaner-spec-reporter:
         specifier: ^0.5.0
         version: 0.5.0
@@ -153,7 +153,7 @@ importers:
         version: 16.6.1
       eslint:
         specifier: '9'
-        version: 9.39.5
+        version: 9.39.5(supports-color@7.2.0)
       execa:
         specifier: ^9.0.0
         version: 9.6.1
@@ -168,7 +168,7 @@ importers:
         version: 11.4.0
       neostandard:
         specifier: ^0.13.0
-        version: 0.13.0(eslint@9.39.5)(typescript@5.9.3)
+        version: 0.13.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       react:
         specifier: ^19.1.0
         version: 19.2.8
@@ -192,7 +192,7 @@ importers:
         version: 5.4.21(@types/node@26.2.0)
       wattpm:
         specifier: 3.67.0
-        version: 3.67.0
+        version: 3.67.0(supports-color@7.2.0)
       why-is-node-running:
         specifier: ^2.2.2
         version: 2.3.0
@@ -732,6 +732,7 @@ packages:
     engines: {node: ^22.20 || ^24.12 || >=25}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1007,6 +1008,10 @@ packages:
     resolution: {integrity: sha512-/UhIkaZgPutTFmQ7RnIJGgDXZmtEJ7Dvi86xNTFWcnRxVRNk/aotsqDJYeEvDP+FSMB2SdW+pQzNMcWP0rwuNA==}
     engines: {node: '>=14'}
 
+  '@opentelemetry/semantic-conventions@1.43.0':
+    resolution: {integrity: sha512-eSYWTm620tTk45EKSedaUL8MFYI8hW164hIXsgIHyxu3VobUB3fFCu5t0hQby6OoWRPsG1KkKUG2M5UadiLiVg==}
+    engines: {node: '>=14'}
+
   '@pinojs/redact@0.4.0':
     resolution: {integrity: sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg==}
 
@@ -1195,66 +1200,79 @@ packages:
     resolution: {integrity: sha512-81wiiX3v7aqy+T+bT61TJ78yJjRquqFFTTbAPt08imfQQzkPIW8t6aJbkTagtCCrXMNc9D66+geqlK7ydLPNqA==}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.62.4':
     resolution: {integrity: sha512-9kmDIvNZqdoHOBZgNtpTBeLWYO/LVipM3H/j62P8848/l/VPEQL6N3uxU9pvP1oZAsXyC2MEnFP3ovRjo7WYNQ==}
     cpu: [arm]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.62.4':
     resolution: {integrity: sha512-CcnXHWnXg69g+DX5VWL3FHts3qMRN2uVEHX+BZvGLdd07/gXkn3ePjYtO1LDJvxkGKVHMclKBRa1QUTH+6toYQ==}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.62.4':
     resolution: {integrity: sha512-iFOibiHnTRuhrWLlRsOQFdZJJIa7S8OwkneJr4ocALP16u5yk6lWLINFwhHaEqBFMsKDUZofLkGos7+CPzGB3g==}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-loong64-gnu@4.62.4':
     resolution: {integrity: sha512-XnWYMI7euHlb5a871xPja+Gm7DRCFU+FGRrtS2sMq9N8FvqtpagUy6gD4YOemC5MRk9xbh8+jYMEJbigFQwsgA==}
     cpu: [loong64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-loong64-musl@4.62.4':
     resolution: {integrity: sha512-qGDAlO0U8xedCcsdRm9oaoQY8DAx/QT7uIxJWhCdx0ceIWX783UC9QSYkdpzAe29wNiVfp24+bZdQmn49o45SQ==}
     cpu: [loong64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-ppc64-gnu@4.62.4':
     resolution: {integrity: sha512-ru4H6ezD7ysA5EiEK6qkkaEb4modH8CTej6kUy/gQi20u3kB3G7Zn8snXXkeJSCOFKG/rbPPtM/+9Wgas1961w==}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-ppc64-musl@4.62.4':
     resolution: {integrity: sha512-2W4MO5WQVJnbJaZdvDb9rhBDuFU1nKIepPFpJUBsTh2k1YY2g+ODViaWuyOAjQ5cOP7NvrvLzt3wvHOoiAvc7w==}
     cpu: [ppc64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-riscv64-gnu@4.62.4':
     resolution: {integrity: sha512-+fxjfuoAmVMCYV5QyjoIpu0cp5DOiOTeqYFk1AVaxGr+/ravWLX89XfQmptsoWcaVy/TGf2hexzbUOrCQIL1CQ==}
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-musl@4.62.4':
     resolution: {integrity: sha512-jTn8JfHGL4djjFxPuM06LmNUJDsst2jeVlsd9OmIH6zc5sC9K6rIuO4YajXatLUpBmBKl6b35ro1QZocLi+tcA==}
     cpu: [riscv64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-linux-s390x-gnu@4.62.4':
     resolution: {integrity: sha512-oCJCJL4pXsoDcP2QZ+JVlPTIRc6266zsIaeJJsWImmF7HO0W8nb6HuSgZlMWxJwaPf8ehbSw8yo0EUw925hKsA==}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.62.4':
     resolution: {integrity: sha512-W69hukhZ3KKNRCaMIEzKvcFye42hh0FE1+YoYaf5+Ikacuftoco6yO/xouz0hc5d5W/s3yBro5jRiuEE/Q5vUw==}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.62.4':
     resolution: {integrity: sha512-qiXbGG2jkjXhzXpsFZSR2Xpb8DN/UaxYsbb/STbuR/6fpaDgRmmaq1B/LmtF2wQFOFOSsK2jdE0RZ3a0zHn4QA==}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rollup/rollup-openbsd-x64@4.62.4':
     resolution: {integrity: sha512-nWeM//hxv8mIo6jD7Hu4o48DVmV9pbV6gsKaWU+4NFyqHoPKwrkRiZGLKUhOBk8qNmDmpwFtPKg80Bo/Tn4xiQ==}
@@ -1644,8 +1662,8 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
-  baseline-browser-mapping@2.11.14:
-    resolution: {integrity: sha512-JyJ954WzuIR8/FFzX0o5krdSTrBAkcCSRfWSleRsIHSWV+cZe2FI1PKggVkFke1hBldRs+LRxUczzE9iPmgZww==}
+  baseline-browser-mapping@2.11.15:
+    resolution: {integrity: sha512-FwMjJJ7HnyZpWe+oWxegG0fezZyBZUagI5LZEoO3GCbtbKNwRfMH9Ue5d5v01PNePBy1QSfPSDTTeVL0Hb9EzA==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -1803,6 +1821,10 @@ packages:
 
   cluster-key-slot@1.1.1:
     resolution: {integrity: sha512-rwHwUfXL40Chm1r08yrhU3qpUvdVlgkKNeyeGPOxnW8/SyVDvgRaed/Uz54AqWNaTCAThlj6QAs3TZcKI0xDEw==}
+    engines: {node: '>=0.10.0'}
+
+  cluster-key-slot@1.1.2:
+    resolution: {integrity: sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==}
     engines: {node: '>=0.10.0'}
 
   code-block-writer@13.0.3:
@@ -1976,8 +1998,8 @@ packages:
   ecdsa-sig-formatter@1.0.11:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
-  electron-to-chromium@1.5.406:
-    resolution: {integrity: sha512-hWH5ORBi3d0IipnMh7BN5GDTaAmrSSSWmznwt2zltdiRNEWoEQyTwF0FFSBxzHO7hLSRT6loQu3IQGV0wg/Tvg==}
+  electron-to-chromium@1.5.408:
+    resolution: {integrity: sha512-SLoprcYpJ/OH2v2ps0+N5biv9H4/KBT3+YmmDew64TwK5y9j2wv7pMOFY7IorVkyMtEyLSCRlXKLsNlakeAlPw==}
 
   elliptic@6.6.1:
     resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
@@ -2025,8 +2047,8 @@ packages:
     resolution: {integrity: sha512-c/A0P0oxkACDc+cKWw8evLXK83oBKgn0qPOqCYT4x9uolpCIJAcYvJC9QYKNDRPsTeGyCrQ326jrvgZWdCdK5Q==}
     engines: {node: '>= 0.4'}
 
-  es-module-lexer@2.3.1:
-    resolution: {integrity: sha512-shc1dbU90Yl/xq1QrC7QRtfcwURZuVRfPhZbDoldJ1cn1gzDvBaBWlv0eFolj5+0znnPJz5TXLxsN77X/12KTA==}
+  es-module-lexer@2.3.2:
+    resolution: {integrity: sha512-poHGpORABojJJucnV9KbOavETW8lBVnphkW77ER5/BQ5Fz7oXSoCNek7IH3vR5nRjdsEz926ibFYX8KtLQmdyw==}
 
   es-object-atoms@1.1.2:
     resolution: {integrity: sha512-HWcBoN6NileqtSydK2FqHbS/LoDd2pqrnQHLyJzBj4kOp/ky2MWMN694xOfkK8/SnUsW2DH7EfyVlydKCsm1Zw==}
@@ -2392,8 +2414,8 @@ packages:
     resolution: {integrity: sha512-w9UMqWwJxHNOvoNzSJ2oPF5wvYcvP7jUvYzhp67yEhTi17ZDBBC1z9pTdGuzjD+EFIqLSYRweZjqfiPzQ06Ebg==}
     engines: {node: '>= 0.4'}
 
-  get-tsconfig@4.14.2:
-    resolution: {integrity: sha512-XpwZALwwl/BaKTAyC6+c5T8y6kCg2jk+XGqOVrKIQmW49pNypYLMRjCUXqa28tQgJlhS2RlzP7sc+Rx7W6qsfw==}
+  get-tsconfig@4.14.3:
+    resolution: {integrity: sha512-++QEw4DIY7WGoukz+/+A/8dGYPT9l9yIadnmSgZ8Rjr3YVSVDipQSO9CdnJo9ePqFqUUqh+wk9uIaoiAwsiPkA==}
 
   github-from-package@0.0.0:
     resolution: {integrity: sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==}
@@ -4354,20 +4376,20 @@ snapshots:
 
   '@babel/compat-data@7.29.7': {}
 
-  '@babel/core@7.29.7':
+  '@babel/core@7.29.7(supports-color@7.2.0)':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.8
       '@babel/helper-compilation-targets': 7.29.7
-      '@babel/helper-module-transforms': 7.29.7(@babel/core@7.29.7)
+      '@babel/helper-module-transforms': 7.29.7(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0)
       '@babel/helpers': 7.29.7
       '@babel/parser': 7.29.8
       '@babel/template': 7.29.7
-      '@babel/traverse': 7.29.8
+      '@babel/traverse': 7.29.8(supports-color@7.2.0)
       '@babel/types': 7.29.8
       '@jridgewell/remapping': 2.3.5
       convert-source-map: 2.0.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -4392,19 +4414,19 @@ snapshots:
 
   '@babel/helper-globals@7.29.7': {}
 
-  '@babel/helper-module-imports@7.29.7':
+  '@babel/helper-module-imports@7.29.7(supports-color@7.2.0)':
     dependencies:
-      '@babel/traverse': 7.29.8
+      '@babel/traverse': 7.29.8(supports-color@7.2.0)
       '@babel/types': 7.29.8
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-module-transforms@7.29.7(@babel/core@7.29.7)':
+  '@babel/helper-module-transforms@7.29.7(@babel/core@7.29.7(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
-      '@babel/core': 7.29.7
-      '@babel/helper-module-imports': 7.29.7
+      '@babel/core': 7.29.7(supports-color@7.2.0)
+      '@babel/helper-module-imports': 7.29.7(supports-color@7.2.0)
       '@babel/helper-validator-identifier': 7.29.7
-      '@babel/traverse': 7.29.8
+      '@babel/traverse': 7.29.8(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -4425,14 +4447,14 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.8
 
-  '@babel/plugin-transform-react-jsx-self@7.29.7(@babel/core@7.29.7)':
+  '@babel/plugin-transform-react-jsx-self@7.29.7(@babel/core@7.29.7(supports-color@7.2.0))':
     dependencies:
-      '@babel/core': 7.29.7
+      '@babel/core': 7.29.7(supports-color@7.2.0)
       '@babel/helper-plugin-utils': 7.29.7
 
-  '@babel/plugin-transform-react-jsx-source@7.29.7(@babel/core@7.29.7)':
+  '@babel/plugin-transform-react-jsx-source@7.29.7(@babel/core@7.29.7(supports-color@7.2.0))':
     dependencies:
-      '@babel/core': 7.29.7
+      '@babel/core': 7.29.7(supports-color@7.2.0)
       '@babel/helper-plugin-utils': 7.29.7
 
   '@babel/template@7.29.7':
@@ -4441,7 +4463,7 @@ snapshots:
       '@babel/parser': 7.29.8
       '@babel/types': 7.29.8
 
-  '@babel/traverse@7.29.8':
+  '@babel/traverse@7.29.8(supports-color@7.2.0)':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.8
@@ -4449,7 +4471,7 @@ snapshots:
       '@babel/parser': 7.29.8
       '@babel/template': 7.29.7
       '@babel/types': 7.29.8
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -4616,17 +4638,17 @@ snapshots:
   '@esbuild/win32-x64@0.21.5':
     optional: true
 
-  '@eslint-community/eslint-utils@4.10.1(eslint@9.39.5)':
+  '@eslint-community/eslint-utils@4.10.1(eslint@9.39.5(supports-color@7.2.0))':
     dependencies:
-      eslint: 9.39.5
+      eslint: 9.39.5(supports-color@7.2.0)
       eslint-visitor-keys: 3.4.3
 
   '@eslint-community/regexpp@4.12.2': {}
 
-  '@eslint/config-array@0.21.2':
+  '@eslint/config-array@0.21.2(supports-color@7.2.0)':
     dependencies:
       '@eslint/object-schema': 2.1.7
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       minimatch: 3.1.5
     transitivePeerDependencies:
       - supports-color
@@ -4639,10 +4661,10 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
-  '@eslint/eslintrc@3.3.6':
+  '@eslint/eslintrc@3.3.6(supports-color@7.2.0)':
     dependencies:
       ajv: 6.15.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       espree: 10.4.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -4781,10 +4803,10 @@ snapshots:
       fastq: 1.20.1
       glob: 13.0.6
 
-  '@fastify/swagger@9.8.1':
+  '@fastify/swagger@9.8.1(supports-color@7.2.0)':
     dependencies:
       fastify-plugin: 6.0.0
-      json-schema-resolver: 3.0.0
+      json-schema-resolver: 3.0.0(supports-color@7.2.0)
       openapi-types: 12.1.3
       rfdc: 1.4.1
       yaml: 2.9.0
@@ -4972,7 +4994,7 @@ snapshots:
   '@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/semantic-conventions': 1.41.1
+      '@opentelemetry/semantic-conventions': 1.43.0
 
   '@opentelemetry/core@2.8.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -4982,7 +5004,7 @@ snapshots:
   '@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/semantic-conventions': 1.41.1
+      '@opentelemetry/semantic-conventions': 1.43.0
 
   '@opentelemetry/exporter-logs-otlp-grpc@0.219.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5116,31 +5138,31 @@ snapshots:
       '@opentelemetry/sdk-trace-base': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.41.1
 
-  '@opentelemetry/instrumentation-http@0.219.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/instrumentation-http@0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.8.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/semantic-conventions': 1.41.1
       forwarded-parse: 2.1.2
     transitivePeerDependencies:
       - supports-color
 
-  '@opentelemetry/instrumentation-undici@0.29.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/instrumentation-undici@0.29.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.10.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.8.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/semantic-conventions': 1.41.1
     transitivePeerDependencies:
       - supports-color
 
-  '@opentelemetry/instrumentation@0.219.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/instrumentation@0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/api-logs': 0.219.0
       import-in-the-middle: 3.3.3
-      require-in-the-middle: 8.0.1
+      require-in-the-middle: 8.0.1(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -5206,7 +5228,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.10.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.41.1
+      '@opentelemetry/semantic-conventions': 1.43.0
 
   '@opentelemetry/resources@2.8.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5218,7 +5240,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.41.1
+      '@opentelemetry/semantic-conventions': 1.43.0
 
   '@opentelemetry/sdk-logs@0.219.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5234,7 +5256,7 @@ snapshots:
       '@opentelemetry/api-logs': 0.220.0
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.9.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.41.1
+      '@opentelemetry/semantic-conventions': 1.43.0
 
   '@opentelemetry/sdk-metrics@2.8.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5248,7 +5270,7 @@ snapshots:
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.9.0(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/sdk-node@0.219.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/sdk-node@0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/api-logs': 0.219.0
@@ -5266,7 +5288,7 @@ snapshots:
       '@opentelemetry/exporter-trace-otlp-http': 0.219.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/exporter-trace-otlp-proto': 0.219.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/exporter-zipkin': 2.8.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/otlp-exporter-base': 0.219.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/otlp-grpc-exporter-base': 0.219.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/propagator-b3': 2.8.0(@opentelemetry/api@1.9.1)
@@ -5299,23 +5321,25 @@ snapshots:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.9.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.41.1
+      '@opentelemetry/semantic-conventions': 1.43.0
 
   '@opentelemetry/semantic-conventions@1.41.1': {}
+
+  '@opentelemetry/semantic-conventions@1.43.0': {}
 
   '@pinojs/redact@0.4.0': {}
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@platformatic/basic@3.67.0':
+  '@platformatic/basic@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.0
-      '@platformatic/foundation': 3.67.0
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
       '@platformatic/itc': 3.67.0
       '@platformatic/metrics': 3.67.0
-      '@platformatic/telemetry': 3.67.0
+      '@platformatic/telemetry': 3.67.0(supports-color@7.2.0)
       execa: 9.6.1
       fast-json-patch: 3.1.1
       pino: 9.14.0
@@ -5329,10 +5353,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@platformatic/composer@3.67.0':
+  '@platformatic/composer@3.67.0(supports-color@7.2.0)':
     dependencies:
-      '@platformatic/foundation': 3.67.0
-      '@platformatic/gateway': 3.67.0
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
+      '@platformatic/gateway': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
     transitivePeerDependencies:
       - bufferutil
@@ -5340,10 +5364,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@platformatic/control@3.67.0':
+  '@platformatic/control@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.0
-      '@platformatic/foundation': 3.67.0
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       help-me: 5.0.0
       pino: 9.14.0
       pino-pretty: 13.1.3
@@ -5364,12 +5388,12 @@ snapshots:
       leven: 3.1.0
       undici: 7.29.0
 
-  '@platformatic/db-core@3.67.0(@types/node@26.2.0)(typescript@5.9.3)':
+  '@platformatic/db-core@3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
-      '@platformatic/sql-events': 3.67.0
-      '@platformatic/sql-graphql': 3.67.0
-      '@platformatic/sql-mapper': 3.67.0(@types/node@26.2.0)(typescript@5.9.3)
-      '@platformatic/sql-openapi': 3.67.0
+      '@platformatic/sql-events': 3.67.0(supports-color@7.2.0)
+      '@platformatic/sql-graphql': 3.67.0(supports-color@7.2.0)
+      '@platformatic/sql-mapper': 3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)
+      '@platformatic/sql-openapi': 3.67.0(supports-color@7.2.0)
       fastify-plugin: 5.1.0
     transitivePeerDependencies:
       - '@types/node'
@@ -5379,7 +5403,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@platformatic/db@3.67.0(@types/node@26.2.0)(typescript@5.9.3)':
+  '@platformatic/db@3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@fastify/accepts': 5.0.4
       '@fastify/basic-auth': 6.3.0
@@ -5387,18 +5411,18 @@ snapshots:
       '@fastify/deepmerge': 3.2.1
       '@fastify/error': 4.2.0
       '@fastify/static': 10.1.3
-      '@fastify/swagger': 9.8.1
-      '@platformatic/basic': 3.67.0
+      '@fastify/swagger': 9.8.1(supports-color@7.2.0)
+      '@platformatic/basic': 3.67.0(supports-color@7.2.0)
       '@platformatic/db-authorization': 3.67.0
-      '@platformatic/db-core': 3.67.0(@types/node@26.2.0)(typescript@5.9.3)
-      '@platformatic/foundation': 3.67.0
-      '@platformatic/service': 3.67.0
-      '@platformatic/sql-events': 3.67.0
-      '@platformatic/sql-graphql': 3.67.0
+      '@platformatic/db-core': 3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
+      '@platformatic/service': 3.67.0(supports-color@7.2.0)
+      '@platformatic/sql-events': 3.67.0(supports-color@7.2.0)
+      '@platformatic/sql-graphql': 3.67.0(supports-color@7.2.0)
       '@platformatic/sql-json-schema-mapper': 3.67.0
-      '@platformatic/sql-mapper': 3.67.0(@types/node@26.2.0)(typescript@5.9.3)
-      '@platformatic/sql-openapi': 3.67.0
-      '@platformatic/telemetry': 3.67.0
+      '@platformatic/sql-mapper': 3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)
+      '@platformatic/sql-openapi': 3.67.0(supports-color@7.2.0)
+      '@platformatic/telemetry': 3.67.0(supports-color@7.2.0)
       camelcase: 6.3.0
       close-with-grace: 2.5.0
       code-block-writer: 13.0.3
@@ -5435,7 +5459,7 @@ snapshots:
       fastify-plugin: 5.1.0
       js-yaml: 4.3.1
 
-  '@platformatic/foundation@3.67.0':
+  '@platformatic/foundation@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/deepmerge': 3.2.1
       '@fastify/error': 4.2.0
@@ -5444,7 +5468,7 @@ snapshots:
       ajv: 8.20.0
       boring-name-generator: 1.0.3
       colorette: 2.0.20
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       fast-json-patch: 3.1.1
       json5: 2.2.3
       leven: 3.1.0
@@ -5456,24 +5480,24 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@platformatic/gateway@3.67.0':
+  '@platformatic/gateway@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.0
       '@fastify/http-proxy': 11.6.0
       '@fastify/reply-from': 12.6.4
       '@fastify/static': 10.1.3
-      '@fastify/swagger': 9.8.1
+      '@fastify/swagger': 9.8.1(supports-color@7.2.0)
       '@fastify/view': 12.0.0
-      '@platformatic/basic': 3.67.0
+      '@platformatic/basic': 3.67.0(supports-color@7.2.0)
       '@platformatic/dynamic-buffer': 0.4.0
       '@platformatic/fastify-openapi-glue': 5.2.0
-      '@platformatic/foundation': 3.67.0
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
       '@platformatic/graphql-composer': 0.11.0
       '@platformatic/openapi-schema-validator': 3.0.0
       '@platformatic/scalar-theme': 3.67.0
-      '@platformatic/service': 3.67.0
-      '@platformatic/telemetry': 3.67.0
+      '@platformatic/service': 3.67.0(supports-color@7.2.0)
+      '@platformatic/telemetry': 3.67.0(supports-color@7.2.0)
       '@scalar/fastify-api-reference': 1.62.5
       ajv: 8.20.0
       console-table-printer: 2.16.1
@@ -5484,7 +5508,7 @@ snapshots:
       find-my-way: 9.9.0
       graphql: 16.14.2
       help-me: 5.0.0
-      iovalkey: 0.3.3
+      iovalkey: 0.3.3(supports-color@7.2.0)
       json-schema-traverse: 1.0.0
       mercurius: 16.10.0(graphql@16.14.2)
       minimist: 1.2.8
@@ -5504,10 +5528,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@platformatic/generators@3.67.0':
+  '@platformatic/generators@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.0
-      '@platformatic/foundation': 3.67.0
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       change-case-all: 2.1.0
       execa: 9.6.1
       fastify: 5.12.1
@@ -5571,7 +5595,7 @@ snapshots:
       protobufjs: 8.7.2
       undici: 7.29.0
 
-  '@platformatic/runtime@3.67.0':
+  '@platformatic/runtime@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/accepts': 5.0.4
       '@fastify/basic-auth': 6.3.0
@@ -5579,14 +5603,14 @@ snapshots:
       '@fastify/websocket': 11.3.0
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/exporter-metrics-otlp-proto': 0.219.0(@opentelemetry/api@1.9.1)
-      '@platformatic/basic': 3.67.0
-      '@platformatic/foundation': 3.67.0
-      '@platformatic/generators': 3.67.0
+      '@platformatic/basic': 3.67.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
+      '@platformatic/generators': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
       '@platformatic/itc': 3.67.0
       '@platformatic/metrics': 3.67.0
       '@platformatic/prom-client': 1.0.0
-      '@platformatic/telemetry': 3.67.0
+      '@platformatic/telemetry': 3.67.0(supports-color@7.2.0)
       '@platformatic/undici-cache-memory': 0.9.0
       '@watchable/unpromise': 1.0.2
       change-case-all: 2.1.0
@@ -5615,7 +5639,7 @@ snapshots:
 
   '@platformatic/scalar-theme@3.67.0': {}
 
-  '@platformatic/service@3.67.0':
+  '@platformatic/service@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/accepts': 5.0.4
       '@fastify/autoload': 6.5.0
@@ -5623,15 +5647,15 @@ snapshots:
       '@fastify/deepmerge': 3.2.1
       '@fastify/error': 4.2.0
       '@fastify/static': 10.1.3
-      '@fastify/swagger': 9.8.1
+      '@fastify/swagger': 9.8.1(supports-color@7.2.0)
       '@fastify/under-pressure': 9.1.0
-      '@platformatic/basic': 3.67.0
-      '@platformatic/foundation': 3.67.0
-      '@platformatic/generators': 3.67.0
+      '@platformatic/basic': 3.67.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
+      '@platformatic/generators': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
       '@platformatic/metrics': 3.67.0
       '@platformatic/scalar-theme': 3.67.0
-      '@platformatic/telemetry': 3.67.0
+      '@platformatic/telemetry': 3.67.0(supports-color@7.2.0)
       '@scalar/fastify-api-reference': 1.62.5
       '@types/node': 22.20.1
       '@types/ws': 8.18.1
@@ -5662,21 +5686,21 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@platformatic/sql-events@3.67.0':
+  '@platformatic/sql-events@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.0
       camelcase: 6.3.0
       fastify-plugin: 6.0.0
       mqemitter: 7.1.0
-      mqemitter-redis: 7.2.0
+      mqemitter-redis: 7.2.0(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
-  '@platformatic/sql-graphql@3.67.0':
+  '@platformatic/sql-graphql@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.0
       '@mercuriusjs/federation': 5.1.1
-      '@platformatic/foundation': 3.67.0
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       camelcase: 6.3.0
       fastify-plugin: 6.0.0
       graphql: 16.14.2
@@ -5694,7 +5718,7 @@ snapshots:
       code-block-writer: 13.0.3
       safe-identifier: 0.4.2
 
-  '@platformatic/sql-mapper@3.67.0(@types/node@26.2.0)(typescript@5.9.3)':
+  '@platformatic/sql-mapper@3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@databases/mysql': 7.0.1(@types/node@26.2.0)(typescript@5.9.3)
       '@databases/pg': 5.5.0(typescript@5.9.3)
@@ -5702,8 +5726,8 @@ snapshots:
       '@fastify/error': 4.2.0
       '@hapi/topo': 6.0.2
       '@matteo.collina/sqlite-pool': 0.7.0
-      '@platformatic/foundation': 3.67.0
-      '@platformatic/telemetry': 3.67.0
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
+      '@platformatic/telemetry': 3.67.0(supports-color@7.2.0)
       async-cache-dedupe: 2.2.0
       camelcase: 6.3.0
       fastify-plugin: 6.0.0
@@ -5714,12 +5738,12 @@ snapshots:
       - supports-color
       - typescript
 
-  '@platformatic/sql-openapi@3.67.0':
+  '@platformatic/sql-openapi@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/deepmerge': 3.2.1
       '@fastify/error': 4.2.0
-      '@fastify/swagger': 9.8.1
-      '@platformatic/foundation': 3.67.0
+      '@fastify/swagger': 9.8.1(supports-color@7.2.0)
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
       '@platformatic/scalar-theme': 3.67.0
       '@platformatic/sql-json-schema-mapper': 3.67.0
@@ -5734,22 +5758,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@platformatic/telemetry@3.67.0':
+  '@platformatic/telemetry@3.67.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/swagger': 9.8.1
+      '@fastify/swagger': 9.8.1(supports-color@7.2.0)
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/exporter-trace-otlp-grpc': 0.219.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/exporter-trace-otlp-proto': 0.219.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/exporter-zipkin': 2.8.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation-http': 0.219.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation-undici': 0.29.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/instrumentation-http': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/instrumentation-undici': 0.29.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/resources': 2.8.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-node': 0.219.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-node': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/sdk-trace-base': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.41.1
-      '@platformatic/foundation': 3.67.0
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
       fast-uri: 4.1.2
       fastify-plugin: 5.1.0
@@ -5920,10 +5944,10 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@stylistic/eslint-plugin@2.11.0(eslint@9.39.5)(typescript@5.9.3)':
+  '@stylistic/eslint-plugin@2.11.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/utils': 8.67.0(eslint@9.39.5)(typescript@5.9.3)
-      eslint: 9.39.5
+      '@typescript-eslint/utils': 8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
+      eslint: 9.39.5(supports-color@7.2.0)
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
       estraverse: 5.3.0
@@ -6004,17 +6028,17 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 26.2.0
+      '@types/node': 22.20.1
 
-  '@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5)(typescript@5.9.3))(eslint@9.39.5)(typescript@5.9.3)':
+  '@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.2
-      '@typescript-eslint/parser': 8.67.0(eslint@9.39.5)(typescript@5.9.3)
+      '@typescript-eslint/parser': 8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       '@typescript-eslint/scope-manager': 8.67.0
-      '@typescript-eslint/type-utils': 8.67.0(eslint@9.39.5)(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.67.0(eslint@9.39.5)(typescript@5.9.3)
+      '@typescript-eslint/type-utils': 8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 8.67.0
-      eslint: 9.39.5
+      eslint: 9.39.5(supports-color@7.2.0)
       ignore: 7.0.6
       natural-compare: 1.4.0
       ts-api-utils: 2.5.0(typescript@5.9.3)
@@ -6022,23 +6046,23 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/parser@8.67.0(eslint@9.39.5)(typescript@5.9.3)':
+  '@typescript-eslint/parser@8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/scope-manager': 8.67.0
       '@typescript-eslint/types': 8.67.0
-      '@typescript-eslint/typescript-estree': 8.67.0(typescript@5.9.3)
+      '@typescript-eslint/typescript-estree': 8.67.0(supports-color@7.2.0)(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 8.67.0
-      debug: 4.4.3
-      eslint: 9.39.5
+      debug: 4.4.3(supports-color@7.2.0)
+      eslint: 9.39.5(supports-color@7.2.0)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/project-service@8.67.0(typescript@5.9.3)':
+  '@typescript-eslint/project-service@8.67.0(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.67.0(typescript@5.9.3)
       '@typescript-eslint/types': 8.67.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -6052,13 +6076,13 @@ snapshots:
     dependencies:
       typescript: 5.9.3
 
-  '@typescript-eslint/type-utils@8.67.0(eslint@9.39.5)(typescript@5.9.3)':
+  '@typescript-eslint/type-utils@8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/types': 8.67.0
-      '@typescript-eslint/typescript-estree': 8.67.0(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.67.0(eslint@9.39.5)(typescript@5.9.3)
-      debug: 4.4.3
-      eslint: 9.39.5
+      '@typescript-eslint/typescript-estree': 8.67.0(supports-color@7.2.0)(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
+      debug: 4.4.3(supports-color@7.2.0)
+      eslint: 9.39.5(supports-color@7.2.0)
       ts-api-utils: 2.5.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -6066,13 +6090,13 @@ snapshots:
 
   '@typescript-eslint/types@8.67.0': {}
 
-  '@typescript-eslint/typescript-estree@8.67.0(typescript@5.9.3)':
+  '@typescript-eslint/typescript-estree@8.67.0(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/project-service': 8.67.0(typescript@5.9.3)
+      '@typescript-eslint/project-service': 8.67.0(supports-color@7.2.0)(typescript@5.9.3)
       '@typescript-eslint/tsconfig-utils': 8.67.0(typescript@5.9.3)
       '@typescript-eslint/types': 8.67.0
       '@typescript-eslint/visitor-keys': 8.67.0
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       minimatch: 10.2.6
       semver: 7.8.5
       tinyglobby: 0.2.17
@@ -6081,13 +6105,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/utils@8.67.0(eslint@9.39.5)(typescript@5.9.3)':
+  '@typescript-eslint/utils@8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5(supports-color@7.2.0))
       '@typescript-eslint/scope-manager': 8.67.0
       '@typescript-eslint/types': 8.67.0
-      '@typescript-eslint/typescript-estree': 8.67.0(typescript@5.9.3)
-      eslint: 9.39.5
+      '@typescript-eslint/typescript-estree': 8.67.0(supports-color@7.2.0)(typescript@5.9.3)
+      eslint: 9.39.5(supports-color@7.2.0)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -6097,11 +6121,11 @@ snapshots:
       '@typescript-eslint/types': 8.67.0
       eslint-visitor-keys: 5.0.1
 
-  '@vitejs/plugin-react@4.7.0(vite@5.4.21(@types/node@26.2.0))':
+  '@vitejs/plugin-react@4.7.0(supports-color@7.2.0)(vite@5.4.21(@types/node@26.2.0))':
     dependencies:
-      '@babel/core': 7.29.7
-      '@babel/plugin-transform-react-jsx-self': 7.29.7(@babel/core@7.29.7)
-      '@babel/plugin-transform-react-jsx-source': 7.29.7(@babel/core@7.29.7)
+      '@babel/core': 7.29.7(supports-color@7.2.0)
+      '@babel/plugin-transform-react-jsx-self': 7.29.7(@babel/core@7.29.7(supports-color@7.2.0))
+      '@babel/plugin-transform-react-jsx-source': 7.29.7(@babel/core@7.29.7(supports-color@7.2.0))
       '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
@@ -6282,7 +6306,7 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  baseline-browser-mapping@2.11.14: {}
+  baseline-browser-mapping@2.11.15: {}
 
   better-sqlite3@12.11.1:
     dependencies:
@@ -6335,9 +6359,9 @@ snapshots:
 
   browserslist@4.28.8:
     dependencies:
-      baseline-browser-mapping: 2.11.14
+      baseline-browser-mapping: 2.11.15
       caniuse-lite: 1.0.30001809
-      electron-to-chromium: 1.5.406
+      electron-to-chromium: 1.5.408
       node-releases: 2.0.53
       update-browserslist-db: 1.3.1(browserslist@4.28.8)
 
@@ -6448,6 +6472,8 @@ snapshots:
 
   cluster-key-slot@1.1.1: {}
 
+  cluster-key-slot@1.1.2: {}
+
   code-block-writer@13.0.3: {}
 
   color-convert@2.0.1:
@@ -6520,9 +6546,11 @@ snapshots:
 
   debounce@2.2.0: {}
 
-  debug@4.4.3:
+  debug@4.4.3(supports-color@7.2.0):
     dependencies:
       ms: 2.1.3
+    optionalDependencies:
+      supports-color: 7.2.0
 
   decamelize-keys@1.1.1:
     dependencies:
@@ -6602,7 +6630,7 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  electron-to-chromium@1.5.406: {}
+  electron-to-chromium@1.5.408: {}
 
   elliptic@6.6.1:
     dependencies:
@@ -6724,7 +6752,7 @@ snapshots:
       iterator.prototype: 1.1.5
       math-intrinsics: 1.1.0
 
-  es-module-lexer@2.3.1: {}
+  es-module-lexer@2.3.2: {}
 
   es-object-atoms@1.1.2:
     dependencies:
@@ -6782,9 +6810,9 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-compat-utils@0.5.1(eslint@9.39.5):
+  eslint-compat-utils@0.5.1(eslint@9.39.5(supports-color@7.2.0)):
     dependencies:
-      eslint: 9.39.5
+      eslint: 9.39.5(supports-color@7.2.0)
       semver: 7.8.5
 
   eslint-formatter-pretty@4.1.0:
@@ -6798,20 +6826,20 @@ snapshots:
       string-width: 4.2.3
       supports-hyperlinks: 2.3.0
 
-  eslint-plugin-es-x@7.8.0(eslint@9.39.5):
+  eslint-plugin-es-x@7.8.0(eslint@9.39.5(supports-color@7.2.0)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5(supports-color@7.2.0))
       '@eslint-community/regexpp': 4.12.2
-      eslint: 9.39.5
-      eslint-compat-utils: 0.5.1(eslint@9.39.5)
+      eslint: 9.39.5(supports-color@7.2.0)
+      eslint-compat-utils: 0.5.1(eslint@9.39.5(supports-color@7.2.0))
 
-  eslint-plugin-n@17.24.0(eslint@9.39.5)(typescript@5.9.3):
+  eslint-plugin-n@17.24.0(eslint@9.39.5(supports-color@7.2.0))(typescript@5.9.3):
     dependencies:
-      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5(supports-color@7.2.0))
       enhanced-resolve: 5.24.5
-      eslint: 9.39.5
-      eslint-plugin-es-x: 7.8.0(eslint@9.39.5)
-      get-tsconfig: 4.14.2
+      eslint: 9.39.5(supports-color@7.2.0)
+      eslint-plugin-es-x: 7.8.0(eslint@9.39.5(supports-color@7.2.0))
+      get-tsconfig: 4.14.3
       globals: 15.15.0
       globrex: 0.1.2
       ignore: 5.3.2
@@ -6820,12 +6848,12 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  eslint-plugin-promise@7.3.0(eslint@9.39.5):
+  eslint-plugin-promise@7.3.0(eslint@9.39.5(supports-color@7.2.0)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
-      eslint: 9.39.5
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5(supports-color@7.2.0))
+      eslint: 9.39.5(supports-color@7.2.0)
 
-  eslint-plugin-react@7.37.5(eslint@9.39.5):
+  eslint-plugin-react@7.37.5(eslint@9.39.5(supports-color@7.2.0)):
     dependencies:
       array-includes: 3.1.9
       array.prototype.findlast: 1.2.5
@@ -6833,7 +6861,7 @@ snapshots:
       array.prototype.tosorted: 1.1.4
       doctrine: 2.1.0
       es-iterator-helpers: 1.4.0
-      eslint: 9.39.5
+      eslint: 9.39.5(supports-color@7.2.0)
       estraverse: 5.3.0
       hasown: 2.0.4
       jsx-ast-utils: 3.3.5
@@ -6860,14 +6888,14 @@ snapshots:
 
   eslint-visitor-keys@5.0.1: {}
 
-  eslint@9.39.5:
+  eslint@9.39.5(supports-color@7.2.0):
     dependencies:
-      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5(supports-color@7.2.0))
       '@eslint-community/regexpp': 4.12.2
-      '@eslint/config-array': 0.21.2
+      '@eslint/config-array': 0.21.2(supports-color@7.2.0)
       '@eslint/config-helpers': 0.4.2
       '@eslint/core': 0.17.0
-      '@eslint/eslintrc': 3.3.6
+      '@eslint/eslintrc': 3.3.6(supports-color@7.2.0)
       '@eslint/js': 9.39.5
       '@eslint/plugin-kit': 0.4.1
       '@humanfs/node': 0.16.8
@@ -6877,7 +6905,7 @@ snapshots:
       ajv: 6.15.0
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       escape-string-regexp: 4.0.0
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
@@ -7063,7 +7091,7 @@ snapshots:
       fast-json-stringify: 7.0.1
       find-my-way: 9.9.0
       light-my-request: 6.6.0
-      pino: 10.3.1
+      pino: 9.14.0
       process-warning: 5.1.0
       rfdc: 1.4.1
       secure-json-parse: 4.1.0
@@ -7219,7 +7247,7 @@ snapshots:
       es-errors: 1.3.0
       get-intrinsic: 1.3.0
 
-  get-tsconfig@4.14.2:
+  get-tsconfig@4.14.3:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
@@ -7398,7 +7426,7 @@ snapshots:
   import-in-the-middle@3.3.3:
     dependencies:
       cjs-module-lexer: 2.2.1
-      es-module-lexer: 2.3.1
+      es-module-lexer: 2.3.2
       module-details-from-path: 1.0.4
 
   imurmurhash@0.1.4: {}
@@ -7421,11 +7449,11 @@ snapshots:
       hasown: 2.0.4
       side-channel: 1.1.1
 
-  ioredis@5.11.1:
+  ioredis@5.11.1(supports-color@7.2.0):
     dependencies:
       '@ioredis/commands': 1.10.0
       cluster-key-slot: 1.1.1
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       denque: 2.1.0
       redis-errors: 1.2.0
       redis-parser: 3.0.0
@@ -7433,11 +7461,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  iovalkey@0.3.3:
+  iovalkey@0.3.3(supports-color@7.2.0):
     dependencies:
       '@iovalkey/commands': 0.1.0
-      cluster-key-slot: 1.1.1
-      debug: 4.4.3
+      cluster-key-slot: 1.1.2
+      debug: 4.4.3(supports-color@7.2.0)
       denque: 2.1.0
       lodash.defaults: 4.2.0
       lodash.isarguments: 3.1.0
@@ -7673,9 +7701,9 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  json-schema-resolver@3.0.0:
+  json-schema-resolver@3.0.0(supports-color@7.2.0):
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       fast-uri: 3.1.5
       rfdc: 1.4.1
     transitivePeerDependencies:
@@ -7820,27 +7848,27 @@ snapshots:
       punycode.js: 2.3.1
       uc.micro: 2.1.0
 
-  markdownlint-cli2-formatter-default@0.0.6(markdownlint-cli2@0.23.2):
+  markdownlint-cli2-formatter-default@0.0.6(markdownlint-cli2@0.23.2(supports-color@7.2.0)):
     dependencies:
-      markdownlint-cli2: 0.23.2
+      markdownlint-cli2: 0.23.2(supports-color@7.2.0)
 
-  markdownlint-cli2@0.23.2:
+  markdownlint-cli2@0.23.2(supports-color@7.2.0):
     dependencies:
       globby: 16.2.2
       js-yaml: 5.2.2
       jsonc-parser: 3.3.1
       jsonpointer: 5.0.1
       markdown-it: 14.3.0
-      markdownlint: 0.41.1
-      markdownlint-cli2-formatter-default: 0.0.6(markdownlint-cli2@0.23.2)
+      markdownlint: 0.41.1(supports-color@7.2.0)
+      markdownlint-cli2-formatter-default: 0.0.6(markdownlint-cli2@0.23.2(supports-color@7.2.0))
       micromatch: 4.0.8
       smol-toml: 1.7.0
     transitivePeerDependencies:
       - supports-color
 
-  markdownlint@0.41.1:
+  markdownlint@0.41.1(supports-color@7.2.0):
     dependencies:
-      micromark: 4.0.2
+      micromark: 4.0.2(supports-color@7.2.0)
       micromark-core-commonmark: 2.0.3
       micromark-extension-directive: 4.0.0
       micromark-extension-gfm-autolink-literal: 2.1.0
@@ -8048,10 +8076,10 @@ snapshots:
 
   micromark-util-types@2.0.2: {}
 
-  micromark@4.0.2:
+  micromark@4.0.2(supports-color@7.2.0):
     dependencies:
       '@types/debug': 4.1.13
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       decode-named-character-reference: 1.3.0
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
@@ -8127,11 +8155,11 @@ snapshots:
 
   module-details-from-path@1.0.4: {}
 
-  mqemitter-redis@7.2.0:
+  mqemitter-redis@7.2.0(supports-color@7.2.0):
     dependencies:
       hyperid: 3.3.0
       inherits: 2.0.4
-      ioredis: 5.11.1
+      ioredis: 5.11.1(supports-color@7.2.0)
       lru-cache: 11.5.2
       mqemitter: 7.1.0
       msgpack-lite: 0.1.26
@@ -8195,18 +8223,18 @@ snapshots:
 
   negotiator@0.6.3: {}
 
-  neostandard@0.13.0(eslint@9.39.5)(typescript@5.9.3):
+  neostandard@0.13.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3):
     dependencies:
       '@humanwhocodes/gitignore-to-minimatch': 1.0.2
-      '@stylistic/eslint-plugin': 2.11.0(eslint@9.39.5)(typescript@5.9.3)
-      eslint: 9.39.5
-      eslint-plugin-n: 17.24.0(eslint@9.39.5)(typescript@5.9.3)
-      eslint-plugin-promise: 7.3.0(eslint@9.39.5)
-      eslint-plugin-react: 7.37.5(eslint@9.39.5)
+      '@stylistic/eslint-plugin': 2.11.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
+      eslint: 9.39.5(supports-color@7.2.0)
+      eslint-plugin-n: 17.24.0(eslint@9.39.5(supports-color@7.2.0))(typescript@5.9.3)
+      eslint-plugin-promise: 7.3.0(eslint@9.39.5(supports-color@7.2.0))
+      eslint-plugin-react: 7.37.5(eslint@9.39.5(supports-color@7.2.0))
       find-up: 8.0.0
       globals: 17.11.0
       peowly: 1.3.3
-      typescript-eslint: 8.67.0(eslint@9.39.5)(typescript@5.9.3)
+      typescript-eslint: 8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -8725,9 +8753,9 @@ snapshots:
 
   require-from-string@2.0.2: {}
 
-  require-in-the-middle@8.0.1:
+  require-in-the-middle@8.0.1(supports-color@7.2.0):
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@7.2.0)
       module-details-from-path: 1.0.4
     transitivePeerDependencies:
       - supports-color
@@ -9230,13 +9258,13 @@ snapshots:
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
 
-  typescript-eslint@8.67.0(eslint@9.39.5)(typescript@5.9.3):
+  typescript-eslint@8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3):
     dependencies:
-      '@typescript-eslint/eslint-plugin': 8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5)(typescript@5.9.3))(eslint@9.39.5)(typescript@5.9.3)
-      '@typescript-eslint/parser': 8.67.0(eslint@9.39.5)(typescript@5.9.3)
-      '@typescript-eslint/typescript-estree': 8.67.0(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.67.0(eslint@9.39.5)(typescript@5.9.3)
-      eslint: 9.39.5
+      '@typescript-eslint/eslint-plugin': 8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
+      '@typescript-eslint/parser': 8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
+      '@typescript-eslint/typescript-estree': 8.67.0(supports-color@7.2.0)(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
+      eslint: 9.39.5(supports-color@7.2.0)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -9312,13 +9340,13 @@ snapshots:
       '@types/node': 26.2.0
       fsevents: 2.3.3
 
-  wattpm@3.67.0:
+  wattpm@3.67.0(supports-color@7.2.0):
     dependencies:
       '@fastify/websocket': 11.3.0
-      '@platformatic/control': 3.67.0
-      '@platformatic/foundation': 3.67.0
+      '@platformatic/control': 3.67.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
-      '@platformatic/runtime': 3.67.0
+      '@platformatic/runtime': 3.67.0(supports-color@7.2.0)
       colorette: 2.0.20
       pino-pretty: 13.1.3
       split2: 4.2.0
