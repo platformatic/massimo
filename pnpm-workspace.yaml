@@ -1,2 +1,26 @@
 packages:
   - 'packages/*'
+
+autoInstallPeers: true
+strictPeerDependencies: false
+childConcurrency: 1
+resolutionMode: highest
+preferSymlinkedExecutables: true
+nodeLinker: hoisted
+packageImportMethod: copy
+hoist: false
+allowBuilds:
+  '@fastify/pre-commit': true
+  better-sqlite3: true
+  esbuild: true
+  msgpackr-extract: true
+  protobufjs: true
+
+minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  - fastify@5.12.1
+  - find-my-way@9.9.0
+minimumReleaseAgeExcludePrune: true
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 10080
+blockExoticSubdeps: true
