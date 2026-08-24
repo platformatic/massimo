@@ -446,6 +446,12 @@ function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, pr
     })
   })
 
+  // Declare the module-level named exports emitted by the implementation file,
+  // so consumers relying on the .d.ts can `import { setBaseUrl, ... }` without type errors.
+  writer.writeLine(`export declare const setBaseUrl: ${camelCaseName}['setBaseUrl'];`)
+  writer.writeLine(`export declare const setDefaultHeaders: ${camelCaseName}['setDefaultHeaders'];`)
+  writer.writeLine(`export declare const setDefaultFetchParams: ${camelCaseName}['setDefaultFetchParams'];`)
+
   writer.writeLine(`type PlatformaticFrontendClient = Omit<${camelCaseName}, 'setBaseUrl'>`)
   writer.write('type BuildOptions = ').block(() => {
     writer.writeLine('headers?: object')

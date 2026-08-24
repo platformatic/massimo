@@ -172,6 +172,9 @@ export default function build (url, options) {
 }`
   // factory type
   const factoryType = `
+export declare const setBaseUrl: Sample['setBaseUrl'];
+export declare const setDefaultHeaders: Sample['setDefaultHeaders'];
+export declare const setDefaultFetchParams: Sample['setDefaultFetchParams'];
 type PlatformaticFrontendClient = Omit<Sample, 'setBaseUrl'>
 type BuildOptions = {
   headers?: object
@@ -351,11 +354,16 @@ export interface Api {
    */
   getHello(req: GetHelloRequest): Promise<GetHelloResponses>;
 }`
+  const moduleExportsTemplate = `
+export declare const setBaseUrl: Api['setBaseUrl'];
+export declare const setDefaultHeaders: Api['setDefaultHeaders'];
+export declare const setDefaultFetchParams: Api['setDefaultFetchParams'];`
 
   ok(implementation)
   ok(types)
   equal(implementation.includes(tsImplementationTemplate), true)
   equal(types.includes(typesTemplate), true)
+  equal(types.includes(moduleExportsTemplate), true)
 })
 
 test('generate frontend client from path (name with dashes)', async t => {
@@ -1404,6 +1412,11 @@ import type * as Types from './client-types'`)
    */
   getHello(req: GetHelloRequest): Promise<GetHelloResponses>;
 }`)
+  )
+  ok(
+    types.includes(`export declare const setBaseUrl: Client['setBaseUrl'];
+export declare const setDefaultHeaders: Client['setDefaultHeaders'];
+export declare const setDefaultFetchParams: Client['setDefaultFetchParams'];`)
   )
   ok(types.includes("type PlatformaticFrontendClient = Omit<Client, 'setBaseUrl'>"))
   ok(types.includes('export default function build(url: string, options?: BuildOptions): PlatformaticFrontendClient'))
