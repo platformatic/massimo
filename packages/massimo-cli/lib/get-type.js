@@ -60,6 +60,14 @@ export function getType (typeDef, methodType, spec) {
       })
       .join(' & ')
   }
+  if (Array.isArray(typeDef.type)) {
+    // OpenAPI 3.1 / JSON Schema 2020-12 nullable syntax, e.g. `type: ['string', 'null']`.
+    // Resolve each member type independently and join them as a union.
+    const mapped = typeDef.type.map(t => {
+      return getType({ ...typeDef, type: t }, methodType, spec)
+    })
+    return [...new Set(mapped)].join(' | ')
+  }
   if (typeDef.type === 'array') {
     const nullable = typeDef.nullable
     return `Array<${getType(typeDef.items, methodType, spec)}>${nullable === true ? ' | null' : ''}`
