@@ -368,3 +368,64 @@ test('support type nullable null', async () => {
   }
   equal(getType(def), 'null')
 })
+
+test('support direct self-reference without infinite recursion', async () => {
+  const spec = {
+    components: {
+      schemas: {
+        Node: {
+          type: 'object',
+          properties: {
+            children: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Node' }
+            }
+          }
+        }
+      }
+    }
+  }
+  const type = getType({ $ref: '#/components/schemas/Node' }, 'res', spec)
+  equal(type, "{ 'children'?: Array<unknown> }")
+})
+
+test('support mutual recursion between two components without infinite recursion', async () => {
+  const spec = {
+    components: {
+      schemas: {
+        A: {
+          type: 'object',
+          properties: { b: { $ref: '#/components/schemas/B' } }
+        },
+        B: {
+          type: 'object',
+          properties: { a: { $ref: '#/components/schemas/A' } }
+        }
+      }
+    }
+  }
+  const type = getType({ $ref: '#/components/schemas/A' }, 'res', spec)
+  equal(type, "{ 'b'?: { 'a'?: unknown } }")
+})
+
+test('sibling properties referencing the same non-cyclic component both expand fully', async () => {
+  const spec = {
+    components: {
+      schemas: {
+        Shared: {
+          type: 'object',
+          properties: { value: { type: 'string' } }
+        },
+        Parent: {
+          type: 'object',
+          properties: {
+            first: { $ref: '#/components/schemas/Shared' },
+            second: { $ref: '#/components/schemas/Shared' }
+          }
+        }
+      }
+    }
+  }
+  const type = getType({ $ref: '#/components/schemas/Parent' }, 'res', spec)
+  equal(type, "{ 'first'?: { 'value'?: string }; 'second'?: { 'value'?: string } }")
+})
