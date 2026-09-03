@@ -1,16 +1,21 @@
 import jsonpointer from 'jsonpointer'
 
-export function getType (typeDef, methodType, spec) {
+export function getType (typeDef, methodType, spec, seenRefs = new Set()) {
   if (typeDef.$ref) {
+    if (seenRefs.has(typeDef.$ref)) {
+      return 'unknown'
+    }
+    seenRefs = new Set(seenRefs)
+    seenRefs.add(typeDef.$ref)
     typeDef = jsonpointer.get(spec, typeDef.$ref.replace('#', ''))
   }
   if (typeDef.schema) {
-    return getType(typeDef.schema, methodType, spec)
+    return getType(typeDef.schema, methodType, spec, seenRefs)
   }
   if (typeDef.anyOf) {
     // recursively call this function
     const mapped = typeDef.anyOf.map(t => {
-      return getType(t, methodType, spec)
+      return getType(t, methodType, spec, seenRefs)
     })
     return mapped.join(' | ')
   }
@@ -18,7 +23,7 @@ export function getType (typeDef, methodType, spec) {
   if (typeDef.oneOf) {
     // recursively call this function
     const mapped = typeDef.oneOf.map(t => {
-      return getType(t, methodType, spec)
+      return getType(t, methodType, spec, seenRefs)
     })
 
     if (typeDef.discriminator && typeDef.discriminator.propertyName) {
@@ -56,13 +61,13 @@ export function getType (typeDef, methodType, spec) {
     // recursively call this function
     return typeDef.allOf
       .map(t => {
-        return getType(t, methodType, spec)
+        return getType(t, methodType, spec, seenRefs)
       })
       .join(' & ')
   }
   if (typeDef.type === 'array') {
     const nullable = typeDef.nullable
-    return `Array<${getType(typeDef.items, methodType, spec)}>${nullable === true ? ' | null' : ''}`
+    return `Array<${getType(typeDef.items, methodType, spec, seenRefs)}>${nullable === true ? ' | null' : ''}`
   }
   if (typeDef.enum) {
     // Note: null type represented with an enum have no types and single enum element 'null'
@@ -107,7 +112,7 @@ export function getType (typeDef, methodType, spec) {
       if (additionalPropsRequired) {
         required = required || !!additionalPropsRequired.includes(prop)
       }
-      return `'${prop}'${required ? '' : '?'}: ${getType(objProperties[prop], methodType, spec)}`
+      return `'${prop}'${required ? '' : '?'}: ${getType(objProperties[prop], methodType, spec, seenRefs)}`
     })
     if (additionalProps === true) {
       props.push('[key: string]: unknown')
