@@ -43,8 +43,8 @@ importers:
         specifier: 3.68.0
         version: 3.68.0(supports-color@7.2.0)
       '@platformatic/service':
-        specifier: 3.67.0
-        version: 3.67.0(supports-color@7.2.0)
+        specifier: 3.68.0
+        version: 3.68.0(supports-color@7.2.0)
       '@platformatic/telemetry':
         specifier: 3.67.0
         version: 3.67.0(supports-color@7.2.0)
@@ -125,8 +125,8 @@ importers:
         specifier: 3.68.0
         version: 3.68.0(supports-color@7.2.0)
       '@platformatic/service':
-        specifier: 3.67.0
-        version: 3.67.0(supports-color@7.2.0)
+        specifier: 3.68.0
+        version: 3.68.0(supports-color@7.2.0)
       '@platformatic/sql-graphql':
         specifier: 3.68.0
         version: 3.68.0(supports-color@7.2.0)
@@ -6277,7 +6277,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 22.20.1
+      '@types/node': 26.2.0
 
   '@typescript-eslint/eslint-plugin@8.67.0(@typescript-eslint/parser@8.67.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
