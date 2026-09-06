@@ -131,8 +131,8 @@ importers:
         specifier: 3.68.0
         version: 3.68.0(supports-color@7.2.0)
       '@platformatic/sql-mapper':
-        specifier: 3.67.0
-        version: 3.67.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)
+        specifier: 3.68.0
+        version: 3.68.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)
       '@playwright/test':
         specifier: ^1.42.1
         version: 1.62.1
@@ -1158,6 +1158,10 @@ packages:
 
   '@platformatic/sql-mapper@3.67.0':
     resolution: {integrity: sha512-LT8JPxtFGb2Lk1+DSt30E1C2rIUeNzlvYwsTZuPkbZiUHx4fnpIOuo/B6YdKqi50Dk1p9Jj4S4bn9cplXkNHNQ==}
+    engines: {node: '>=22.19.0'}
+
+  '@platformatic/sql-mapper@3.68.0':
+    resolution: {integrity: sha512-m+BgxyMqDoYjUULzHxUpdF4R3RqT8Y1A60FcP7Y0Fi9ZoypmWJKquSXzkFdZhAuqsnkWYtAy8UeSXB1cX4wKzA==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/sql-openapi@3.67.0':
@@ -5955,6 +5959,26 @@ snapshots:
       '@matteo.collina/sqlite-pool': 0.7.0
       '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       '@platformatic/telemetry': 3.67.0(supports-color@7.2.0)
+      async-cache-dedupe: 2.2.0
+      camelcase: 6.3.0
+      fastify-plugin: 6.0.0
+      inflected: 2.1.0
+    transitivePeerDependencies:
+      - '@types/node'
+      - pg-native
+      - supports-color
+      - typescript
+
+  '@platformatic/sql-mapper@3.68.0(@types/node@26.2.0)(supports-color@7.2.0)(typescript@5.9.3)':
+    dependencies:
+      '@databases/mysql': 7.1.0(@types/node@26.2.0)(typescript@5.9.3)
+      '@databases/pg': 5.5.0(typescript@5.9.3)
+      '@databases/sql': 3.3.0
+      '@fastify/error': 4.2.0
+      '@hapi/topo': 6.0.2
+      '@matteo.collina/sqlite-pool': 0.7.0
+      '@platformatic/foundation': 3.68.0(supports-color@7.2.0)
+      '@platformatic/telemetry': 3.68.0(supports-color@7.2.0)
       async-cache-dedupe: 2.2.0
       camelcase: 6.3.0
       fastify-plugin: 6.0.0
