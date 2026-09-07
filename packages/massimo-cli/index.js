@@ -11,6 +11,7 @@ import { getGlobalDispatcher, interceptors, request } from 'undici'
 import YAML from 'yaml'
 import { processFrontendOpenAPI } from './lib/frontend-openapi-generator.js'
 import { processGraphQL } from './lib/graphql-generator.js'
+import { processJSONSchema } from './lib/json-schema-generator.js'
 import { processOpenAPI } from './lib/openapi-generator.js'
 
 function parseFile (content) {
@@ -223,6 +224,34 @@ async function writeGraphQLClient (
   )
 }
 
+async function writeJSONSchemaTypes ({
+  folder,
+  name,
+  text,
+  logger,
+  moduleFormat,
+  typeExtension,
+  explicitModuleFormat
+}) {
+  await createDirectory(folder)
+
+  const schema = parseFile(text)
+  if (!schema) {
+    throw new Error(
+      'Cannot parse JSON Schema file. Please make sure it is valid JSON or YAML.'
+    )
+  }
+
+  const { types } = processJSONSchema({
+    schema,
+    rootName: name
+  })
+  const typeExt = await determineTypeExtension(folder, moduleFormat, typeExtension, explicitModuleFormat, false)
+
+  logger.info(`Writing JSON Schema types to ${join(folder, `${name}.${typeExt}`)}`)
+  await writeFile(join(folder, `${name}.${typeExt}`), types)
+}
+
 async function downloadAndWriteOpenAPI (
   logger,
   url,
@@ -355,12 +384,27 @@ async function readFromFileAndWrite (
   typesComment,
   withCredentials,
   propsOptional,
+  type,
   moduleFormat,
   typeExtension,
   explicitModuleFormat
 ) {
   logger.info(`Trying to read schema from file ${file}`)
   const text = await readFile(file, 'utf8')
+
+  if (type === 'json-schema') {
+    await writeJSONSchemaTypes({
+      folder,
+      name,
+      text,
+      logger,
+      moduleFormat,
+      typeExtension,
+      explicitModuleFormat
+    })
+    return 'json-schema'
+  }
+
   // try OpenAPI first
   try {
     await writeOpenAPIClient(
@@ -433,6 +477,20 @@ async function downloadAndProcess (options) {
   } = options
 
   const generateImplementation = options.generateImplementation
+
+  if (options.type === 'json-schema') {
+    if (url.startsWith('http')) {
+      throw new Error('JSON Schema generation currently supports local files only.')
+    }
+
+    if (options.frontend) {
+      throw new Error('JSON Schema generation does not support --frontend.')
+    }
+
+    if (generateImplementation) {
+      throw new Error('JSON Schema generation only supports type output. Use --types-only or --config.')
+    }
+  }
 
   let found = false
   const toTry = []
@@ -620,6 +678,7 @@ async function downloadAndProcess (options) {
         typesComment,
         withCredentials,
         propsOptional,
+        type,
         moduleFormat,
         typeExtension,
         explicitModuleFormat

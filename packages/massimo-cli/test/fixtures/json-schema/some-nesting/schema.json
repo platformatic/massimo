@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/schemas/reservations/commands/create-reservation.schema.json",
+  "title": "CreateReservation",
+  "type": "object",
+  "required": [
+    "specversion",
+    "id",
+    "source",
+    "type",
+    "datacontenttype",
+    "dataschema",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "source": {
+      "type": "string",
+      "format": "uri-reference"
+    },
+    "type": {
+      "const": "example.reservations.commands.create-reservation"
+    },
+    "datacontenttype": {
+      "const": "application/json"
+    },
+    "dataschema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "subject": {
+      "type": "string",
+      "pattern": "^.+$"
+    },
+    "correlationid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "callbackurl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "customerId",
+        "siteCode",
+        "planId",
+        "reservationId",
+        "requestContext"
+      ],
+      "properties": {
+        "customerId": {
+          "type": "string"
+        },
+        "siteCode": {
+          "type": "string",
+          "title": "The site code",
+          "enum": ["NORTH", "SOUTH", "EAST", "WEST"]
+        },
+        "planId": {
+          "type": "string"
+        },
+        "reservationId": {
+          "type": "string"
+        },
+        "requestContext": {
+          "type": "object",
+          "required": ["clientId", "actor"],
+          "properties": {
+            "sourceSystemId": {
+              "type": "string",
+              "title": "The system identifier that initiated the request",
+              "description": "This is the stable identifier of the system or application that sent the command."
+            },
+            "clientId": {
+              "type": "string",
+              "title": "The client identifier used for the request",
+              "description": "For HTTP requests this is usually derived from the authenticated client or token audience."
+            },
+            "policyId": {
+              "type": "string",
+              "title": "The authorization policy that accepted the request",
+              "description": "Useful for audit logs and troubleshooting access decisions."
+            },
+            "actor": {
+              "type": "object",
+              "required": ["kind", "id"],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "description": "Actors can be service processes, team members, or external users.",
+                  "enum": [
+                    "SYSTEM",
+                    "TEAM_MEMBER",
+                    "INDIVIDUAL",
+                    "BUSINESS"
+                  ]
+                },
+                "id": {
+                  "type": "string",
+                  "title": "The actor identifier",
+                  "description": "Its meaning depends on the actor kind and the upstream identity provider."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
