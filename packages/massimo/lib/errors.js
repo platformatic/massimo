@@ -11,6 +11,10 @@ export const MissingParamsRequiredError = createError(
   `${ERROR_PREFIX}_MISSING_PARAMS_REQUIRED`,
   "Param %s is missing, and it's required"
 )
+export const InvalidPathParameterError = createError(
+  `${ERROR_PREFIX}_INVALID_PATH_PARAMETER`,
+  'Path parameter %s cannot be "." or ".."'
+)
 export const WrongOptsTypeError = createError(
   `${ERROR_PREFIX}_WRONG_OPTS_TYPE`,
   'opts.type must be either "openapi" or "graphql"'

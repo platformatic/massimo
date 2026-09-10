@@ -52,6 +52,57 @@ test('encode spaces as %20 (not +) in query string parameters', async () => {
   )
 })
 
+test('generated clients encode path parameters and reject dot segments', async t => {
+  const schema = {
+    openapi: '3.0.0',
+    info: { title: 'Test', version: '1.0.0' },
+    paths: {
+      '/users/{id}': {
+        get: {
+          operationId: 'getUser',
+          parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+          responses: {
+            200: {
+              description: 'OK',
+              content: { 'application/json': { schema: { type: 'object' } } }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  let observed
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    observed = { url: new URL(url).href, headers: options.headers }
+    return { ok: true, json: async () => ({}) }
+  })
+
+  for (const fullRequest of [true, false]) {
+    const { implementation } = processFrontendOpenAPI({
+      schema,
+      name: `path-${fullRequest}`,
+      language: 'js',
+      fullResponse: false,
+      fullRequest,
+      withCredentials: false,
+      propsOptional: false,
+      logger: { warn () {} }
+    })
+    const moduleUrl = `data:text/javascript;base64,${Buffer.from(implementation).toString('base64')}`
+    const generated = await import(moduleUrl)
+    generated.setDefaultHeaders({ authorization: 'Bearer secret' })
+    const client = generated.default('https://example.test/api/v1')
+    const request = id => (fullRequest ? { path: { id } } : { id })
+
+    await client.getUser(request('../../../admin'))
+    equal(observed.url, 'https://example.test/api/v1/users/..%2F..%2F..%2Fadmin')
+    equal(observed.headers.authorization, 'Bearer secret')
+    await t.assert.rejects(client.getUser(request('.')), /Path parameters cannot be/)
+    await t.assert.rejects(client.getUser(request('..')), /Path parameters cannot be/)
+  }
+})
+
 test('integration: spaces in query params are sent as %20 not +', async t => {
   const { buildApp } = await import('./fixtures/spaces-in-query-params/server.js')
   const app = await buildApp()
@@ -524,7 +575,7 @@ async function _getPkgScopeNameRange (url, request) {
     ...defaultHeaders
   }
 
-  const response = await fetch(\`\${url}/pkg/@\${request['scope']}/\${request['name']}/\${request['range']}/\${request['*']}\`, {
+  const response = await fetch(\`\${url}/pkg/@\${encodePathParameter(request['scope'])}/\${encodePathParameter(request['name'])}/\${encodePathParameter(request['range'])}/\${encodePathParameter(request['*'])}\`, {
     headers,
     ...defaultFetchParams
   })
@@ -1299,13 +1350,13 @@ test('add credentials: include in client implementation from file', async t => {
     const implementationFile = join(dir, 'movies', 'movies.mts')
     const implementation = await readFile(implementationFile, 'utf-8')
     const expectedGetMethod = `
-const response = await fetch(\`\${url}/hello/\${request['name']}\`, {
+const response = await fetch(\`\${url}/hello/\${encodePathParameter(request['name'])}\`, {
 credentials: 'include',
 headers,
 ...defaultFetchParams
 })`
     const expectedPostMethod = `
-  const response = await fetch(\`\${url}/movies/\${request['id']}?\${searchParams.toString().replace(/\\+/g, '%20')}\`, {
+  const response = await fetch(\`\${url}/movies/\${encodePathParameter(request['id'])}?\${searchParams.toString().replace(/\\+/g, '%20')}\`, {
     method: 'POST',
     body: isFormData ? body : JSON.stringify(body),
     credentials: 'include',
