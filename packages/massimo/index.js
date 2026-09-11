@@ -39,6 +39,14 @@ function computeURLWithoutPath (url) {
   return url.toString()
 }
 
+function encodePathParameter (value, name) {
+  const encoded = encodeURIComponent(value)
+  if (encoded === '.' || encoded === '..') {
+    throw new errors.InvalidPathParameterError(name)
+  }
+  return encoded
+}
+
 async function buildCallFunction (
   spec,
   baseUrl,
@@ -87,7 +95,7 @@ async function buildCallFunction (
         if (args?.path[param.name] === undefined) {
           throw new errors.MissingParamsRequiredError(param.name)
         }
-        pathToCall = pathToCall.replace(`{${param.name}}`, args.path[param.name])
+        pathToCall = pathToCall.replace(`{${param.name}}`, encodePathParameter(args.path[param.name], param.name))
       }
 
       for (const param of queryParams) {
@@ -105,7 +113,7 @@ async function buildCallFunction (
         if (body[param.name] === undefined) {
           throw new errors.MissingParamsRequiredError(param.name)
         }
-        pathToCall = pathToCall.replace(`{${param.name}}`, body[param.name])
+        pathToCall = pathToCall.replace(`{${param.name}}`, encodePathParameter(body[param.name], param.name))
         body[param.name] = undefined
       }
 

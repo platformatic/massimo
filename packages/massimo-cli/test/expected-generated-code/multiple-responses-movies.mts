@@ -29,13 +29,20 @@ function headersToJSON(headers: Headers): JSON {
   })
   return output
 }
+function encodePathParameter(value: unknown): string {
+  const encoded = encodeURIComponent(value as string)
+  if (encoded === '.' || encoded === '..') {
+    throw new Error('Path parameters cannot be "." or ".."')
+  }
+  return encoded
+}
 
 const _getPkgScopeNameVersion = async (url: string, request: Types.GetPkgScopeNameVersionRequest): Promise<Types.GetPkgScopeNameVersionResponses> => {
   const headers: HeadersInit = {
     ...defaultHeaders
   }
 
-  const response = await fetch(`${url}/pkg/@${request['scope']}/${request['name']}/${request['version']}/${request['*']}`, {
+  const response = await fetch(`${url}/pkg/@${encodePathParameter(request['scope'])}/${encodePathParameter(request['name'])}/${encodePathParameter(request['version'])}/${encodePathParameter(request['*'])}`, {
     headers,
     ...defaultFetchParams
   })

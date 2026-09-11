@@ -7,7 +7,7 @@ import { join } from 'node:path'
 import { mock, test } from 'node:test'
 import { getGlobalDispatcher, MockAgent, setGlobalDispatcher } from 'undici'
 import { buildOpenAPIClient } from '../index.js'
-import { MissingParamsRequiredError, UnexpectedCallFailureError } from '../lib/errors.js'
+import { InvalidPathParameterError, MissingParamsRequiredError, UnexpectedCallFailureError } from '../lib/errors.js'
 import './helper.js'
 
 test('rejects with no url', async t => {
@@ -18,6 +18,44 @@ test('rejects with no url', async t => {
       path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json')
     })
   )
+})
+
+test('encodes path parameters and rejects dot segments', async t => {
+  const cases = [
+    ['../../../admin', '/api/v1/movies/..%2F..%2F..%2Fadmin'],
+    ['%2e%2e/%2e%2e/admin', '/api/v1/movies/%252e%252e%2F%252e%252e%2Fadmin'],
+    ['..\\..\\..\\admin', '/api/v1/movies/..%5C..%5C..%5Cadmin']
+  ]
+
+  for (const fullRequest of [true, false]) {
+    const mockAgent = new MockAgent()
+    mockAgent.disableNetConnect()
+    t.after(() => mockAgent.close())
+
+    const mockPool = mockAgent.get('https://example.test')
+    for (const [, path] of cases) {
+      mockPool.intercept({ path, method: 'GET' }).reply(200, {}, { headers: { 'content-type': 'application/json' } })
+    }
+
+    const client = await buildOpenAPIClient({
+      url: 'https://example.test/api/v1',
+      path: join(import.meta.dirname, 'fixtures', 'movies', 'openapi.json'),
+      dispatcher: mockAgent,
+      fullRequest,
+      fullResponse: false
+    })
+
+    for (const [id] of cases) {
+      await client.getMovieById(fullRequest ? { path: { id } } : { id })
+    }
+
+    for (const id of ['.', '..']) {
+      await rejects(
+        client.getMovieById(fullRequest ? { path: { id } } : { id }),
+        error => error instanceof InvalidPathParameterError && error.code === 'PLT_MASSIMO_INVALID_PATH_PARAMETER'
+      )
+    }
+  }
 })
 
 test('build basic client from url', async t => {
