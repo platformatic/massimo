@@ -128,8 +128,8 @@ importers:
         specifier: 3.67.0
         version: 3.67.0(supports-color@7.2.0)
       '@platformatic/sql-graphql':
-        specifier: 3.68.0
-        version: 3.68.0(supports-color@7.2.0)
+        specifier: 3.69.0
+        version: 3.69.0(supports-color@7.2.0)
       '@platformatic/sql-mapper':
         specifier: 3.68.0
         version: 3.68.0(@types/node@26.4.1)(supports-color@7.2.0)(typescript@5.9.3)
@@ -1062,6 +1062,10 @@ packages:
     resolution: {integrity: sha512-VjIub7E4cFpGI6u7IT71K0EQadJRfwbRu7RRVoZXiCFID1oDNhIbbk23DLvNNRXkoOjZTiBcm2HHh6B20WOktg==}
     engines: {node: '>=22.19.0'}
 
+  '@platformatic/foundation@3.69.0':
+    resolution: {integrity: sha512-8Bt6lcsbWF7y9O1qsQuQGA2Nd6r4grNl2plzCZ1f3LsfAlBy0Yzs07jO18/Kj3hxRMMzAZ91OKKuWWqbcL7gPQ==}
+    engines: {node: '>=22.19.0'}
+
   '@platformatic/gateway@3.68.0':
     resolution: {integrity: sha512-OWxZnWwATGKOzzYyZOsND6cE/0pK2xfs05fuv844uBPUaP5msAml7olEOs1t7n4doLt/l82zXY4SEOXs9Lih1A==}
     engines: {node: '>=22.19.0'}
@@ -1148,8 +1152,8 @@ packages:
     resolution: {integrity: sha512-QLZTJG2MxmYC5Y/KoAE4XISHYlPGYDnoo6wmUl5/DBb3REDC+TffMOj4GsScNMiXAlsYFSMFxJc16j3LQbCNMw==}
     engines: {node: '>=22.19.0'}
 
-  '@platformatic/sql-graphql@3.68.0':
-    resolution: {integrity: sha512-O0X1XvArLnOUk59xuMKDCETHAHo4gswY1lZgXVuRZr9LC2HRRRIibHJjf059zBUlg9f0vPy7ogwoIYW5zYiz2A==}
+  '@platformatic/sql-graphql@3.69.0':
+    resolution: {integrity: sha512-IVmSlEHcGrLu+6AuZKmBn7ydgEunVKDErywahfgjlV3O6QtPRjDMr7DeyWT8sFSG0HfW9Ghl/wwch7TfBajidQ==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/sql-json-schema-mapper@3.67.0':
@@ -5566,6 +5570,27 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@platformatic/foundation@3.69.0(supports-color@7.2.0)':
+    dependencies:
+      '@fastify/deepmerge': 3.2.1
+      '@fastify/error': 4.2.0
+      '@iarna/toml': 2.2.5
+      '@watchable/unpromise': 1.0.2
+      ajv: 8.20.0
+      boring-name-generator: 1.0.3
+      colorette: 2.0.20
+      debug: 4.4.3(supports-color@7.2.0)
+      fast-json-patch: 3.1.1
+      json5: 2.2.3
+      leven: 3.1.0
+      pino: 9.14.0
+      pino-pretty: 13.1.3
+      semver: 7.8.5
+      undici: 7.29.1
+      yaml: 2.9.1
+    transitivePeerDependencies:
+      - supports-color
+
   '@platformatic/gateway@3.68.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.0
@@ -5922,11 +5947,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@platformatic/sql-graphql@3.68.0(supports-color@7.2.0)':
+  '@platformatic/sql-graphql@3.69.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.0
       '@mercuriusjs/federation': 5.1.1
-      '@platformatic/foundation': 3.68.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.69.0(supports-color@7.2.0)
       camelcase: 6.3.0
       fastify-plugin: 6.0.0
       graphql: 16.14.2
