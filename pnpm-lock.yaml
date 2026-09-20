@@ -131,8 +131,8 @@ importers:
         specifier: 3.69.0
         version: 3.69.0(supports-color@7.2.0)
       '@platformatic/sql-mapper':
-        specifier: 3.68.0
-        version: 3.68.0(@types/node@26.4.1)(supports-color@7.2.0)(typescript@5.9.3)
+        specifier: 3.69.0
+        version: 3.69.0(@types/node@26.4.1)(supports-color@7.2.0)(typescript@5.9.3)
       '@playwright/test':
         specifier: ^1.42.1
         version: 1.63.0
@@ -1086,6 +1086,10 @@ packages:
     resolution: {integrity: sha512-sGM0dmeqO0GFE2eYvX9KhR1IIVMEY3QJHDm/dIJMX9NlRD+DlwQ2AyjGjgGrOBzQjlOOK5PfZQmFtyhb4wj4fg==}
     engines: {node: '>=22.19.0'}
 
+  '@platformatic/globals@3.69.0':
+    resolution: {integrity: sha512-I5w047lbw4frei0r3g17UwWQqa/p4GLEsLmYPpU5U2EPsqNC6a+PRFk7AtDRSAOTLvj0sBifjRAiRZkIwZlvbQ==}
+    engines: {node: '>=22.19.0'}
+
   '@platformatic/graphql-composer@0.11.0':
     resolution: {integrity: sha512-e3EZH1okfdQPkhTNPrijgGQrlETFVO1V5WOjxN4EJFYRlurZdmqSuJw56JgvD08TMhdRXgwQK9bAbn1ZY2YzHg==}
 
@@ -1164,8 +1168,8 @@ packages:
     resolution: {integrity: sha512-LT8JPxtFGb2Lk1+DSt30E1C2rIUeNzlvYwsTZuPkbZiUHx4fnpIOuo/B6YdKqi50Dk1p9Jj4S4bn9cplXkNHNQ==}
     engines: {node: '>=22.19.0'}
 
-  '@platformatic/sql-mapper@3.68.0':
-    resolution: {integrity: sha512-m+BgxyMqDoYjUULzHxUpdF4R3RqT8Y1A60FcP7Y0Fi9ZoypmWJKquSXzkFdZhAuqsnkWYtAy8UeSXB1cX4wKzA==}
+  '@platformatic/sql-mapper@3.69.0':
+    resolution: {integrity: sha512-tSRfSDnYnC+bAkEqXxZkocLNDfa3MarmNzVuq7Jcx5w86sr+OzGBg7qLeD4veY5eIAspRmZSSZump4KpiCCdCg==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/sql-openapi@3.67.0':
@@ -1178,6 +1182,10 @@ packages:
 
   '@platformatic/telemetry@3.68.0':
     resolution: {integrity: sha512-yWqHMEUKrpefsVe63t0DK2RcfyVgd1Nema9CSGlaLGcmXRBkGu8iHdo88Uxcx62N+mIB0jRbLrGSkT+HRVhfiQ==}
+    engines: {node: '>=22.19.0'}
+
+  '@platformatic/telemetry@3.69.0':
+    resolution: {integrity: sha512-JR0KYdP7Ehlgoa3MYBB71+HAhbGhaInGouy/74PZd40iR4Bflreu0D9i4K5lCP6nGfRH8eA8X2Q3WcNOE/GFqQ==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/undici-cache-memory@0.9.0':
@@ -5147,7 +5155,7 @@ snapshots:
       '@opentelemetry/core': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-metrics': 2.8.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.41.1
+      '@opentelemetry/semantic-conventions': 1.43.0
 
   '@opentelemetry/exporter-trace-otlp-grpc@0.219.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5296,7 +5304,7 @@ snapshots:
       '@opentelemetry/api-logs': 0.219.0
       '@opentelemetry/core': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.8.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.41.1
+      '@opentelemetry/semantic-conventions': 1.43.0
 
   '@opentelemetry/sdk-logs@0.220.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5675,6 +5683,12 @@ snapshots:
       '@platformatic/prom-client': 1.0.0
       pino: 9.14.0
 
+  '@platformatic/globals@3.69.0':
+    dependencies:
+      '@opentelemetry/api': 1.9.1
+      '@platformatic/prom-client': 1.0.0
+      pino: 9.14.0
+
   '@platformatic/graphql-composer@0.11.0':
     dependencies:
       abstract-logger: 0.2.5
@@ -5989,7 +6003,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@platformatic/sql-mapper@3.68.0(@types/node@26.4.1)(supports-color@7.2.0)(typescript@5.9.3)':
+  '@platformatic/sql-mapper@3.69.0(@types/node@26.4.1)(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@databases/mysql': 7.1.0(@types/node@26.4.1)(typescript@5.9.3)
       '@databases/pg': 5.5.0(typescript@5.9.3)
@@ -5997,8 +6011,8 @@ snapshots:
       '@fastify/error': 4.2.0
       '@hapi/topo': 6.0.2
       '@matteo.collina/sqlite-pool': 0.7.0
-      '@platformatic/foundation': 3.68.0(supports-color@7.2.0)
-      '@platformatic/telemetry': 3.68.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.69.0(supports-color@7.2.0)
+      '@platformatic/telemetry': 3.69.0(supports-color@7.2.0)
       async-cache-dedupe: 2.2.0
       camelcase: 6.3.0
       fastify-plugin: 6.0.0
@@ -6068,6 +6082,28 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.41.1
       '@platformatic/foundation': 3.68.0(supports-color@7.2.0)
       '@platformatic/globals': 3.68.0
+      fast-uri: 4.1.4
+      fastify-plugin: 5.1.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@platformatic/telemetry@3.69.0(supports-color@7.2.0)':
+    dependencies:
+      '@fastify/swagger': 9.8.1(supports-color@7.2.0)
+      '@opentelemetry/api': 1.9.1
+      '@opentelemetry/core': 2.8.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-trace-otlp-grpc': 0.219.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-trace-otlp-proto': 0.219.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-zipkin': 2.8.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/instrumentation-http': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/instrumentation-undici': 0.29.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/resources': 2.8.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-node': 0.219.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/sdk-trace-base': 2.8.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/semantic-conventions': 1.41.1
+      '@platformatic/foundation': 3.69.0(supports-color@7.2.0)
+      '@platformatic/globals': 3.69.0
       fast-uri: 4.1.4
       fastify-plugin: 5.1.0
     transitivePeerDependencies:
