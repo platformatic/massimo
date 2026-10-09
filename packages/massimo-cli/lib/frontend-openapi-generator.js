@@ -1,7 +1,9 @@
 import camelcase from 'camelcase'
 import CodeBlockWriter from 'code-block-writer'
 import { generateOperationId } from 'massimo'
-import { writeOperations } from './openapi-common.js'
+import { writeNamedSchemas } from './named-schemas.js'
+import { getOperationTypeNames, writeOperations } from './openapi-common.js'
+import { buildSchemaNames } from './schema-names.js'
 import {
   capitalize,
   getAllResponseCodes,
@@ -19,10 +21,11 @@ export function processFrontendOpenAPI ({
   logger,
   withCredentials,
   propsOptional,
+  namedSchemas,
   typeExt = 'd.mts'
 }) {
   return {
-    types: generateTypesFromOpenAPI({ schema, name, fullResponse, fullRequest, propsOptional }),
+    types: generateTypesFromOpenAPI({ schema, name, fullResponse, fullRequest, propsOptional, namedSchemas }),
     implementation: generateFrontendImplementationFromOpenAPI({
       schema,
       name,
@@ -410,7 +413,7 @@ function generateFrontendImplementationFromOpenAPI ({
   return writer.toString()
 }
 
-function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, propsOptional }) {
+function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, propsOptional, namedSchemas }) {
   const camelCaseName = capitalize(camelcase(name))
   const { paths } = schema
   const generatedOperationIds = []
@@ -447,6 +450,14 @@ function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, pr
   })
   interfaces.blankLine()
 
+  // Operation and client types keep their names; a schema that collides is renamed
+  const schemaNames = namedSchemas
+    ? buildSchemaNames(schema, [...getOperationTypeNames(operations), camelCaseName, 'PlatformaticFrontendClient', 'BuildOptions'])
+    : undefined
+  if (schemaNames) {
+    writeNamedSchemas(interfaces, schema, schemaNames)
+  }
+
   writer.blankLine()
   writer.write(`export interface ${camelCaseName}`).block(() => {
     writer.writeLine('setBaseUrl(newUrl: string): void;')
@@ -457,7 +468,8 @@ function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, pr
       fullResponse,
       optionalHeaders: [],
       schema,
-      propsOptional
+      propsOptional,
+      schemaNames
     })
   })
 

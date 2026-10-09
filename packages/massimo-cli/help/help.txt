@@ -77,4 +77,5 @@ Options:
 * `--props-optional` - If `true`, properties will be defined as optional unless they're part of the `required` array. By default this option is `true`.
 * `--retry-timeout-ms` - If passed, the HTTP request to get an Open API schema will be retried (reference: https://undici.nodejs.org/#/docs/api/RetryHandler.md)
 * `--type-extension` - Force the use of module-specific type extensions (.d.mts for ESM, .d.cts for CJS) instead of the default logic.
+* `--named-schemas` - Declare every `components.schemas` entry as a named type (`interface` for objects, `type` otherwise) and print response `$ref`s as that name instead of inlining the schema; recursive schemas stay typed instead of becoming `unknown`. Request types keep inlining, because there date formats widen to `string | Date`. A schema whose name is already taken by a generated type (e.g. `GetMoviesResponseOK`), by another schema, or by a TypeScript built-in is declared with a `Schema` suffix (`Schema2`, ... if needed). Off by default.
 * `--skip-prefixed-url` - If passed, it will avoid unnecessary extra HTTP call to check if, for instance, the `/documentation/json` Open API URL exists

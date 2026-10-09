@@ -1,7 +1,16 @@
 import jsonpointer from 'jsonpointer'
 
-export function getType (typeDef, methodType, spec, seenRefs = new Set()) {
+// `schemaNames` (from `buildSchemaNames`, only with `--named-schemas`) maps the
+// `$ref` of each component schema to the type name it is declared under.
+export function getType (typeDef, methodType, spec, seenRefs = new Set(), schemaNames) {
   if (typeDef.$ref) {
+    // A named component is printed by its name, which also keeps recursive
+    // schemas typed. Request positions keep inlining: there date formats widen
+    // to `string | Date`, which the response-shaped declaration does not allow.
+    const refName = methodType === 'req' ? undefined : schemaNames?.get(typeDef.$ref)
+    if (refName) {
+      return refName
+    }
     if (seenRefs.has(typeDef.$ref)) {
       return 'unknown'
     }
@@ -10,12 +19,12 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set()) {
     typeDef = jsonpointer.get(spec, typeDef.$ref.replace('#', ''))
   }
   if (typeDef.schema) {
-    return getType(typeDef.schema, methodType, spec, seenRefs)
+    return getType(typeDef.schema, methodType, spec, seenRefs, schemaNames)
   }
   if (typeDef.anyOf) {
     // recursively call this function
     const mapped = typeDef.anyOf.map(t => {
-      return getType(t, methodType, spec, seenRefs)
+      return getType(t, methodType, spec, seenRefs, schemaNames)
     })
     return mapped.join(' | ')
   }
@@ -23,7 +32,7 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set()) {
   if (typeDef.oneOf) {
     // recursively call this function
     const mapped = typeDef.oneOf.map(t => {
-      return getType(t, methodType, spec, seenRefs)
+      return getType(t, methodType, spec, seenRefs, schemaNames)
     })
 
     if (typeDef.discriminator && typeDef.discriminator.propertyName) {
@@ -39,6 +48,10 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set()) {
       })
       return mapped
         .map((mappedObject, idx) => {
+          // A named member is a bare type name: narrow the discriminator by intersection
+          if (methodType !== 'req' && schemaNames?.has(typeDef.oneOf[idx].$ref)) {
+            return `(${mappedObject} & { '${propertyName}': '${mappedRefNames[idx]}' })`
+          }
           const regexp = new RegExp(`'${propertyName}'[?]?: (string)`)
 
           const match = mappedObject.match(regexp)
@@ -61,13 +74,13 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set()) {
     // recursively call this function
     return typeDef.allOf
       .map(t => {
-        return getType(t, methodType, spec, seenRefs)
+        return getType(t, methodType, spec, seenRefs, schemaNames)
       })
       .join(' & ')
   }
   if (typeDef.type === 'array') {
     const nullable = typeDef.nullable
-    return `Array<${getType(typeDef.items, methodType, spec, seenRefs)}>${nullable === true ? ' | null' : ''}`
+    return `Array<${getType(typeDef.items, methodType, spec, seenRefs, schemaNames)}>${nullable === true ? ' | null' : ''}`
   }
   if (typeDef.enum) {
     // Note: null type represented with an enum have no types and single enum element 'null'
@@ -112,7 +125,7 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set()) {
       if (additionalPropsRequired) {
         required = required || !!additionalPropsRequired.includes(prop)
       }
-      return `'${prop}'${required ? '' : '?'}: ${getType(objProperties[prop], methodType, spec, seenRefs)}`
+      return `'${prop}'${required ? '' : '?'}: ${getType(objProperties[prop], methodType, spec, seenRefs, schemaNames)}`
     })
     if (additionalProps === true) {
       props.push('[key: string]: unknown')

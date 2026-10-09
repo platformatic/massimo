@@ -219,6 +219,9 @@ massimo <url> --name myclient --module cjs
 
 # Force TypeScript declaration file extensions (.d.mts/.d.cts)
 massimo <url> --name myclient --type-extension
+
+# Declare components.schemas as named types instead of inlining every $ref
+massimo <url> --name myclient --named-schemas
 ```
 
 ### Module Format Detection
