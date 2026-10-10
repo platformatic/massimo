@@ -138,7 +138,7 @@ async function writeOpenAPIClient (
       'Cannot parse OpenAPI file. Please make sure is a JSON or a YAML file.'
     )
   }
-  if (namedSchemas && !schema.components?.schemas) {
+  if (namedSchemas && Object.keys(schema.components?.schemas ?? {}).length === 0) {
     logger.warn('--named-schemas has no effect: the spec has no components.schemas')
   }
   if (!typesOnly) {

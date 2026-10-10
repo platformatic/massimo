@@ -267,39 +267,47 @@ test('support discriminator object with named members', async () => {
           properties: { petType: { type: 'string', enum: ['dog'] }, bark: { type: 'string' } },
           required: ['petType', 'bark']
         },
+        Snake: {
+          type: 'object',
+          properties: { petType: { type: 'string', const: 'snake' } },
+          required: ['petType']
+        },
+        Pet: {
+          type: 'object',
+          properties: { petType: { type: 'string' } },
+          required: ['petType']
+        },
+        Gecko: {
+          allOf: [
+            { $ref: '#/components/schemas/Pet' },
+            { type: 'object', properties: { petType: { type: 'string', enum: ['gecko'] } } }
+          ]
+        },
         Lizard: {
           type: 'object',
           properties: { petType: { type: 'string' }, scales: { type: 'integer' } }
         },
         Fish: {
-          type: 'object',
-          properties: { petType: { type: 'string' } },
-          required: ['petType']
+          allOf: [{ $ref: '#/components/schemas/Pet' }]
         }
       }
     }
   }
-  const schemaNames = new Map([
-    ['#/components/schemas/Dog', 'Dog'],
-    ['#/components/schemas/Lizard', 'Lizard'],
-    ['#/components/schemas/Fish', 'Fish']
-  ])
+  const names = ['Dog', 'Snake', 'Gecko', 'Lizard', 'Fish']
+  const schemaNames = new Map(names.map(name => [`#/components/schemas/${name}`, name]))
   const oneOfDef = {
-    oneOf: [
-      { $ref: '#/components/schemas/Dog' },
-      { $ref: '#/components/schemas/Lizard' },
-      { $ref: '#/components/schemas/Fish' }
-    ],
+    oneOf: names.map(name => ({ $ref: `#/components/schemas/${name}` })),
     discriminator: {
       propertyName: 'petType',
-      mapping: { dog: '#/components/schemas/Dog', lizard: 'Lizard' }
+      mapping: { dog: '#/components/schemas/Dog', lizard: 'Lizard', 'old\'lizard': '#/components/schemas/Lizard' }
     }
   }
-  // an enum member keeps its own value, a plain string member takes its mapping
-  // key, and a member without a mapping entry takes its component name
+  // an `enum` or `const` member keeps its own value, also when only a child in
+  // its `allOf` chain restates the parent's plain string; a plain string member
+  // takes every mapping key that points at it, or its component name
   equal(
     getType(oneOfDef, 'res', spec, undefined, schemaNames),
-    "Dog | (Lizard & { 'petType'?: 'lizard' }) | (Fish & { 'petType': 'Fish' })"
+    "Dog | Snake | Gecko | (Lizard & { 'petType'?: 'lizard' | 'old\\'lizard' }) | (Fish & { 'petType': 'Fish' })"
   )
 })
 

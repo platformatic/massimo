@@ -88,6 +88,15 @@
           { "type": "object", "required": ["rank"], "properties": { "rank": { "type": "integer" }, "children": { "type": "array", "items": { "$ref": "#/components/schemas/SafeChild" } } } }
         ]
       },
+      "Square": {
+        "type": "object",
+        "required": ["kind", "side"],
+        "properties": { "kind": { "type": "string" }, "side": { "type": "integer" } }
+      },
+      "Shape": {
+        "oneOf": [{ "$ref": "#/components/schemas/Restated" }, { "$ref": "#/components/schemas/Square" }],
+        "discriminator": { "propertyName": "kind" }
+      },
       "Dog": {
         "type": "object",
         "required": ["petType", "bark"],
@@ -144,6 +153,8 @@
         "required": ["mime"],
         "properties": { "mime": { "type": "string" } }
       },
+      "LineBreak": { "type": "string" },
+      "line\nbreak": { "type": "boolean" },
       "Größe": { "type": "integer" },
       "größe-wert": { "type": "string" }
     }

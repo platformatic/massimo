@@ -1,51 +1,60 @@
 import jsonpointer from 'jsonpointer'
 import { toSchemaRef } from './schema-names.js'
 
-// The discriminator value of the `oneOf` member at `ref`: the `mapping` key that
-// points at it (a mapping value is a `$ref` or a component name), else the
-// component name, as OpenAPI defines the implicit mapping.
-function discriminatorValue (discriminator, ref) {
-  for (const [value, target] of Object.entries(discriminator.mapping ?? {})) {
-    if ((target.startsWith('#') ? target : toSchemaRef(target)) === ref) {
-      return value
-    }
-  }
-  return ref.split('/').slice(-1).toString()
+// Prints a string as a single-quoted TypeScript literal.
+function quote (value) {
+  return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
 }
 
-// Finds `name` among the properties of `schema` and of its `allOf` members,
-// with whether any of them lists it as required.
+// The discriminator values of the `oneOf` member at `ref`: every `mapping` key
+// that points at it (a mapping value is a `$ref` or a component name), else the
+// component name, as OpenAPI defines the implicit mapping.
+function discriminatorValues (discriminator, ref) {
+  const values = Object.entries(discriminator.mapping ?? {})
+    .filter(([, target]) => (target.startsWith('#') ? target : toSchemaRef(target)) === ref)
+    .map(([value]) => value)
+  return values.length > 0 ? values : [ref.split('/').slice(-1).toString()]
+}
+
+// Collects every definition of the property `name` along the `$ref` and `allOf`
+// chain of `schema`, with whether any member lists it as required.
 function findProperty (schema, name, spec, seenRefs = new Set()) {
   if (schema.$ref) {
-    if (seenRefs.has(schema.$ref)) return { required: false }
+    if (seenRefs.has(schema.$ref)) return { definitions: [], required: false }
     seenRefs = new Set(seenRefs).add(schema.$ref)
     schema = jsonpointer.get(spec, schema.$ref.replace('#', '')) ?? {}
   }
-  let property = schema.properties?.[name]
+  const definitions = []
   let required = Array.isArray(schema.required) && schema.required.includes(name)
+  const own = schema.properties?.[name]
+  if (own) {
+    definitions.push(own.$ref ? jsonpointer.get(spec, own.$ref.replace('#', '')) ?? {} : own)
+  }
   for (const member of schema.allOf ?? []) {
     const found = findProperty(member, name, spec, seenRefs)
-    property ??= found.property
+    definitions.push(...found.definitions)
     required ||= found.required
   }
-  if (property?.$ref && !seenRefs.has(property.$ref)) {
-    property = jsonpointer.get(spec, property.$ref.replace('#', ''))
-  }
-  return { property, required }
+  return { definitions, required }
+}
+
+function isPlainString (schema) {
+  return schema.type === 'string' && schema.enum === undefined && schema.const === undefined
 }
 
 // A named `oneOf` member is printed as a bare type name, so the discriminator is
 // narrowed by intersection, and only where the inline path would narrow it: a
-// property typed as a plain string. One with an `enum` or `const` already
-// carries its value, and intersecting it with another literal gives `never`.
+// property typed as a plain string by every member that declares it. One with
+// an `enum` or `const` anywhere along its `allOf` chain already carries its
+// value, and intersecting it with another literal gives `never`.
 function narrowNamedMember (typeName, ref, discriminator, spec) {
   const propertyName = discriminator.propertyName
-  const { property, required } = findProperty({ $ref: ref }, propertyName, spec)
-  if (!property || property.type !== 'string' || property.enum !== undefined || property.const !== undefined) {
+  const { definitions, required } = findProperty({ $ref: ref }, propertyName, spec)
+  if (definitions.length === 0 || !definitions.every(isPlainString)) {
     return typeName
   }
-  const value = discriminatorValue(discriminator, ref).replace(/\\/g, '\\\\').replace(/'/g, "\\'")
-  return `(${typeName} & { '${propertyName}'${required ? '' : '?'}: '${value}' })`
+  const values = discriminatorValues(discriminator, ref).map(quote).join(' | ')
+  return `(${typeName} & { '${propertyName}'${required ? '' : '?'}: ${values} })`
 }
 
 // `schemaNames` (from `buildSchemaNames`, only with `--named-schemas`) maps the

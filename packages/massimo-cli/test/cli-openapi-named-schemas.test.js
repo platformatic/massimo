@@ -124,12 +124,15 @@ test('--named-schemas narrows a discriminated oneOf by its mapping and keeps enu
   ok(data.includes("export type Pet = Dog | Cat | (Lizard & { 'petType': 'lizard' })"))
   // without a mapping the component name is the value, optionality follows the member
   ok(data.includes("export type Animal = (Fish & { 'kind'?: 'Fish' }) | (Bird & { 'kind': 'Bird' })"))
+  // a child that restates its parent's plain string as an enum keeps the enum
+  ok(data.includes("export type Shape = Restated | (Square & { 'kind': 'Square' })"))
 })
 
 test('--named-schemas escapes the end of a comment in a description and keeps non-ASCII names', async () => {
   const data = await generate(['--named-schemas'], edgeFile)
 
   ok(data.includes(' * Accepts *\\/* and ends the comment early\n * unless it is escaped\n */'))
+  ok(data.includes("// components.schemas['line\\nbreak'] is declared as LineBreakSchema: its own name is taken\nexport type LineBreakSchema = boolean"))
   ok(data.includes('export type Größe = number'))
   ok(data.includes('export type GrößeWert = string'))
 })
@@ -138,7 +141,7 @@ test('--named-schemas output for the edge cases compiles and keeps the discrimin
   const dir = await moveToTmpdir(after)
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), edgeFile, '--name', 'movies', '--types-only', '--named-schemas'])
   await writeFile(join(dir, 'check.ts'), `
-import type { GetAnimalsResponseOK, GetPetsResponseOK, Größe, GrößeWert, Media, OptionalId, Restated, SafeChild, TwoParents } from './movies/movies.js'
+import type { GetAnimalsResponseOK, GetPetsResponseOK, Größe, GrößeWert, Media, OptionalId, Restated, SafeChild, Shape, TwoParents } from './movies/movies.js'
 
 export const dog: GetPetsResponseOK = { petType: 'dog', bark: 'woof' }
 export const cat: GetPetsResponseOK = { petType: 'cat', meow: 'meow' }
@@ -147,6 +150,8 @@ export const lizard: GetPetsResponseOK = { petType: 'lizard', scales: 3 }
 export const wrongLizard: GetPetsResponseOK = { petType: 'Lizard' }
 export const fish: GetAnimalsResponseOK = { kind: 'Fish', fins: 2 }
 export const bird: GetAnimalsResponseOK = { kind: 'Bird', wings: 2 }
+export const shape: Shape = { id: 1, kind: 'a' }
+export const square: Shape = { kind: 'Square', side: 2 }
 export const restated: Restated = { id: 1, kind: 'a' }
 export const optionalId: OptionalId = { id: 1, kind: 'k' }
 export const safeChild: SafeChild = { id: 1, kind: 'k', label: 'l', rank: 1, children: [{ id: 2, kind: 'k', rank: 2 }] }
@@ -184,6 +189,10 @@ test('--named-schemas warns when the spec has no components.schemas', async () =
   }))
   const { stdout } = await execa('node', [join(import.meta.dirname, '..', 'index.js'), file, '--name', 'movies', '--types-only', '--named-schemas'])
   ok(stdout.includes('--named-schemas has no effect: the spec has no components.schemas'))
+  const emptyFile = join(dir, 'empty-components.json')
+  await writeFile(emptyFile, JSON.stringify({ ...JSON.parse(await readFile(file, 'utf-8')), components: { schemas: {} } }))
+  const { stdout: empty } = await execa('node', [join(import.meta.dirname, '..', 'index.js'), emptyFile, '--name', 'movies', '--types-only', '--named-schemas'])
+  ok(empty.includes('--named-schemas has no effect: the spec has no components.schemas'))
   const { stdout: withSchemas } = await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--types-only', '--named-schemas'])
   equal(withSchemas.includes('--named-schemas has no effect'), false)
 })

@@ -46,6 +46,13 @@ function writeAllOfInterface (writer, name, schema, spec, schemaNames) {
   return true
 }
 
+const KEY_ESCAPES = { '\\': '\\\\', "'": "\\'", '\n': '\\n', '\r': '\\r', '\u2028': '\\u2028', '\u2029': '\\u2029' }
+
+// A schema key is printed inside a line comment: a line terminator would end it.
+function escapeKey (key) {
+  return key.replace(/[\\'\n\r\u2028\u2029]/g, char => KEY_ESCAPES[char])
+}
+
 // A description is printed inside a JSDoc block: `*/` would close it early.
 function escapeComment (text) {
   return text.replace(/\*\//g, '*\\/')
@@ -59,7 +66,7 @@ export function writeNamedSchemas (writer, spec, schemaNames) {
   for (const [key, schema] of Object.entries(schemas)) {
     const name = schemaNames.get(toSchemaRef(key))
     if (name !== toTypeName(key)) {
-      writer.writeLine(`// components.schemas['${key.replace(/'/g, "\\'")}'] is declared as ${name}: its own name is taken`)
+      writer.writeLine(`// components.schemas['${escapeKey(key)}'] is declared as ${name}: its own name is taken`)
     }
     if (schema.description) {
       writer.writeLine('/**')
