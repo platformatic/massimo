@@ -117,6 +117,21 @@ test('--named-schemas extends a parent only when the members agree on every shar
   equal(data.includes('interface TwoParents'), false)
 })
 
+test('--named-schemas inlines a direct self-reference of a type alias and keeps wrapped recursion named', async () => {
+  const data = await generate(['--named-schemas'], edgeFile)
+
+  ok(data.includes('export type SelfAlias = string | unknown'))
+  ok(data.includes('export type PingA = string | number | unknown'))
+  ok(data.includes('export type PingB = number | string | unknown'))
+  ok(data.includes('export type TreeOrLeaf = string | Array<TreeOrLeaf>'))
+})
+
+test('--named-schemas leaves the inline members of a discriminated oneOf as they are', async () => {
+  const data = await generate(['--named-schemas'], edgeFile)
+
+  ok(data.includes("export type InlineShape = { 'kind': string; 'r'?: number } | { 'kind': string; 'side'?: number }"))
+})
+
 test('--named-schemas narrows a discriminated oneOf by its mapping and keeps enum members as they are', async () => {
   const data = await generate(['--named-schemas'], edgeFile)
 
@@ -141,7 +156,7 @@ test('--named-schemas output for the edge cases compiles and keeps the discrimin
   const dir = await moveToTmpdir(after)
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), edgeFile, '--name', 'movies', '--types-only', '--named-schemas'])
   await writeFile(join(dir, 'check.ts'), `
-import type { GetAnimalsResponseOK, GetPetsResponseOK, Größe, GrößeWert, Media, OptionalId, Restated, SafeChild, Shape, TwoParents } from './movies/movies.js'
+import type { GetAnimalsResponseOK, GetPetsResponseOK, Größe, GrößeWert, Media, OptionalId, Restated, SafeChild, Shape, TwoParents, SelfAlias, TreeOrLeaf, PingA, InlineShape } from './movies/movies.js'
 
 export const dog: GetPetsResponseOK = { petType: 'dog', bark: 'woof' }
 export const cat: GetPetsResponseOK = { petType: 'cat', meow: 'meow' }
@@ -152,6 +167,10 @@ export const fish: GetAnimalsResponseOK = { kind: 'Fish', fins: 2 }
 export const bird: GetAnimalsResponseOK = { kind: 'Bird', wings: 2 }
 export const shape: Shape = { id: 1, kind: 'a' }
 export const square: Shape = { kind: 'Square', side: 2 }
+export const selfAlias: SelfAlias = 'x'
+export const tree: TreeOrLeaf = ['a', ['b']]
+export const ping: PingA = 1
+export const inlineShape: InlineShape = { kind: 'circle', r: 1 }
 export const restated: Restated = { id: 1, kind: 'a' }
 export const optionalId: OptionalId = { id: 1, kind: 'k' }
 export const safeChild: SafeChild = { id: 1, kind: 'k', label: 'l', rank: 1, children: [{ id: 2, kind: 'k', rank: 2 }] }

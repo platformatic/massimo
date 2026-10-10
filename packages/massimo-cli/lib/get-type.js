@@ -59,12 +59,15 @@ function narrowNamedMember (typeName, ref, discriminator, spec) {
 
 // `schemaNames` (from `buildSchemaNames`, only with `--named-schemas`) maps the
 // `$ref` of each component schema to the type name it is declared under.
-export function getType (typeDef, methodType, spec, seenRefs = new Set(), schemaNames) {
+// `inlineRefs` are refs that must not be printed by name until the type passes
+// through an object or an array: a type alias that names itself directly in a
+// union or intersection is circular (TS2456), so its declaration inlines them.
+export function getType (typeDef, methodType, spec, seenRefs = new Set(), schemaNames, inlineRefs) {
   if (typeDef.$ref) {
     // A named component is printed by its name, which also keeps recursive
     // schemas typed. Request positions keep inlining: there date formats widen
     // to `string | Date`, which the response-shaped declaration does not allow.
-    const refName = methodType === 'req' ? undefined : schemaNames?.get(typeDef.$ref)
+    const refName = methodType === 'req' || inlineRefs?.has(typeDef.$ref) ? undefined : schemaNames?.get(typeDef.$ref)
     if (refName) {
       return refName
     }
@@ -76,12 +79,12 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set(), schema
     typeDef = jsonpointer.get(spec, typeDef.$ref.replace('#', ''))
   }
   if (typeDef.schema) {
-    return getType(typeDef.schema, methodType, spec, seenRefs, schemaNames)
+    return getType(typeDef.schema, methodType, spec, seenRefs, schemaNames, inlineRefs)
   }
   if (typeDef.anyOf) {
     // recursively call this function
     const mapped = typeDef.anyOf.map(t => {
-      return getType(t, methodType, spec, seenRefs, schemaNames)
+      return getType(t, methodType, spec, seenRefs, schemaNames, inlineRefs)
     })
     return mapped.join(' | ')
   }
@@ -89,7 +92,7 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set(), schema
   if (typeDef.oneOf) {
     // recursively call this function
     const mapped = typeDef.oneOf.map(t => {
-      return getType(t, methodType, spec, seenRefs, schemaNames)
+      return getType(t, methodType, spec, seenRefs, schemaNames, inlineRefs)
     })
 
     if (typeDef.discriminator && typeDef.discriminator.propertyName) {
@@ -99,14 +102,17 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set(), schema
       // to   "{ 'type': 'Cat'; 'meowSound': string }",
       // where typeDef.discriminator.propertyName = 'type'
 
-      // we support only an array of $ref values
+      // the value is the name of the $ref, so an inline member is left as is
       const mappedRefNames = typeDef.oneOf.map(t => {
-        return t.$ref.split('/').slice(-1).toString()
+        return t.$ref?.split('/').slice(-1).toString()
       })
       return mapped
         .map((mappedObject, idx) => {
           // A named member is a bare type name: narrow the discriminator by intersection
-          if (methodType !== 'req' && schemaNames?.has(typeDef.oneOf[idx].$ref)) {
+          if (mappedRefNames[idx] === undefined) {
+            return mappedObject
+          }
+          if (methodType !== 'req' && schemaNames?.has(typeDef.oneOf[idx].$ref) && !inlineRefs?.has(typeDef.oneOf[idx].$ref)) {
             return narrowNamedMember(mappedObject, typeDef.oneOf[idx].$ref, typeDef.discriminator, spec)
           }
           const regexp = new RegExp(`'${propertyName}'[?]?: (string)`)
@@ -131,7 +137,7 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set(), schema
     // recursively call this function
     return typeDef.allOf
       .map(t => {
-        return getType(t, methodType, spec, seenRefs, schemaNames)
+        return getType(t, methodType, spec, seenRefs, schemaNames, inlineRefs)
       })
       .join(' & ')
   }

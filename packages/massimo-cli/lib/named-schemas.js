@@ -58,6 +58,41 @@ function escapeComment (text) {
   return text.replace(/\*\//g, '*\\/')
 }
 
+// The component refs a schema names in a direct position: itself a `$ref`, or a
+// member of `anyOf`, `oneOf` or `allOf`, at any depth of those, but never inside
+// an object or an array.
+function directRefs (schema, schemaNames, refs = new Set()) {
+  if (schema.$ref) {
+    if (schemaNames.has(schema.$ref)) refs.add(schema.$ref)
+    return refs
+  }
+  for (const member of [...(schema.anyOf ?? []), ...(schema.oneOf ?? []), ...(schema.allOf ?? [])]) {
+    directRefs(member, schemaNames, refs)
+  }
+  return refs
+}
+
+// The refs that close a cycle of direct references back to `ref`, `ref`
+// included: declared by name, `type A = B | string` with `type B = A | number`
+// is circular (TS2456). Empty when the schema is not on such a cycle.
+function circularRefs (ref, spec, schemaNames) {
+  const edges = from => directRefs(jsonpointer.get(spec, from.replace('#', '')) ?? {}, schemaNames)
+  const reach = from => {
+    const seen = new Set()
+    const stack = [...edges(from)]
+    while (stack.length > 0) {
+      const next = stack.pop()
+      if (seen.has(next)) continue
+      seen.add(next)
+      stack.push(...edges(next))
+    }
+    return seen
+  }
+  const reachable = reach(ref)
+  if (!reachable.has(ref)) return new Set()
+  return new Set([...reachable].filter(other => other === ref || reach(other).has(ref)))
+}
+
 // Writes one declaration per `components.schemas` entry, in spec order, under
 // the names assigned by `buildSchemaNames`.
 export function writeNamedSchemas (writer, spec, schemaNames) {
@@ -78,12 +113,18 @@ export function writeNamedSchemas (writer, spec, schemaNames) {
     if (schema.allOf && writeAllOfInterface(writer, name, schema, spec, schemaNames)) {
       continue
     }
-    const body = getType(schema, 'res', spec, undefined, schemaNames)
     if (isInterfaceSchema(schema)) {
-      writer.writeLine(`export interface ${name} ${body}`)
-    } else {
-      writer.writeLine(`export type ${name} = ${body}`)
+      writer.writeLine(`export interface ${name} ${getType(schema, 'res', spec, undefined, schemaNames)}`)
+      continue
     }
+    // A schema on a cycle of direct references inlines the cycle, and its own
+    // ref becomes `unknown` there, as without `--named-schemas`
+    const ref = toSchemaRef(key)
+    const circular = circularRefs(ref, spec, schemaNames)
+    const body = circular.size > 0
+      ? getType(schema, 'res', spec, new Set([ref]), schemaNames, circular)
+      : getType(schema, 'res', spec, undefined, schemaNames)
+    writer.writeLine(`export type ${name} = ${body}`)
   }
   writer.blankLine()
 }

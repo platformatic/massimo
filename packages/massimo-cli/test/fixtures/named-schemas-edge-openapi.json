@@ -153,6 +153,17 @@
         "required": ["mime"],
         "properties": { "mime": { "type": "string" } }
       },
+      "SelfAlias": { "anyOf": [{ "type": "string" }, { "$ref": "#/components/schemas/SelfAlias" }] },
+      "TreeOrLeaf": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "$ref": "#/components/schemas/TreeOrLeaf" } }] },
+      "PingA": { "anyOf": [{ "type": "string" }, { "$ref": "#/components/schemas/PingB" }] },
+      "PingB": { "anyOf": [{ "type": "number" }, { "$ref": "#/components/schemas/PingA" }] },
+      "InlineShape": {
+        "oneOf": [
+          { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string" }, "r": { "type": "number" } } },
+          { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string" }, "side": { "type": "number" } } }
+        ],
+        "discriminator": { "propertyName": "kind" }
+      },
       "LineBreak": { "type": "string" },
       "line\nbreak": { "type": "boolean" },
       "Größe": { "type": "integer" },

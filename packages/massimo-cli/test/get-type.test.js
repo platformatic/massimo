@@ -311,6 +311,18 @@ test('support discriminator object with named members', async () => {
   )
 })
 
+test('support discriminator object with inline members', async () => {
+  const oneOfDef = {
+    oneOf: [
+      { type: 'object', properties: { kind: { type: 'string' }, r: { type: 'number' } }, required: ['kind'] },
+      { type: 'object', properties: { kind: { type: 'string' }, side: { type: 'number' } }, required: ['kind'] }
+    ],
+    discriminator: { propertyName: 'kind' }
+  }
+  // without a $ref there is no name to narrow to, so the members are left as they are
+  equal(getType(oneOfDef, 'res', {}), "{ 'kind': string; 'r'?: number } | { 'kind': string; 'side'?: number }")
+})
+
 test('support null', async () => {
   const nullDef = {
     schema: {
