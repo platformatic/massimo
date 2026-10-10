@@ -1,6 +1,8 @@
 import { generateOperationId } from 'massimo'
 import CodeBlockWriter from 'code-block-writer'
-import { writeOperations } from './openapi-common.js'
+import { writeNamedSchemas } from './named-schemas.js'
+import { getOperationTypeNames, writeOperations } from './openapi-common.js'
+import { buildSchemaNames } from './schema-names.js'
 import { capitalize, toJavaScriptName } from './utils.js'
 
 export function processOpenAPI ({
@@ -12,7 +14,8 @@ export function processOpenAPI ({
   validateResponse,
   typesComment,
   propsOptional,
-  moduleFormat
+  moduleFormat,
+  namedSchemas
 }) {
   return {
     types: generateTypesFromOpenAPI({
@@ -22,7 +25,8 @@ export function processOpenAPI ({
       fullRequest,
       optionalHeaders,
       typesComment,
-      propsOptional
+      propsOptional,
+      namedSchemas
     }),
     implementation: generateImplementationFromOpenAPI({ name, fullResponse, fullRequest, validateResponse, moduleFormat })
   }
@@ -84,6 +88,7 @@ function generateTypesFromOpenAPI ({
   optionalHeaders,
   typesComment,
   propsOptional,
+  namedSchemas
 }) {
   const camelcasedName = toJavaScriptName(name)
   const capitalizedName = capitalize(camelcasedName)
@@ -148,13 +153,22 @@ function generateTypesFromOpenAPI ({
   })
   interfaces.blankLine()
 
+  // Operation and client types keep their names; a schema that collides is renamed
+  const schemaNames = namedSchemas
+    ? buildSchemaNames(schema, [...getOperationTypeNames(operations), capitalizedName])
+    : undefined
+  if (schemaNames) {
+    writeNamedSchemas(interfaces, schema, schemaNames)
+  }
+
   writer.write(`export type ${capitalizedName} =`).block(() => {
     writeOperations(interfaces, writer, operations, {
       fullRequest,
       fullResponse,
       optionalHeaders,
       schema,
-      propsOptional
+      propsOptional,
+      schemaNames
     })
   })
 

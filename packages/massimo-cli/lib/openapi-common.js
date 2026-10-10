@@ -4,14 +4,14 @@ import CodeBlockWriter from 'code-block-writer'
 import jsonpointer from 'jsonpointer'
 import { TypeNotSupportedError } from './errors.js'
 import { getType } from './get-type.js'
-import { responsesWriter } from './responses-writer.js'
+import { getResponseTypeName, responsesWriter } from './responses-writer.js'
 import { capitalize, getBodyType } from './utils.js'
 
 export function writeOperations (
   interfacesWriter,
   mainWriter,
   operations,
-  { fullRequest, fullResponse, optionalHeaders, schema, propsOptional }
+  { fullRequest, fullResponse, optionalHeaders, schema, propsOptional, schemaNames }
 ) {
   const originalFullResponse = fullResponse
   const originalFullRequest = fullRequest
@@ -116,7 +116,8 @@ export function writeOperations (
       responses,
       currentFullResponse,
       interfacesWriter,
-      schema
+      schema,
+      schemaNames
     )
     mainWriter.writeLine('/**')
     if (summary) {
@@ -143,6 +144,19 @@ export function writeOperations (
     currentFullResponse = originalFullResponse
     currentFullRequest = originalFullRequest
   }
+}
+
+// Every type name `writeOperations` declares for these operations.
+export function getOperationTypeNames (operations) {
+  const names = []
+  for (const { operation } of operations) {
+    const operationTypeName = capitalize(camelcase(operation.operationId))
+    names.push(`${operationTypeName}Request`, `${operationTypeName}Responses`)
+    for (const statusCode of Object.keys(operation.responses || {})) {
+      names.push(getResponseTypeName(operationTypeName, statusCode))
+    }
+  }
+  return names
 }
 
 export function writeProperties (writer, blockName, parameters, addedProps, methodType, spec) {
