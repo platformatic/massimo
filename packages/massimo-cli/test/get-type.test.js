@@ -258,6 +258,51 @@ test('support discriminator object', async () => {
   equal(getType(anyOfDef, 'res', spec), '{ \'type\': \'Dog\'; \'barkSound\': string } | { \'type\': \'Cat\'; \'meowSound\': string }')
 })
 
+test('support discriminator object with named members', async () => {
+  const spec = {
+    components: {
+      schemas: {
+        Dog: {
+          type: 'object',
+          properties: { petType: { type: 'string', enum: ['dog'] }, bark: { type: 'string' } },
+          required: ['petType', 'bark']
+        },
+        Lizard: {
+          type: 'object',
+          properties: { petType: { type: 'string' }, scales: { type: 'integer' } }
+        },
+        Fish: {
+          type: 'object',
+          properties: { petType: { type: 'string' } },
+          required: ['petType']
+        }
+      }
+    }
+  }
+  const schemaNames = new Map([
+    ['#/components/schemas/Dog', 'Dog'],
+    ['#/components/schemas/Lizard', 'Lizard'],
+    ['#/components/schemas/Fish', 'Fish']
+  ])
+  const oneOfDef = {
+    oneOf: [
+      { $ref: '#/components/schemas/Dog' },
+      { $ref: '#/components/schemas/Lizard' },
+      { $ref: '#/components/schemas/Fish' }
+    ],
+    discriminator: {
+      propertyName: 'petType',
+      mapping: { dog: '#/components/schemas/Dog', lizard: 'Lizard' }
+    }
+  }
+  // an enum member keeps its own value, a plain string member takes its mapping
+  // key, and a member without a mapping entry takes its component name
+  equal(
+    getType(oneOfDef, 'res', spec, undefined, schemaNames),
+    "Dog | (Lizard & { 'petType'?: 'lizard' }) | (Fish & { 'petType': 'Fish' })"
+  )
+})
+
 test('support null', async () => {
   const nullDef = {
     schema: {

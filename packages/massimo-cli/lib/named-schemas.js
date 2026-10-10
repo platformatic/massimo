@@ -19,16 +19,22 @@ function isInterfaceSchema (schema) {
 
 // `allOf` of named object schemas (plus at most one inline object) becomes
 // `interface X extends A, B { ...inline }`, which the compiler caches by name.
+// It is only used when no property is declared by two members: an interface
+// that restates a parent property with another type or optionality does not
+// compile (TS2430), nor does one whose parents disagree on a property (TS2320).
+// Otherwise the schema is declared as the `A & B & {...}` alias.
 function writeAllOfInterface (writer, name, schema, spec, schemaNames) {
   const parents = []
   const inline = []
+  const declared = new Set()
+  const declareOnce = member => Object.keys(member.properties).every(prop => !declared.has(prop) && declared.add(prop))
   for (const member of schema.allOf) {
     const parentName = member.$ref && schemaNames.get(member.$ref)
     if (parentName) {
       const parent = jsonpointer.get(spec, member.$ref.replace('#', ''))
-      if (!parent || !isInterfaceSchema(parent)) return false
+      if (!parent || !isInterfaceSchema(parent) || !declareOnce(parent)) return false
       parents.push(parentName)
-    } else if (isInterfaceSchema(member)) {
+    } else if (isInterfaceSchema(member) && declareOnce(member)) {
       inline.push(member)
     } else {
       return false
@@ -38,6 +44,11 @@ function writeAllOfInterface (writer, name, schema, spec, schemaNames) {
   const body = inline.length === 1 ? getType(inline[0], 'res', spec, undefined, schemaNames) : '{}'
   writer.writeLine(`export interface ${name} extends ${parents.join(', ')} ${body}`)
   return true
+}
+
+// A description is printed inside a JSDoc block: `*/` would close it early.
+function escapeComment (text) {
+  return text.replace(/\*\//g, '*\\/')
 }
 
 // Writes one declaration per `components.schemas` entry, in spec order, under
@@ -53,7 +64,7 @@ export function writeNamedSchemas (writer, spec, schemaNames) {
     if (schema.description) {
       writer.writeLine('/**')
       for (const line of schema.description.split('\n')) {
-        writer.writeLine(` * ${line}`)
+        writer.writeLine(` * ${escapeComment(line)}`)
       }
       writer.writeLine(' */')
     }

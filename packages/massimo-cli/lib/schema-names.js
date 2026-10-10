@@ -23,17 +23,18 @@ export function toSchemaRef (key) {
   return SCHEMA_REF_PREFIX + key.replace(/~/g, '~0').replace(/\//g, '~1')
 }
 
-// Converts a component schema key into a TypeScript identifier.
+// Converts a component schema key into a TypeScript identifier. Letters and
+// digits of any script are kept, as TypeScript identifiers allow them.
 export function toTypeName (key) {
-  if (/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key)) {
+  if (/^[\p{ID_Start}_$][\p{ID_Continue}$\u200C\u200D]*$/u.test(key)) {
     return key
   }
   const name = key
-    .split(/[^A-Za-z0-9]+/)
+    .split(/(?:[^\p{ID_Continue}]|_)+/u)
     .filter(Boolean)
     .map(part => part.charAt(0).toUpperCase() + part.slice(1))
     .join('')
-  return /^[0-9]/.test(name) ? `Schema${name}` : name || 'Schema'
+  return name && !/^\p{ID_Start}/u.test(name) ? `Schema${name}` : name || 'Schema'
 }
 
 // Assigns a unique type name to every `components.schemas` entry and returns a

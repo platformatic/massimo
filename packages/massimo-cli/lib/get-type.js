@@ -1,4 +1,52 @@
 import jsonpointer from 'jsonpointer'
+import { toSchemaRef } from './schema-names.js'
+
+// The discriminator value of the `oneOf` member at `ref`: the `mapping` key that
+// points at it (a mapping value is a `$ref` or a component name), else the
+// component name, as OpenAPI defines the implicit mapping.
+function discriminatorValue (discriminator, ref) {
+  for (const [value, target] of Object.entries(discriminator.mapping ?? {})) {
+    if ((target.startsWith('#') ? target : toSchemaRef(target)) === ref) {
+      return value
+    }
+  }
+  return ref.split('/').slice(-1).toString()
+}
+
+// Finds `name` among the properties of `schema` and of its `allOf` members,
+// with whether any of them lists it as required.
+function findProperty (schema, name, spec, seenRefs = new Set()) {
+  if (schema.$ref) {
+    if (seenRefs.has(schema.$ref)) return { required: false }
+    seenRefs = new Set(seenRefs).add(schema.$ref)
+    schema = jsonpointer.get(spec, schema.$ref.replace('#', '')) ?? {}
+  }
+  let property = schema.properties?.[name]
+  let required = Array.isArray(schema.required) && schema.required.includes(name)
+  for (const member of schema.allOf ?? []) {
+    const found = findProperty(member, name, spec, seenRefs)
+    property ??= found.property
+    required ||= found.required
+  }
+  if (property?.$ref && !seenRefs.has(property.$ref)) {
+    property = jsonpointer.get(spec, property.$ref.replace('#', ''))
+  }
+  return { property, required }
+}
+
+// A named `oneOf` member is printed as a bare type name, so the discriminator is
+// narrowed by intersection, and only where the inline path would narrow it: a
+// property typed as a plain string. One with an `enum` or `const` already
+// carries its value, and intersecting it with another literal gives `never`.
+function narrowNamedMember (typeName, ref, discriminator, spec) {
+  const propertyName = discriminator.propertyName
+  const { property, required } = findProperty({ $ref: ref }, propertyName, spec)
+  if (!property || property.type !== 'string' || property.enum !== undefined || property.const !== undefined) {
+    return typeName
+  }
+  const value = discriminatorValue(discriminator, ref).replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+  return `(${typeName} & { '${propertyName}'${required ? '' : '?'}: '${value}' })`
+}
 
 // `schemaNames` (from `buildSchemaNames`, only with `--named-schemas`) maps the
 // `$ref` of each component schema to the type name it is declared under.
@@ -50,7 +98,7 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set(), schema
         .map((mappedObject, idx) => {
           // A named member is a bare type name: narrow the discriminator by intersection
           if (methodType !== 'req' && schemaNames?.has(typeDef.oneOf[idx].$ref)) {
-            return `(${mappedObject} & { '${propertyName}': '${mappedRefNames[idx]}' })`
+            return narrowNamedMember(mappedObject, typeDef.oneOf[idx].$ref, typeDef.discriminator, spec)
           }
           const regexp = new RegExp(`'${propertyName}'[?]?: (string)`)
 
