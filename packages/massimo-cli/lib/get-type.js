@@ -143,7 +143,11 @@ export function getType (typeDef, methodType, spec, seenRefs = new Set(), schema
   }
   if (typeDef.type === 'array') {
     const nullable = typeDef.nullable
-    return `Array<${getType(typeDef.items, methodType, spec, seenRefs, schemaNames)}>${nullable === true ? ' | null' : ''}`
+    // `--named-schemas` declares every component, also those the default output
+    // never reaches, so a missing `items` is read as `{}`, any item. Without it
+    // the default output is left as it was.
+    const items = typeDef.items ?? (schemaNames ? {} : undefined)
+    return `Array<${getType(items, methodType, spec, seenRefs, schemaNames)}>${nullable === true ? ' | null' : ''}`
   }
   if (typeDef.enum) {
     // Note: null type represented with an enum have no types and single enum element 'null'

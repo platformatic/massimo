@@ -167,7 +167,9 @@
       "LineBreak": { "type": "string" },
       "line\nbreak": { "type": "boolean" },
       "Größe": { "type": "integer" },
-      "größe-wert": { "type": "string" }
+      "größe-wert": { "type": "string" },
+      "Tags": { "type": "array" },
+      "Tagged": { "type": "object", "properties": { "tags": { "type": "array" } } }
     }
   }
 }

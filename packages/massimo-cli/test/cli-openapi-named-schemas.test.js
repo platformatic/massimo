@@ -152,11 +152,19 @@ test('--named-schemas escapes the end of a comment in a description and keeps no
   ok(data.includes('export type GrößeWert = string'))
 })
 
+test('--named-schemas declares an array without items as an array of unknown', async () => {
+  const data = await generate(['--named-schemas'], edgeFile)
+
+  // the same as `items: {}`; neither schema is referenced, so the default output never reads them
+  ok(data.includes('export type Tags = Array<unknown>'))
+  ok(data.includes("export interface Tagged { 'tags'?: Array<unknown> }"))
+})
+
 test('--named-schemas output for the edge cases compiles and keeps the discriminated union usable', async () => {
   const dir = await moveToTmpdir(after)
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), edgeFile, '--name', 'movies', '--types-only', '--named-schemas'])
   await writeFile(join(dir, 'check.ts'), `
-import type { GetAnimalsResponseOK, GetPetsResponseOK, Größe, GrößeWert, Media, OptionalId, Restated, SafeChild, Shape, TwoParents, SelfAlias, TreeOrLeaf, PingA, InlineShape } from './movies/movies.js'
+import type { GetAnimalsResponseOK, GetPetsResponseOK, Größe, GrößeWert, Media, OptionalId, Restated, SafeChild, Shape, TwoParents, SelfAlias, TreeOrLeaf, PingA, InlineShape, Tags, Tagged } from './movies/movies.js'
 
 export const dog: GetPetsResponseOK = { petType: 'dog', bark: 'woof' }
 export const cat: GetPetsResponseOK = { petType: 'cat', meow: 'meow' }
@@ -178,6 +186,8 @@ export type Parents = TwoParents
 export const media: Media = { mime: '*/*' }
 export const size: Größe = 1
 export const value: GrößeWert = 'x'
+export const tags: Tags = ['a', 1]
+export const tagged: Tagged = { tags: [{}] }
 `)
   // the declaration file itself is checked: an interface that cannot extend its
   // parents or a comment closed early is an error there, not at the use site
