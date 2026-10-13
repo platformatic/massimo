@@ -1,0 +1,175 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Named schema edge cases", "version": "1.0.0" },
+  "paths": {
+    "/pets": {
+      "get": {
+        "operationId": "getPets",
+        "responses": {
+          "200": {
+            "description": "Pets",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Pet" } } }
+          }
+        }
+      }
+    },
+    "/animals": {
+      "get": {
+        "operationId": "getAnimals",
+        "responses": {
+          "200": {
+            "description": "Animals",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Animal" } } }
+          }
+        }
+      }
+    },
+    "/things": {
+      "get": {
+        "operationId": "getThings",
+        "responses": {
+          "200": {
+            "description": "Things",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      { "$ref": "#/components/schemas/Restated" },
+                      { "$ref": "#/components/schemas/OptionalId" },
+                      { "$ref": "#/components/schemas/TwoParents" },
+                      { "$ref": "#/components/schemas/SafeChild" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Base": {
+        "type": "object",
+        "required": ["id", "kind"],
+        "properties": { "id": { "type": "integer" }, "kind": { "type": "string" } }
+      },
+      "Other": {
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "string" } }
+      },
+      "Labeled": {
+        "type": "object",
+        "properties": { "label": { "type": "string" } }
+      },
+      "Restated": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Base" },
+          { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string", "enum": ["a", "b"] } } }
+        ]
+      },
+      "OptionalId": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Base" },
+          { "type": "object", "properties": { "id": { "type": "integer" }, "note": { "type": "string" } } }
+        ]
+      },
+      "TwoParents": {
+        "allOf": [{ "$ref": "#/components/schemas/Base" }, { "$ref": "#/components/schemas/Other" }]
+      },
+      "SafeChild": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Base" },
+          { "$ref": "#/components/schemas/Labeled" },
+          { "type": "object", "required": ["rank"], "properties": { "rank": { "type": "integer" }, "children": { "type": "array", "items": { "$ref": "#/components/schemas/SafeChild" } } } }
+        ]
+      },
+      "Square": {
+        "type": "object",
+        "required": ["kind", "side"],
+        "properties": { "kind": { "type": "string" }, "side": { "type": "integer" } }
+      },
+      "Shape": {
+        "oneOf": [{ "$ref": "#/components/schemas/Restated" }, { "$ref": "#/components/schemas/Square" }],
+        "discriminator": { "propertyName": "kind" }
+      },
+      "Dog": {
+        "type": "object",
+        "required": ["petType", "bark"],
+        "properties": { "petType": { "type": "string", "enum": ["dog"] }, "bark": { "type": "string" } }
+      },
+      "Cat": {
+        "type": "object",
+        "required": ["petType", "meow"],
+        "properties": { "petType": { "type": "string", "enum": ["cat"] }, "meow": { "type": "string" } }
+      },
+      "Lizard": {
+        "type": "object",
+        "required": ["petType"],
+        "properties": { "petType": { "type": "string" }, "scales": { "type": "integer" } }
+      },
+      "Pet": {
+        "oneOf": [
+          { "$ref": "#/components/schemas/Dog" },
+          { "$ref": "#/components/schemas/Cat" },
+          { "$ref": "#/components/schemas/Lizard" }
+        ],
+        "discriminator": {
+          "propertyName": "petType",
+          "mapping": {
+            "dog": "#/components/schemas/Dog",
+            "cat": "#/components/schemas/Cat",
+            "lizard": "Lizard"
+          }
+        }
+      },
+      "Fish": {
+        "type": "object",
+        "required": ["fins"],
+        "properties": { "kind": { "type": "string" }, "fins": { "type": "integer" } }
+      },
+      "Bird": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Winged" },
+          { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string" } } }
+        ]
+      },
+      "Winged": {
+        "type": "object",
+        "required": ["wings"],
+        "properties": { "wings": { "type": "integer" } }
+      },
+      "Animal": {
+        "oneOf": [{ "$ref": "#/components/schemas/Fish" }, { "$ref": "#/components/schemas/Bird" }],
+        "discriminator": { "propertyName": "kind" }
+      },
+      "Media": {
+        "description": "Accepts */* and ends the comment early\nunless it is escaped",
+        "type": "object",
+        "required": ["mime"],
+        "properties": { "mime": { "type": "string" } }
+      },
+      "SelfAlias": { "anyOf": [{ "type": "string" }, { "$ref": "#/components/schemas/SelfAlias" }] },
+      "TreeOrLeaf": { "anyOf": [{ "type": "string" }, { "type": "array", "items": { "$ref": "#/components/schemas/TreeOrLeaf" } }] },
+      "PingA": { "anyOf": [{ "type": "string" }, { "$ref": "#/components/schemas/PingB" }] },
+      "PingB": { "anyOf": [{ "type": "number" }, { "$ref": "#/components/schemas/PingA" }] },
+      "InlineShape": {
+        "oneOf": [
+          { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string" }, "r": { "type": "number" } } },
+          { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string" }, "side": { "type": "number" } } }
+        ],
+        "discriminator": { "propertyName": "kind" }
+      },
+      "LineBreak": { "type": "string" },
+      "line\nbreak": { "type": "boolean" },
+      "Größe": { "type": "integer" },
+      "größe-wert": { "type": "string" },
+      "Tags": { "type": "array" },
+      "Tagged": { "type": "object", "properties": { "tags": { "type": "array" } } }
+    }
+  }
+}

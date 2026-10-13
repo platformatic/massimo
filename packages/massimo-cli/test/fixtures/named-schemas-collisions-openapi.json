@@ -1,0 +1,51 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Named schema collisions", "version": "1.0.0" },
+  "paths": {
+    "/movies": {
+      "get": {
+        "operationId": "listMovies",
+        "responses": {
+          "200": {
+            "description": "Movies",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Movies" } } }
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "operationId": "getMovie",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": {
+            "description": "Movie",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GetMovieResponseOK" } } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GetMovieResponseOK": {
+        "type": "object",
+        "required": ["id"],
+        "properties": { "id": { "type": "integer" } }
+      },
+      "GetMovieResponseOKSchema": {
+        "type": "object",
+        "required": ["note"],
+        "properties": { "note": { "type": "string" } }
+      },
+      "Movies": { "type": "array", "items": { "$ref": "#/components/schemas/Array" } },
+      "Array": {
+        "type": "object",
+        "required": ["title"],
+        "properties": { "title": { "type": "string" } }
+      },
+      "foo-bar": { "type": "integer" },
+      "FooBar": { "type": "string" }
+    }
+  }
+}

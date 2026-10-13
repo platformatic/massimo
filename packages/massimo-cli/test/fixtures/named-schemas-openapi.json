@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Named schemas", "version": "1.0.0" },
+  "paths": {
+    "/movies": {
+      "get": {
+        "operationId": "getMovies",
+        "responses": {
+          "200": {
+            "description": "Movies",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Movie" } } } }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createMovie",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MovieInput" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Movie",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Movie" } } }
+          }
+        }
+      }
+    },
+    "/quotes/{id}": {
+      "get": {
+        "operationId": "getQuote",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": {
+            "description": "Quote",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FeaturedQuote" } } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Movie": {
+        "type": "object",
+        "required": ["id", "title"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "releasedAt": { "type": "string", "format": "date-time", "nullable": true }
+        }
+      },
+      "MovieInput": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "releasedAt": { "type": "string", "format": "date-time", "nullable": true },
+          "sequel": { "$ref": "#/components/schemas/MovieInput" }
+        }
+      },
+      "Quote": {
+        "type": "object",
+        "required": ["id", "movie"],
+        "properties": {
+          "id": { "type": "integer" },
+          "movie": { "$ref": "#/components/schemas/Movie" },
+          "replies": { "type": "array", "items": { "$ref": "#/components/schemas/Quote" } }
+        }
+      },
+      "FeaturedQuote": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Quote" },
+          { "type": "object", "required": ["rank"], "properties": { "rank": { "type": "integer" } } }
+        ]
+      },
+      "MovieOrQuote": {
+        "anyOf": [{ "$ref": "#/components/schemas/Movie" }, { "$ref": "#/components/schemas/Quote" }]
+      },
+      "rating-value": { "type": "integer", "nullable": true }
+    }
+  }
+}
