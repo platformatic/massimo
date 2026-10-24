@@ -22,7 +22,7 @@ importers:
         version: 11.9.3
       '@fastify/error':
         specifier: ^4.0.0
-        version: 4.2.0
+        version: 4.2.1
       ajv:
         specifier: ^8.12.0
         version: 8.20.0
@@ -77,7 +77,7 @@ importers:
     dependencies:
       '@fastify/error':
         specifier: ^4.0.0
-        version: 4.2.0
+        version: 4.2.1
       camelcase:
         specifier: ~6.3.0
         version: 6.3.0
@@ -543,8 +543,8 @@ packages:
   '@fastify/deepmerge@3.2.2':
     resolution: {integrity: sha512-155eqA/WMQdN6gUD4RrhS2K0Pcz2Ou9pQ86L0sipOpP9ONbTA6oYw/hW4VdBjR4egcDHqmWUK9x80oUX7S1mDQ==}
 
-  '@fastify/error@4.2.0':
-    resolution: {integrity: sha512-RSo3sVDXfHskiBZKBPRgnQTtIqpi/7zhJOEmAxCiBcM7d0uwdGdxLlsCaLzGs8v8NnxIRlfG0N51p5yFaOentQ==}
+  '@fastify/error@4.2.1':
+    resolution: {integrity: sha512-MYBumuIwP+5MIpXSyKm6/o1Eigcoij186lWUssX3LH5U8KWqU0ktZhzC4CErIX9EJeQeRGI+zJZQWakBlFbUcg==}
 
   '@fastify/fast-json-stringify-compiler@5.1.0':
     resolution: {integrity: sha512-PxcYtKLbQ8Z+yApiqjK8FwxIwvEj38k2OiLc17u8dkJSlmfi2wHHPaSnaoqBPQqtvF8YVsDgDpP2snDCfFrpfw==}
@@ -932,6 +932,7 @@ packages:
   '@opentelemetry/propagator-jaeger@2.8.0':
     resolution: {integrity: sha512-Xnz9zZvvQzUw+9DrOn0MomR7BxFCkA2pcfXBQuHC28ndJpSbjLs7knzYb05kw5SyCjSsEWombkZMgGcJSk8JVg==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Package no longer supported. See https://github.com/open-telemetry/opentelemetry-js/pull/7077
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
@@ -986,12 +987,14 @@ packages:
   '@opentelemetry/sdk-trace-base@2.8.0':
     resolution: {integrity: sha512-mhU4jp+vW0mGbFRd+GeXHvmfA4aDqWjBjLC3pE5XMpLs0IE2ryYb019Ts2AQrOq67gaTF25D91+fgvEHDZEnuQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Use @opentelemetry/sdk-trace package
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
   '@opentelemetry/sdk-trace-node@2.8.0':
     resolution: {integrity: sha512-nZt9OGufioAc3AfoLTqA9bsAeaMJAictYDdI2VcNQ+PmT+3rfKjAZDZvgPfd8VPX0O5Bw1hdQF6kDK8VSpZiWg==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Use @opentelemetry/sdk-trace package
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
@@ -4321,7 +4324,7 @@ snapshots:
 
   '@fastify/basic-auth@6.3.0':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       fastify-plugin: 6.0.0
 
   '@fastify/busboy@3.2.2': {}
@@ -4335,7 +4338,7 @@ snapshots:
 
   '@fastify/deepmerge@3.2.2': {}
 
-  '@fastify/error@4.2.0': {}
+  '@fastify/error@4.2.1': {}
 
   '@fastify/fast-json-stringify-compiler@5.1.0':
     dependencies:
@@ -4355,7 +4358,7 @@ snapshots:
 
   '@fastify/jwt@10.2.2':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@lukeed/ms': 2.0.2
       fast-jwt: 6.3.4
       fastify-plugin: 6.0.0
@@ -4363,7 +4366,7 @@ snapshots:
 
   '@fastify/jwt@9.1.0':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@lukeed/ms': 2.0.2
       fast-jwt: 5.0.6
       fastify-plugin: 5.1.0
@@ -4377,7 +4380,7 @@ snapshots:
     dependencies:
       '@fastify/busboy': 3.2.2
       '@fastify/deepmerge': 3.2.2
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       fastify-plugin: 6.0.0
       secure-json-parse: 4.1.0
 
@@ -4393,7 +4396,7 @@ snapshots:
 
   '@fastify/reply-from@12.6.5':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       end-of-stream: 1.4.5
       fast-content-type-parse: 3.0.0
       fast-querystring: 1.1.2
@@ -4412,7 +4415,7 @@ snapshots:
   '@fastify/static@10.1.5':
     dependencies:
       '@fastify/accept-negotiator': 2.1.0
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/send': 4.1.1
       content-disposition: 3.0.0
       fastify-plugin: 6.0.0
@@ -4431,7 +4434,7 @@ snapshots:
 
   '@fastify/under-pressure@9.2.0':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       fastify-plugin: 6.0.0
 
   '@fastify/view@12.0.0':
@@ -4547,7 +4550,7 @@ snapshots:
 
   '@mercuriusjs/federation@5.1.1':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       graphql: 16.14.2
       mercurius: 16.10.1(graphql@16.14.2)
     transitivePeerDependencies:
@@ -4950,7 +4953,7 @@ snapshots:
 
   '@platformatic/basic@3.67.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
       '@platformatic/itc': 3.67.0
@@ -4971,7 +4974,7 @@ snapshots:
 
   '@platformatic/basic@3.68.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@platformatic/foundation': 3.68.0(supports-color@7.2.0)
       '@platformatic/globals': 3.68.0
       '@platformatic/itc': 3.68.0
@@ -5003,7 +5006,7 @@ snapshots:
 
   '@platformatic/control@3.67.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       help-me: 5.0.0
       pino: 9.14.0
@@ -5018,7 +5021,7 @@ snapshots:
 
   '@platformatic/db-authorization@3.67.0':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/jwt': 10.2.2
       fastify-plugin: 6.0.0
       fastify-user: 1.4.0
@@ -5046,7 +5049,7 @@ snapshots:
       '@fastify/basic-auth': 6.3.0
       '@fastify/cors': 11.3.0
       '@fastify/deepmerge': 3.2.2
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/static': 10.1.5
       '@fastify/swagger': 9.9.1(supports-color@7.2.0)
       '@platformatic/basic': 3.67.0(supports-color@7.2.0)
@@ -5099,7 +5102,7 @@ snapshots:
   '@platformatic/foundation@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/deepmerge': 3.2.2
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@iarna/toml': 2.2.5
       '@watchable/unpromise': 1.0.2
       ajv: 8.20.0
@@ -5120,7 +5123,7 @@ snapshots:
   '@platformatic/foundation@3.68.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/deepmerge': 3.2.2
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@iarna/toml': 2.2.5
       '@watchable/unpromise': 1.0.2
       ajv: 8.20.0
@@ -5141,7 +5144,7 @@ snapshots:
   '@platformatic/foundation@3.69.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/deepmerge': 3.2.2
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@iarna/toml': 2.2.5
       '@watchable/unpromise': 1.0.2
       ajv: 8.20.0
@@ -5161,7 +5164,7 @@ snapshots:
 
   '@platformatic/gateway@3.68.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/http-proxy': 11.6.4
       '@fastify/reply-from': 12.6.5
       '@fastify/static': 10.1.5
@@ -5209,7 +5212,7 @@ snapshots:
 
   '@platformatic/generators@3.67.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       change-case-all: 2.1.0
       execa: 9.6.1
@@ -5221,7 +5224,7 @@ snapshots:
 
   '@platformatic/generators@3.68.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@platformatic/foundation': 3.68.0(supports-color@7.2.0)
       change-case-all: 2.1.0
       execa: 9.6.1
@@ -5268,14 +5271,14 @@ snapshots:
 
   '@platformatic/itc@3.67.0':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@opentelemetry/api': 1.9.1
       '@platformatic/globals': 3.67.0
       '@watchable/unpromise': 1.0.2
 
   '@platformatic/itc@3.68.0':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@opentelemetry/api': 1.9.1
       '@platformatic/globals': 3.68.0
       '@watchable/unpromise': 1.0.2
@@ -5316,7 +5319,7 @@ snapshots:
     dependencies:
       '@fastify/accepts': 5.0.6
       '@fastify/basic-auth': 6.3.0
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/websocket': 11.3.3
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/exporter-metrics-otlp-proto': 0.219.0(@opentelemetry/api@1.9.1)
@@ -5358,7 +5361,7 @@ snapshots:
     dependencies:
       '@fastify/accepts': 5.0.6
       '@fastify/basic-auth': 6.3.0
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/websocket': 11.3.3
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/exporter-metrics-otlp-proto': 0.219.0(@opentelemetry/api@1.9.1)
@@ -5406,7 +5409,7 @@ snapshots:
       '@fastify/autoload': 6.5.0
       '@fastify/cors': 11.3.0
       '@fastify/deepmerge': 3.2.2
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/static': 10.1.5
       '@fastify/swagger': 9.9.1(supports-color@7.2.0)
       '@fastify/under-pressure': 9.2.0
@@ -5453,7 +5456,7 @@ snapshots:
       '@fastify/autoload': 6.5.0
       '@fastify/cors': 11.3.0
       '@fastify/deepmerge': 3.2.2
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/static': 10.1.5
       '@fastify/swagger': 9.9.1(supports-color@7.2.0)
       '@fastify/under-pressure': 9.2.0
@@ -5496,7 +5499,7 @@ snapshots:
 
   '@platformatic/sql-events@3.67.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       camelcase: 6.3.0
       fastify-plugin: 6.0.0
       mqemitter: 7.1.0
@@ -5506,7 +5509,7 @@ snapshots:
 
   '@platformatic/sql-graphql@3.67.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@mercuriusjs/federation': 5.1.1
       '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       camelcase: 6.3.0
@@ -5523,7 +5526,7 @@ snapshots:
 
   '@platformatic/sql-graphql@3.69.0(supports-color@7.2.0)':
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@mercuriusjs/federation': 5.1.1
       '@platformatic/foundation': 3.69.0(supports-color@7.2.0)
       camelcase: 6.3.0
@@ -5548,7 +5551,7 @@ snapshots:
       '@databases/mysql': 7.1.0(@types/node@26.6.4)(typescript@5.9.3)
       '@databases/pg': 5.5.0(typescript@5.9.3)
       '@databases/sql': 3.3.0
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@hapi/topo': 6.0.2
       '@matteo.collina/sqlite-pool': 0.7.0
       '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
@@ -5568,7 +5571,7 @@ snapshots:
       '@databases/mysql': 7.1.0(@types/node@26.6.4)(typescript@5.9.3)
       '@databases/pg': 5.5.0(typescript@5.9.3)
       '@databases/sql': 3.3.0
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@hapi/topo': 6.0.2
       '@matteo.collina/sqlite-pool': 0.7.0
       '@platformatic/foundation': 3.69.0(supports-color@7.2.0)
@@ -5586,7 +5589,7 @@ snapshots:
   '@platformatic/sql-openapi@3.67.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/deepmerge': 3.2.2
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/swagger': 9.9.1(supports-color@7.2.0)
       '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
       '@platformatic/globals': 3.67.0
@@ -6121,7 +6124,7 @@ snapshots:
 
   avvio@9.3.0:
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       fastq: 1.20.3
 
   aws-ssl-profiles@1.1.2: {}
@@ -6701,7 +6704,7 @@ snapshots:
 
   fastify-user@1.4.0:
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/jwt': 9.1.0
       fastify: 5.12.5
       fastify-plugin: 5.1.0
@@ -6710,7 +6713,7 @@ snapshots:
   fastify@5.12.5:
     dependencies:
       '@fastify/ajv-compiler': 4.0.6
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/fast-json-stringify-compiler': 5.1.0
       '@fastify/proxy-addr': 5.1.1
       abstract-logging: 2.0.1
@@ -7325,7 +7328,7 @@ snapshots:
 
   mercurius@16.10.1(graphql@16.14.2):
     dependencies:
-      '@fastify/error': 4.2.0
+      '@fastify/error': 4.2.1
       '@fastify/static': 10.1.5
       '@fastify/websocket': 11.3.3
       fastify-plugin: 6.0.0
