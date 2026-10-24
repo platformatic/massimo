@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@fastify/pre-commit':
         specifier: ^2.2.0
-        version: 2.2.1
+        version: 2.2.2
       markdownlint-cli2:
         specifier: ^0.23.0
         version: 0.23.3(supports-color@7.2.0)
@@ -567,8 +567,8 @@ packages:
   '@fastify/multipart@10.1.2':
     resolution: {integrity: sha512-WHsqW5ffDXCbXXtdBQDryxu58fQvFPVGh4E4MlCO6hwCLNm0lYTCS6GKXUw2P64REDoECUNpMVvtMMstdIyBjQ==}
 
-  '@fastify/pre-commit@2.2.1':
-    resolution: {integrity: sha512-EluAZU4mFnCJfb6RyWFpWvEIAwdchipoiWMSRkQEaQ6ubbf6UVzYuXKSSZJR36SgtgZmKV5oRMxxwMNta5hskg==}
+  '@fastify/pre-commit@2.2.2':
+    resolution: {integrity: sha512-jYx940BbwI/GkBGL8vTDxbvfdjdhKjHJLypqgzQiCYJqlr7pyDBw24M6/JnIHpSnBZ60lLNOzOO90oW6ZRsTzg==}
 
   '@fastify/proxy-addr@5.1.1':
     resolution: {integrity: sha512-zv07Y9GEuDsJPegZoDFd4SDWaZOW8N2pa0GSrYmKpId/tjt1Hgo3BjZBVjdVpfVrHaA+Qv5jawtS2O50J5xM9g==}
@@ -2596,9 +2596,9 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
-  isexe@3.1.5:
-    resolution: {integrity: sha512-6B3tLtFqtQS4ekarvLVMZ+X+VlvQekbe4taUkf/rhVO3d/h0M2rfARm/pXLcPEsjjMsFgrFgSrhQIxcSVrBz8w==}
-    engines: {node: '>=18'}
+  isexe@4.0.0:
+    resolution: {integrity: sha512-FFUtZMpoZ8RqHS3XeXEmHWLA4thH+ZxCv2lOiPIn1Xc7CxrqhWzNSDzD+/chS/zbYezmiwWLdQC09JdQKmthOw==}
+    engines: {node: '>=20'}
 
   istanbul-lib-coverage@3.2.2:
     resolution: {integrity: sha512-O8dpsF+r0WV/8MNRKfnmrtCWhuKjxrq2w+jpzBL5UZKTi2LeVWnWOmWRxFlesJONmc+wLAGvKQZEOanko0LFTg==}
@@ -3900,9 +3900,9 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
-  which@5.0.0:
-    resolution: {integrity: sha512-JEdGzHwwkrbWoGOlIHqQ5gtprKGOenpDHpxE9zVR1bWbOtYRyPPHMe9FaP6x61CmNaTThSkb0DAJte5jD+DmzQ==}
-    engines: {node: ^18.17.0 || >=20.5.0}
+  which@7.0.0:
+    resolution: {integrity: sha512-RancgH2dmbLdHl6LRhEqvklWMgl/Hdnun0Y90KhBOLkMefg8Qa7/Zel8Sm+8HEcP6DEjzsWzpkuBQEZok58isA==}
+    engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
     hasBin: true
 
   why-is-node-running@2.3.0:
@@ -4384,10 +4384,10 @@ snapshots:
       fastify-plugin: 6.0.0
       secure-json-parse: 4.1.0
 
-  '@fastify/pre-commit@2.2.1':
+  '@fastify/pre-commit@2.2.2':
     dependencies:
       cross-spawn: 7.0.6
-      which: 5.0.0
+      which: 7.0.0
 
   '@fastify/proxy-addr@5.1.1':
     dependencies:
@@ -7085,7 +7085,7 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  isexe@3.1.5: {}
+  isexe@4.0.0: {}
 
   istanbul-lib-coverage@3.2.2: {}
 
@@ -8546,9 +8546,9 @@ snapshots:
     dependencies:
       isexe: 2.0.0
 
-  which@5.0.0:
+  which@7.0.0:
     dependencies:
-      isexe: 3.1.5
+      isexe: 4.0.0
 
   why-is-node-running@2.3.0:
     dependencies:
