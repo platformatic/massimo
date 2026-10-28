@@ -2,17 +2,20 @@ import { STATUS_CODES } from 'node:http'
 import { getType } from './get-type.js'
 import { capitalize, classCase, getResponseContentType, getResponseTypes } from './utils.js'
 
-function responsesWriter (operationId, responsesObject, isFullResponse, writer, spec) {
+// The name of the type declared for one response of an operation.
+export function getResponseTypeName (operationId, statusCode) {
+  const statusCodeName = STATUS_CODES[statusCode]
+  // Unrecognized status code
+  if (statusCodeName === undefined) {
+    return `${operationId}${statusCode}Response`
+  }
+  return `${operationId}Response${classCase(statusCodeName)}`
+}
+
+function responsesWriter (operationId, responsesObject, isFullResponse, writer, spec, schemaNames) {
   const mappedResponses = getResponseTypes(responsesObject)
   const responseTypes = Object.entries(responsesObject).map(([statusCode, response]) => {
-    // Unrecognized status code
-    const statusCodeName = STATUS_CODES[statusCode]
-    let typeName
-    if (statusCodeName === undefined) {
-      typeName = `${operationId}${statusCode}Response`
-    } else {
-      typeName = `${operationId}Response${classCase(STATUS_CODES[statusCode])}`
-    }
+    let typeName = getResponseTypeName(operationId, statusCode)
     let isResponseArray
     const responseContentType = getResponseContentType(response)
     if (responseContentType === 'application/json') {
@@ -84,7 +87,7 @@ function responsesWriter (operationId, responsesObject, isFullResponse, writer, 
       }
       writer.writeLine(' */')
     }
-    writer.writeLine(`export type ${typeName} = ${getType(responseSchema, 'res', spec)}`)
+    writer.writeLine(`export type ${typeName} = ${getType(responseSchema, 'res', spec, undefined, schemaNames)}`)
   }
 }
 
