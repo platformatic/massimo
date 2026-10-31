@@ -35,7 +35,7 @@ importers:
     devDependencies:
       '@fastify/multipart':
         specifier: ^10.0.0
-        version: 10.1.4
+        version: 10.1.6
       '@platformatic/db':
         specifier: 3.67.0
         version: 3.67.0(@types/node@26.6.5)(supports-color@7.2.0)(typescript@5.9.3)
@@ -564,8 +564,8 @@ packages:
   '@fastify/merge-json-schemas@0.2.2':
     resolution: {integrity: sha512-d/gx9sRbUCVgGRGzma46wLcwiY8noTqO2Nmjg/vbTARxHRE5bdh5PIL8s97Lt1X7ScRWRW52eVYxwIoPwIdVUA==}
 
-  '@fastify/multipart@10.1.4':
-    resolution: {integrity: sha512-J510g4fSp3bXh0DEezcPyMXkQzhn2K3blpSESaOGhqQfzNHR4vhiBBHkdisSM2FU4ltTK/jqObUWs0WmHYNYYg==}
+  '@fastify/multipart@10.1.6':
+    resolution: {integrity: sha512-5ykP7SkCbL06ek+j7fa4o1F8XASF4+KjqVLbuANqXunxXqjWdCQk0pw/+kWH3e8ho7Mw21EhuZp24EqtR04yKg==}
 
   '@fastify/pre-commit@2.2.2':
     resolution: {integrity: sha512-jYx940BbwI/GkBGL8vTDxbvfdjdhKjHJLypqgzQiCYJqlr7pyDBw24M6/JnIHpSnBZ60lLNOzOO90oW6ZRsTzg==}
@@ -4372,7 +4372,7 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  '@fastify/multipart@10.1.4':
+  '@fastify/multipart@10.1.6':
     dependencies:
       '@fastify/busboy': 3.2.3
       '@fastify/deepmerge': 3.2.2
