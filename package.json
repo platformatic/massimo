@@ -18,7 +18,7 @@
   "packageManager": "pnpm@11.23.0",
   "devDependencies": {
     "@fastify/pre-commit": "^2.2.0",
-    "markdownlint-cli2": "^0.23.0"
+    "markdownlint-cli2": "^0.24.0"
   },
   "pre-commit": "lint:updated-only",
   "engines": {
