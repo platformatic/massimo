@@ -92,14 +92,15 @@ jobs:
         run: exit 1
 
   massimo:
-    name: "massimo - ${{ matrix.label }}"
+    name: "massimo - ${{ matrix.platform.label }} - undici ${{ matrix.undici }}"
     needs: setup
     if: ${{ !inputs.job || inputs.job == 'massimo' }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.platform.os }}
     timeout-minutes: 30
     strategy:
       matrix:
-        include:
+        undici: [7, 8]
+        platform:
           - label: Linux - 22.x
             node: 22.19.0
             os: ubuntu-24.04
@@ -117,10 +118,10 @@ jobs:
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.platform.node }}
           cache: "pnpm"
       - name: Install node-gyp with Visual Studio 2026 support
-        if: runner.os == 'Windows' && startsWith(matrix.node, '24.')
+        if: runner.os == 'Windows' && startsWith(matrix.platform.node, '24.')
         run: |
           npm install --global node-gyp@12.1.0
           $nodeGyp = Join-Path (npm root --global) "node-gyp\bin\node-gyp.js"
@@ -131,18 +132,34 @@ jobs:
           timeout_minutes: 15
           retry_on: error
           command: pnpm install --frozen-lockfile
+      - name: Install undici ${{ matrix.undici }}
+        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
+        with:
+          max_attempts: 10
+          timeout_minutes: 15
+          retry_on: error
+          command: pnpm --filter ./packages/massimo --filter ./packages/massimo-cli add undici@${{ matrix.undici }}
+      - name: Verify undici version
+        shell: bash
+        run: |
+          for pkg in packages/massimo packages/massimo-cli; do
+            version=$(cd "$pkg" && node -p "require('undici/package.json').version")
+            echo "$pkg uses undici $version"
+            [ "${version%%.*}" = "${{ matrix.undici }}" ] || exit 1
+          done
       - name: Run massimo package test suite
         run: cd packages/massimo && pnpm test && pnpm run lint
 
   massimo-cli:
-    name: "massimo-cli - ${{ matrix.label }}"
+    name: "massimo-cli - ${{ matrix.platform.label }} - undici ${{ matrix.undici }}"
     needs: setup
     if: ${{ !inputs.job || inputs.job == 'massimo-cli' }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.platform.os }}
     timeout-minutes: 30
     strategy:
       matrix:
-        include:
+        undici: [7, 8]
+        platform:
           - label: Linux - 22.x
             node: 22.19.0
             os: ubuntu-24.04
@@ -160,10 +177,10 @@ jobs:
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.platform.node }}
           cache: "pnpm"
       - name: Install node-gyp with Visual Studio 2026 support
-        if: runner.os == 'Windows' && startsWith(matrix.node, '24.')
+        if: runner.os == 'Windows' && startsWith(matrix.platform.node, '24.')
         run: |
           npm install --global node-gyp@12.1.0
           $nodeGyp = Join-Path (npm root --global) "node-gyp\bin\node-gyp.js"
@@ -174,6 +191,21 @@ jobs:
           timeout_minutes: 15
           retry_on: error
           command: pnpm install --frozen-lockfile
+      - name: Install undici ${{ matrix.undici }}
+        uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
+        with:
+          max_attempts: 10
+          timeout_minutes: 15
+          retry_on: error
+          command: pnpm --filter ./packages/massimo --filter ./packages/massimo-cli add undici@${{ matrix.undici }}
+      - name: Verify undici version
+        shell: bash
+        run: |
+          for pkg in packages/massimo packages/massimo-cli; do
+            version=$(cd "$pkg" && node -p "require('undici/package.json').version")
+            echo "$pkg uses undici $version"
+            [ "${version%%.*}" = "${{ matrix.undici }}" ] || exit 1
+          done
       - name: Run massimo-cli package test suite
         run: cd packages/massimo-cli && pnpm test && pnpm run lint
 

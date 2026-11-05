@@ -30,7 +30,7 @@ importers:
         specifier: ^6.3.0
         version: 6.3.0
       undici:
-        specifier: ^8.12.3
+        specifier: ^7.0.0 || ^8.0.0
         version: 8.12.3
     devDependencies:
       '@fastify/multipart':
@@ -106,7 +106,7 @@ importers:
         specifier: ^13.0.0
         version: 13.2.0
       undici:
-        specifier: ^8.12.3
+        specifier: ^7.0.0 || ^8.0.0
         version: 8.12.3
       yaml:
         specifier: ^2.4.1
