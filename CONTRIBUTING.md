@@ -8,7 +8,7 @@ Massimo is an API SDK client and CLI tool for creating clients for remote OpenAP
 
 ## Prerequisites
 
-- **Node.js**: Version 22.18 or higher
+- **Node.js**: Version 22.19 or higher
 - **pnpm**: Package manager (follow the [pnpm installation guide](https://pnpm.io/installation))
 - **Docker** (optional): Only required for running integration tests ([Docker Desktop](https://www.docker.com/products/docker-desktop) or [Colima](https://github.com/abiosoft/colima))
 
