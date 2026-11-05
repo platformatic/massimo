@@ -30,8 +30,8 @@ importers:
         specifier: ^6.3.0
         version: 6.3.0
       undici:
-        specifier: ^7.0.0
-        version: 7.30.1
+        specifier: ^8.12.3
+        version: 8.12.3
     devDependencies:
       '@fastify/multipart':
         specifier: ^10.0.0
@@ -106,8 +106,8 @@ importers:
         specifier: ^13.0.0
         version: 13.2.0
       undici:
-        specifier: ^7.0.0
-        version: 7.30.1
+        specifier: ^8.12.3
+        version: 8.12.3
       yaml:
         specifier: ^2.4.1
         version: 2.9.1
@@ -3812,6 +3812,10 @@ packages:
   undici@7.30.1:
     resolution: {integrity: sha512-03KrMbjIFDWQR5RNPrSw3bd1r12JpyFQl9/yxjUbJtqkjmllqC5lFjZh6ujeuJCKr8EOQvRW872Oy/az+nLYxg==}
     engines: {node: '>=20.18.1'}
+
+  undici@8.12.3:
+    resolution: {integrity: sha512-+fdndUTwBP86cVjihTp21hZHo7d6oj1c/47XPA3lL8mM0XHs+C4EkcjmgRsFnFk2f/UONGDy9ItBItmXsLOQHw==}
+    engines: {node: '>=22.19.0'}
 
   unicorn-magic@0.3.0:
     resolution: {integrity: sha512-+QBBXBCvifc56fsbuxZQ6Sic3wqqc3WWaqxs58gvJrcOuN83HGTCwz3oS5phzU9LthRNE9VrJCFCLUgHeeFnfA==}
@@ -8537,6 +8541,8 @@ snapshots:
   undici-types@8.9.0: {}
 
   undici@7.30.1: {}
+
+  undici@8.12.3: {}
 
   unicorn-magic@0.3.0: {}
 

@@ -42,7 +42,7 @@
     "minimist": "^1.2.8",
     "pino": "^9.9.0",
     "pino-pretty": "^13.0.0",
-    "undici": "^7.0.0",
+    "undici": "^8.12.3",
     "yaml": "^2.4.1"
   },
   "devDependencies": {
@@ -76,6 +76,6 @@
     "why-is-node-running": "^2.2.2"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.19.0"
   }
 }
