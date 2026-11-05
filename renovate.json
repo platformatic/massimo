@@ -15,6 +15,11 @@
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
+    },
+    {
+      "description": "Keep in sync with minimumReleaseAge in pnpm-workspace.yaml, otherwise pnpm refuses to update the lockfile",
+      "matchDatasources": ["npm"],
+      "minimumReleaseAge": "7 days"
     }
   ],
   "lockFileMaintenance": {
