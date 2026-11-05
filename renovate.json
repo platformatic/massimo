@@ -20,6 +20,11 @@
       "description": "Keep in sync with minimumReleaseAge in pnpm-workspace.yaml, otherwise pnpm refuses to update the lockfile",
       "matchDatasources": ["npm"],
       "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Update all packages from the platformatic/platformatic monorepo together",
+      "matchSourceUrls": ["https://github.com/platformatic/platformatic"],
+      "groupName": "platformatic monorepo"
     }
   ],
   "lockFileMaintenance": {
