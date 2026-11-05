@@ -258,6 +258,71 @@ test('support discriminator object', async () => {
   equal(getType(anyOfDef, 'res', spec), '{ \'type\': \'Dog\'; \'barkSound\': string } | { \'type\': \'Cat\'; \'meowSound\': string }')
 })
 
+test('support discriminator object with named members', async () => {
+  const spec = {
+    components: {
+      schemas: {
+        Dog: {
+          type: 'object',
+          properties: { petType: { type: 'string', enum: ['dog'] }, bark: { type: 'string' } },
+          required: ['petType', 'bark']
+        },
+        Snake: {
+          type: 'object',
+          properties: { petType: { type: 'string', const: 'snake' } },
+          required: ['petType']
+        },
+        Pet: {
+          type: 'object',
+          properties: { petType: { type: 'string' } },
+          required: ['petType']
+        },
+        Gecko: {
+          allOf: [
+            { $ref: '#/components/schemas/Pet' },
+            { type: 'object', properties: { petType: { type: 'string', enum: ['gecko'] } } }
+          ]
+        },
+        Lizard: {
+          type: 'object',
+          properties: { petType: { type: 'string' }, scales: { type: 'integer' } }
+        },
+        Fish: {
+          allOf: [{ $ref: '#/components/schemas/Pet' }]
+        }
+      }
+    }
+  }
+  const names = ['Dog', 'Snake', 'Gecko', 'Lizard', 'Fish']
+  const schemaNames = new Map(names.map(name => [`#/components/schemas/${name}`, name]))
+  const oneOfDef = {
+    oneOf: names.map(name => ({ $ref: `#/components/schemas/${name}` })),
+    discriminator: {
+      propertyName: 'petType',
+      mapping: { dog: '#/components/schemas/Dog', lizard: 'Lizard', 'old\'lizard': '#/components/schemas/Lizard' }
+    }
+  }
+  // an `enum` or `const` member keeps its own value, also when only a child in
+  // its `allOf` chain restates the parent's plain string; a plain string member
+  // takes every mapping key that points at it, or its component name
+  equal(
+    getType(oneOfDef, 'res', spec, undefined, schemaNames),
+    "Dog | Snake | Gecko | (Lizard & { 'petType'?: 'lizard' | 'old\\'lizard' }) | (Fish & { 'petType': 'Fish' })"
+  )
+})
+
+test('support discriminator object with inline members', async () => {
+  const oneOfDef = {
+    oneOf: [
+      { type: 'object', properties: { kind: { type: 'string' }, r: { type: 'number' } }, required: ['kind'] },
+      { type: 'object', properties: { kind: { type: 'string' }, side: { type: 'number' } }, required: ['kind'] }
+    ],
+    discriminator: { propertyName: 'kind' }
+  }
+  // without a $ref there is no name to narrow to, so the members are left as they are
+  equal(getType(oneOfDef, 'res', {}), "{ 'kind': string; 'r'?: number } | { 'kind': string; 'side'?: number }")
+})
+
 test('support null', async () => {
   const nullDef = {
     schema: {

@@ -219,7 +219,16 @@ massimo <url> --name myclient --module cjs
 
 # Force TypeScript declaration file extensions (.d.mts/.d.cts)
 massimo <url> --name myclient --type-extension
+
+# Declare components.schemas as named types instead of inlining every $ref
+massimo <url> --name myclient --named-schemas
 ```
+
+### Named Schemas
+
+With `--named-schemas`, every `components.schemas` entry is declared once as a named type: an `interface` for an object schema, `interface X extends A, B` for an `allOf` of named objects whose members declare disjoint properties, and a `type` alias otherwise. Response types print each `$ref` as that name, so recursive schemas stay typed instead of becoming `unknown`. Request types keep inlining, because there date formats widen to `string | Date`.
+
+A schema whose name is already taken by a generated type (e.g. `GetMoviesResponseOK`), by another schema, or by a TypeScript built-in is declared with a `Schema` suffix (`Schema2`, `Schema3`, ... if needed), with a comment on the declaration. Names are stable for a given spec but not across its revisions: a new operation or schema can take a name and move a schema to a suffixed one.
 
 ### Module Format Detection
 

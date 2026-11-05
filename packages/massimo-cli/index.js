@@ -126,7 +126,8 @@ async function writeOpenAPIClient (
   propsOptional,
   moduleFormat,
   typeExtension,
-  explicitModuleFormat
+  explicitModuleFormat,
+  namedSchemas
 ) {
   await createDirectory(folder)
 
@@ -136,6 +137,9 @@ async function writeOpenAPIClient (
     throw new Error(
       'Cannot parse OpenAPI file. Please make sure is a JSON or a YAML file.'
     )
+  }
+  if (namedSchemas && Object.keys(schema.components?.schemas ?? {}).length === 0) {
+    logger.warn('--named-schemas has no effect: the spec has no components.schemas')
   }
   if (!typesOnly) {
     await writeFile(
@@ -155,6 +159,7 @@ async function writeOpenAPIClient (
       logger,
       withCredentials,
       propsOptional,
+      namedSchemas,
       typeExt
     })
     await writeFile(join(folder, `${name}-types.${typeExt}`), types)
@@ -173,6 +178,7 @@ async function writeOpenAPIClient (
       typesComment,
       propsOptional,
       moduleFormat,
+      namedSchemas
     })
     const typeExt = await determineTypeExtension(folder, moduleFormat, typeExtension, explicitModuleFormat, generateImplementation)
     const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
@@ -243,7 +249,8 @@ async function downloadAndWriteOpenAPI (
   retryTimeoutMs,
   moduleFormat,
   typeExtension,
-  explicitModuleFormat
+  explicitModuleFormat,
+  namedSchemas
 ) {
   logger.debug(`Trying to download OpenAPI schema from ${url}`)
   let requestOptions
@@ -283,7 +290,8 @@ async function downloadAndWriteOpenAPI (
         propsOptional,
         moduleFormat,
         typeExtension,
-        explicitModuleFormat
+        explicitModuleFormat,
+        namedSchemas
       )
       /* c8 ignore next 3 */
     } catch (err) {
@@ -357,7 +365,8 @@ async function readFromFileAndWrite (
   propsOptional,
   moduleFormat,
   typeExtension,
-  explicitModuleFormat
+  explicitModuleFormat,
+  namedSchemas
 ) {
   logger.info(`Trying to read schema from file ${file}`)
   const text = await readFile(file, 'utf8')
@@ -381,7 +390,8 @@ async function readFromFileAndWrite (
       propsOptional,
       moduleFormat,
       typeExtension,
-      explicitModuleFormat
+      explicitModuleFormat,
+      namedSchemas
     )
     return 'openapi'
   } catch (err) {
@@ -429,7 +439,8 @@ async function downloadAndProcess (options) {
     moduleFormat,
     typeExtension,
     explicitModuleFormat,
-    skipPrefixedUrl
+    skipPrefixedUrl,
+    namedSchemas
   } = options
 
   const generateImplementation = options.generateImplementation
@@ -461,7 +472,8 @@ async function downloadAndProcess (options) {
             retryTimeoutMs,
             moduleFormat,
             typeExtension,
-            explicitModuleFormat
+            explicitModuleFormat,
+            namedSchemas
           )
         )
       }
@@ -487,7 +499,8 @@ async function downloadAndProcess (options) {
           retryTimeoutMs,
           moduleFormat,
           typeExtension,
-          explicitModuleFormat
+          explicitModuleFormat,
+          namedSchemas
         )
       )
     } else if (options.type === 'graphql') {
@@ -544,7 +557,8 @@ async function downloadAndProcess (options) {
             retryTimeoutMs,
             moduleFormat,
             typeExtension,
-            explicitModuleFormat
+            explicitModuleFormat,
+            namedSchemas
           )
         )
         toTry.push(
@@ -583,7 +597,8 @@ async function downloadAndProcess (options) {
           retryTimeoutMs,
           moduleFormat,
           typeExtension,
-          explicitModuleFormat
+          explicitModuleFormat,
+          namedSchemas
         )
       )
       toTry.push(
@@ -622,7 +637,8 @@ async function downloadAndProcess (options) {
         propsOptional,
         moduleFormat,
         typeExtension,
-        explicitModuleFormat
+        explicitModuleFormat,
+        namedSchemas
       )
     )
   }
@@ -689,7 +705,8 @@ export async function command (argv) {
       'validate-response',
       'props-optional',
       'type-extension',
-      'skip-prefixed-url'
+      'skip-prefixed-url',
+      'named-schemas'
     ],
     default: {
       typescript: false,
@@ -759,6 +776,7 @@ export async function command (argv) {
     options.retryTimeoutMs = options['retry-timeout-ms']
     options.typeExtension = options['type-extension']
     options.skipPrefixedUrl = options['skip-prefixed-url']
+    options.namedSchemas = options['named-schemas']
     options.explicitModuleFormat = !!options.module
     await downloadAndProcess({ url, ...options, logger })
     logger.info(`Client generated successfully into ${options.folder}`)
