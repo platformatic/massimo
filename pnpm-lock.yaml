@@ -191,8 +191,8 @@ importers:
         specifier: ^5.1.6
         version: 5.4.21(@types/node@26.6.5)
       wattpm:
-        specifier: 3.67.0
-        version: 3.67.0(supports-color@7.2.0)
+        specifier: 3.75.0
+        version: 3.75.0(supports-color@7.2.0)
       why-is-node-running:
         specifier: ^2.2.2
         version: 2.3.0
@@ -1208,8 +1208,8 @@ packages:
     resolution: {integrity: sha512-q42lEs4QJ3bxY8JwgOJt3Sof0j5H4PYCpOPR7U4gZA1aVagVpEBw94Eb6eN0N8Hy1JHuFVjKEbBBJ62Fx5xAdw==}
     engines: {node: '>=22.19.0'}
 
-  '@platformatic/control@3.67.0':
-    resolution: {integrity: sha512-X6U6kwr3J7m/HaxiEQKFPIJYAeZdVvtUM4T/02YmMJVZUBQ/7uaYDyeXWtnb6mXpEPvJnA/D0AcfXP0LMzQwDg==}
+  '@platformatic/control@3.75.0':
+    resolution: {integrity: sha512-tQEYfvV1+ra8aL+ZZh0l9GBOo12cx1kYmHawfrzJhDjwHq7t6lOlz8P/r9PFOLTigVEBW3lnHqzpYCuhoM3bBQ==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/db-authorization@3.67.0':
@@ -1321,12 +1321,12 @@ packages:
     engines: {node: '>=20.18.1'}
     hasBin: true
 
-  '@platformatic/runtime@3.67.0':
-    resolution: {integrity: sha512-mUtwwjNeBv1U5Z9VlChtM1J1k8MyeUATrcr3pyKM1kCKf17FTMilOsohZbQ6jpS/FPMRSiHJqmMk9hiVVG54YQ==}
-    engines: {node: '>=22.19.0'}
-
   '@platformatic/runtime@3.68.0':
     resolution: {integrity: sha512-mTI43m001FNERVro+Y5rARvikbTUezZvHOB9s/fgv6yoUw94WRkPjRGFj7IcnzMcwxR3/N4T0bTkfmcyz/nhgw==}
+    engines: {node: '>=22.19.0'}
+
+  '@platformatic/runtime@3.75.0':
+    resolution: {integrity: sha512-N/qcmd4An6fU0lBXLiu99q3qqybqHfHr106OXSFJkVHgWtKYUVWiW6dxYJk+9G5NDSz7f72d8yZnxj/iddiHhA==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/scalar-theme@3.67.0':
@@ -4119,8 +4119,8 @@ packages:
       terser:
         optional: true
 
-  wattpm@3.67.0:
-    resolution: {integrity: sha512-YuEpxuiow+IhCyiK8uTIakwHcSZzYqp7smszXF6R07B2yPahXLtrjyQcdGbojlBfG2IkVkU9xLissokO6M4QbQ==}
+  wattpm@3.75.0:
+    resolution: {integrity: sha512-FWO3ttMnbTjfSntB6Em3/TOgtloar2NNujm4VE7ITHOj8ip1wT1L4xZbYrCBQbcRKwLBfV9WVcT87apx08GM4w==}
     engines: {node: '>=22.19.0'}
     hasBin: true
 
@@ -4998,6 +4998,15 @@ snapshots:
       '@opentelemetry/resources': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-metrics': 2.8.0(@opentelemetry/api@1.9.1)
 
+  '@opentelemetry/exporter-metrics-otlp-http@0.223.0(@opentelemetry/api@1.10.0)':
+    dependencies:
+      '@opentelemetry/api': 1.10.0
+      '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/otlp-exporter-base': 0.223.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/otlp-transformer': 0.223.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/resources': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/sdk-metrics': 2.12.0(@opentelemetry/api@1.10.0)
+
   '@opentelemetry/exporter-metrics-otlp-http@0.223.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
@@ -5026,6 +5035,13 @@ snapshots:
       '@opentelemetry/otlp-transformer': 0.219.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-metrics': 2.8.0(@opentelemetry/api@1.9.1)
+
+  '@opentelemetry/exporter-metrics-otlp-proto@0.223.0(@opentelemetry/api@1.10.0)':
+    dependencies:
+      '@opentelemetry/api': 1.10.0
+      '@opentelemetry/exporter-metrics-otlp-http': 0.223.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/otlp-exporter-base': 0.223.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/otlp-transformer': 0.223.0(@opentelemetry/api@1.10.0)
 
   '@opentelemetry/exporter-metrics-otlp-proto@0.223.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5191,6 +5207,12 @@ snapshots:
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.10.0)
       '@opentelemetry/otlp-transformer': 0.220.0(@opentelemetry/api@1.10.0)
 
+  '@opentelemetry/otlp-exporter-base@0.223.0(@opentelemetry/api@1.10.0)':
+    dependencies:
+      '@opentelemetry/api': 1.10.0
+      '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/otlp-transformer': 0.223.0(@opentelemetry/api@1.10.0)
+
   '@opentelemetry/otlp-exporter-base@0.223.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
@@ -5250,6 +5272,16 @@ snapshots:
       '@opentelemetry/sdk-logs': 0.220.0(@opentelemetry/api@1.10.0)
       '@opentelemetry/sdk-metrics': 2.9.0(@opentelemetry/api@1.10.0)
       '@opentelemetry/sdk-trace': 2.9.0(@opentelemetry/api@1.10.0)
+
+  '@opentelemetry/otlp-transformer@0.223.0(@opentelemetry/api@1.10.0)':
+    dependencies:
+      '@opentelemetry/api': 1.10.0
+      '@opentelemetry/api-logs': 0.223.0
+      '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/resources': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/sdk-logs': 0.223.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/sdk-metrics': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/sdk-trace': 2.12.0(@opentelemetry/api@1.10.0)
 
   '@opentelemetry/otlp-transformer@0.223.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5335,6 +5367,14 @@ snapshots:
       '@opentelemetry/resources': 2.9.0(@opentelemetry/api@1.10.0)
       '@opentelemetry/semantic-conventions': 1.43.0
 
+  '@opentelemetry/sdk-logs@0.223.0(@opentelemetry/api@1.10.0)':
+    dependencies:
+      '@opentelemetry/api': 1.10.0
+      '@opentelemetry/api-logs': 0.223.0
+      '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/resources': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/semantic-conventions': 1.43.0
+
   '@opentelemetry/sdk-logs@0.223.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
@@ -5342,6 +5382,12 @@ snapshots:
       '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.12.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.43.0
+
+  '@opentelemetry/sdk-metrics@2.12.0(@opentelemetry/api@1.10.0)':
+    dependencies:
+      '@opentelemetry/api': 1.10.0
+      '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/resources': 2.12.0(@opentelemetry/api@1.10.0)
 
   '@opentelemetry/sdk-metrics@2.12.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -5468,6 +5514,13 @@ snapshots:
       '@opentelemetry/core': 2.8.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.8.0(@opentelemetry/api@1.9.1)
 
+  '@opentelemetry/sdk-trace@2.12.0(@opentelemetry/api@1.10.0)':
+    dependencies:
+      '@opentelemetry/api': 1.10.0
+      '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/resources': 2.12.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/semantic-conventions': 1.43.0
+
   '@opentelemetry/sdk-trace@2.12.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
@@ -5565,10 +5618,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@platformatic/control@3.67.0(supports-color@7.2.0)':
+  '@platformatic/control@3.75.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.1
-      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.75.0(supports-color@7.2.0)
       help-me: 5.0.0
       pino: 9.14.0
       pino-pretty: 13.2.0
@@ -5929,7 +5982,7 @@ snapshots:
       protobufjs: 8.8.1
       undici: 7.30.1
 
-  '@platformatic/runtime@3.67.0(supports-color@7.2.0)':
+  '@platformatic/runtime@3.68.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/accepts': 5.0.7
       '@fastify/basic-auth': 6.3.1
@@ -5937,14 +5990,14 @@ snapshots:
       '@fastify/websocket': 11.3.4
       '@opentelemetry/api': 1.10.0
       '@opentelemetry/exporter-metrics-otlp-proto': 0.219.0(@opentelemetry/api@1.10.0)
-      '@platformatic/basic': 3.67.0(supports-color@7.2.0)
-      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
-      '@platformatic/generators': 3.67.0(supports-color@7.2.0)
-      '@platformatic/globals': 3.67.0
-      '@platformatic/itc': 3.67.0
-      '@platformatic/metrics': 3.67.0
+      '@platformatic/basic': 3.68.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.68.0(supports-color@7.2.0)
+      '@platformatic/generators': 3.68.0(supports-color@7.2.0)
+      '@platformatic/globals': 3.68.0
+      '@platformatic/itc': 3.68.0
+      '@platformatic/metrics': 3.68.0
       '@platformatic/prom-client': 1.0.0
-      '@platformatic/telemetry': 3.67.0(supports-color@7.2.0)
+      '@platformatic/telemetry': 3.68.0(supports-color@7.2.0)
       '@platformatic/undici-cache-memory': 0.9.0
       '@watchable/unpromise': 1.0.2
       change-case-all: 2.1.0
@@ -5971,22 +6024,22 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@platformatic/runtime@3.68.0(supports-color@7.2.0)':
+  '@platformatic/runtime@3.75.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/accepts': 5.0.7
       '@fastify/basic-auth': 6.3.1
       '@fastify/error': 4.2.1
       '@fastify/websocket': 11.3.4
       '@opentelemetry/api': 1.10.0
-      '@opentelemetry/exporter-metrics-otlp-proto': 0.219.0(@opentelemetry/api@1.10.0)
-      '@platformatic/basic': 3.68.0(supports-color@7.2.0)
-      '@platformatic/foundation': 3.68.0(supports-color@7.2.0)
-      '@platformatic/generators': 3.68.0(supports-color@7.2.0)
-      '@platformatic/globals': 3.68.0
-      '@platformatic/itc': 3.68.0
-      '@platformatic/metrics': 3.68.0
+      '@opentelemetry/exporter-metrics-otlp-proto': 0.223.0(@opentelemetry/api@1.10.0)
+      '@platformatic/basic': 3.75.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.75.0(supports-color@7.2.0)
+      '@platformatic/generators': 3.75.0(supports-color@7.2.0)
+      '@platformatic/globals': 3.75.0
+      '@platformatic/itc': 3.75.0
+      '@platformatic/metrics': 3.75.0
       '@platformatic/prom-client': 1.0.0
-      '@platformatic/telemetry': 3.68.0(supports-color@7.2.0)
+      '@platformatic/telemetry': 3.75.0(supports-color@7.2.0)
       '@platformatic/undici-cache-memory': 0.9.0
       '@watchable/unpromise': 1.0.2
       change-case-all: 2.1.0
@@ -9196,13 +9249,14 @@ snapshots:
       '@types/node': 26.6.5
       fsevents: 2.3.3
 
-  wattpm@3.67.0(supports-color@7.2.0):
+  wattpm@3.75.0(supports-color@7.2.0):
     dependencies:
+      '@fastify/error': 4.2.1
       '@fastify/websocket': 11.3.4
-      '@platformatic/control': 3.67.0(supports-color@7.2.0)
-      '@platformatic/foundation': 3.67.0(supports-color@7.2.0)
-      '@platformatic/globals': 3.67.0
-      '@platformatic/runtime': 3.67.0(supports-color@7.2.0)
+      '@platformatic/control': 3.75.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.75.0(supports-color@7.2.0)
+      '@platformatic/globals': 3.75.0
+      '@platformatic/runtime': 3.75.0(supports-color@7.2.0)
       colorette: 2.0.20
       pino-pretty: 13.2.0
       split2: 4.2.0
