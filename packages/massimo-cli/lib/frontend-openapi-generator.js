@@ -24,10 +24,11 @@ export function processFrontendOpenAPI ({
   namedSchemas,
   typeExt = 'd.mts'
 }) {
+  const { types, operations } = generateTypesFromOpenAPI({ schema, name, fullResponse, fullRequest, propsOptional, namedSchemas })
   return {
-    types: generateTypesFromOpenAPI({ schema, name, fullResponse, fullRequest, propsOptional, namedSchemas }),
+    types,
     implementation: generateFrontendImplementationFromOpenAPI({
-      schema,
+      operations,
       name,
       language,
       fullResponse,
@@ -40,7 +41,7 @@ export function processFrontendOpenAPI ({
 }
 
 function generateFrontendImplementationFromOpenAPI ({
-  schema,
+  operations,
   name,
   language,
   fullResponse,
@@ -50,21 +51,6 @@ function generateFrontendImplementationFromOpenAPI ({
   typeExt = 'd.mts'
 }) {
   const camelCaseName = capitalize(camelcase(name))
-  const { paths } = schema
-  const generatedOperationIds = []
-  const operations = Object.entries(paths).flatMap(([path, methods]) => {
-    return Object.entries(methods).map(([method, operation]) => {
-      const opId = generateOperationId(path, method, operation, generatedOperationIds)
-      return {
-        path,
-        method,
-        operation: {
-          ...operation,
-          operationId: opId
-        }
-      }
-    })
-  })
 
   const writer = new CodeBlockWriter({
     indentNumberOfSpaces: 2,
@@ -484,5 +470,5 @@ function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, pr
     writer.writeLine('headers?: object')
   })
   writer.writeLine('export default function build(url: string, options?: BuildOptions): PlatformaticFrontendClient')
-  return interfaces.toString() + writer.toString()
+  return { types: interfaces.toString() + writer.toString(), operations }
 }
