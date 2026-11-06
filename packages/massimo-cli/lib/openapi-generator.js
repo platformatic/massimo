@@ -1,9 +1,8 @@
 import { generateOperationId } from 'massimo'
-import CodeBlockWriter from 'code-block-writer'
 import { writeNamedSchemas } from './named-schemas.js'
 import { getOperationTypeNames, writeOperations } from './openapi-common.js'
 import { buildSchemaNames } from './schema-names.js'
-import { capitalize, toJavaScriptName } from './utils.js'
+import { capitalize, createCodeWriter, toJavaScriptName } from './utils.js'
 
 export function processOpenAPI ({
   schema,
@@ -36,11 +35,7 @@ function generateImplementationFromOpenAPI ({ name, fullResponse, fullRequest, v
   const camelcasedName = toJavaScriptName(name)
   const isESM = moduleFormat === 'esm'
 
-  const writer = new CodeBlockWriter({
-    indentNumberOfSpaces: 2,
-    useTabs: false,
-    useSingleQuote: true
-  })
+  const writer = createCodeWriter()
 
   if (isESM) {
     writer.writeLine("import { buildOpenAPIClient } from 'massimo'")
@@ -120,17 +115,9 @@ function generateTypesFromOpenAPI ({
     })
   })
 
-  const writer = new CodeBlockWriter({
-    indentNumberOfSpaces: 2,
-    useTabs: false,
-    useSingleQuote: true
-  })
+  const writer = createCodeWriter()
 
-  const interfaces = new CodeBlockWriter({
-    indentNumberOfSpaces: 2,
-    useTabs: false,
-    useSingleQuote: true
-  })
+  const interfaces = createCodeWriter()
 
   if (typesComment) {
     writer.writeLine(`// ${typesComment}`)
