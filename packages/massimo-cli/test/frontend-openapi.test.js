@@ -8,6 +8,40 @@ import { request } from 'undici'
 import { processFrontendOpenAPI } from '../lib/frontend-openapi-generator.js'
 import { cliPath, moveToTmpdir } from './helper.js'
 
+test('types and implementation use the same generated operation IDs', async () => {
+  const responses = {
+    200: { description: 'OK', content: { 'application/json': { schema: { type: 'string' } } } }
+  }
+  const schema = {
+    openapi: '3.0.0',
+    info: { title: 'Items', version: '1.0.0' },
+    paths: {
+      '/first': { get: { operationId: 'fetchItems', responses } },
+      '/second': { get: { operationId: 'fetchItems', responses } },
+      '/third': { get: { responses } }
+    }
+  }
+
+  for (const language of ['js', 'ts']) {
+    const { types, implementation } = processFrontendOpenAPI({
+      schema: structuredClone(schema),
+      name: 'items',
+      language,
+      fullResponse: true,
+      fullRequest: true,
+      withCredentials: false,
+      propsOptional: true,
+      namedSchemas: false,
+      logger: { warn () {} }
+    })
+
+    for (const operationName of ['fetchItems', 'getFetchItems', 'getThird']) {
+      ok(types.includes(`${operationName}(req:`))
+      ok(implementation.includes(`${operationName}: _${operationName}.bind(url, ...arguments)`))
+    }
+  }
+})
+
 test('encode spaces as %20 (not +) in query string parameters', async () => {
   const schema = {
     openapi: '3.0.0',
