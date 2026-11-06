@@ -88,7 +88,7 @@ function generateTypesFromOpenAPI ({
   const camelcasedName = toJavaScriptName(name)
   const capitalizedName = capitalize(camelcasedName)
   const { paths } = schema
-  const generatedOperationIds = []
+  const generatedOperationIds = new Set()
 
   const operations = Object.entries(paths).flatMap(([path, methods]) => {
     let commonParameters = []

@@ -45,6 +45,20 @@ test('generates name from different path with same method and opeartionId', asyn
   equal(fourth, 'getSampleOperationId2')
 })
 
+test('supports a Set for efficient operation ID tracking', () => {
+  const ids = new Set()
+  const first = generateOperationId('sample-path', 'get', { operationId: 'sampleOperationId' }, ids)
+  const second = generateOperationId('sample-path2', 'get', { operationId: 'sampleOperationId' }, ids)
+  const third = generateOperationId('sample-path3', 'get', { operationId: 'sampleOperationId' }, ids)
+
+  equal(first, 'sampleOperationId')
+  equal(second, 'getSampleOperationId')
+  equal(third, 'getSampleOperationId1')
+  equal(ids.has(first), true)
+  equal(ids.has(second), true)
+  equal(ids.has(third), true)
+})
+
 test('generates name with path parameter', async t => {
   const opId = generateOperationId('/v3/accounts/{id}', 'get', {}, [])
   equal(opId, 'getV3AccountsId')

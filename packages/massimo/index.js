@@ -358,6 +358,7 @@ function wrapGraphQLClient (url, openTelemetry, logger) {
 }
 
 export function generateOperationId (path, method, methodMeta, all) {
+  const hasOperationId = candidate => all instanceof Set ? all.has(candidate) : all.includes(candidate)
   let operationId = null
   // use methodMeta.operationId only if it's present AND it is a valid string that can be
   // concatenated without converting it
@@ -385,7 +386,7 @@ export function generateOperationId (path, method, methodMeta, all) {
   } else {
     let count = 0
     let candidate = operationId
-    while (all.includes(candidate)) {
+    while (hasOperationId(candidate)) {
       if (count === 0) {
         // first try with method name
         candidate = `${method}${capitalize(operationId)}`
@@ -397,7 +398,11 @@ export function generateOperationId (path, method, methodMeta, all) {
     operationId = candidate
   }
   operationId = camelCase(operationId)
-  all.push(operationId)
+  if (all instanceof Set) {
+    all.add(operationId)
+  } else {
+    all.push(operationId)
+  }
   return operationId
 }
 
@@ -441,7 +446,7 @@ export async function buildOpenAPIClient (options, openTelemetry) {
     dispatcher = dispatcher.compose(interceptors.responseError())
   }
 
-  const generatedOperationIds = []
+  const generatedOperationIds = new Set()
   for (const path of Object.keys(spec.paths)) {
     const pathMeta = spec.paths[path]
     let commonParameters = []

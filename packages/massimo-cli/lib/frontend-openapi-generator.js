@@ -398,7 +398,7 @@ function generateFrontendImplementationFromOpenAPI ({
 function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, propsOptional, namedSchemas }) {
   const camelCaseName = capitalize(camelcase(name))
   const { paths } = schema
-  const generatedOperationIds = []
+  const generatedOperationIds = new Set()
   const operations = Object.entries(paths).flatMap(([path, methods]) => {
     return Object.entries(methods).map(([method, operation]) => {
       const opId = generateOperationId(path, method, operation, generatedOperationIds)
