@@ -128,8 +128,8 @@ importers:
         specifier: 3.67.0
         version: 3.67.0(supports-color@7.2.0)
       '@platformatic/sql-graphql':
-        specifier: 3.69.0
-        version: 3.69.0(supports-color@7.2.0)
+        specifier: 3.75.0
+        version: 3.75.0(supports-color@7.2.0)
       '@platformatic/sql-mapper':
         specifier: 3.69.0
         version: 3.69.0(@types/node@26.6.5)(supports-color@7.2.0)(typescript@5.9.3)
@@ -1353,8 +1353,8 @@ packages:
     resolution: {integrity: sha512-QLZTJG2MxmYC5Y/KoAE4XISHYlPGYDnoo6wmUl5/DBb3REDC+TffMOj4GsScNMiXAlsYFSMFxJc16j3LQbCNMw==}
     engines: {node: '>=22.19.0'}
 
-  '@platformatic/sql-graphql@3.69.0':
-    resolution: {integrity: sha512-IVmSlEHcGrLu+6AuZKmBn7ydgEunVKDErywahfgjlV3O6QtPRjDMr7DeyWT8sFSG0HfW9Ghl/wwch7TfBajidQ==}
+  '@platformatic/sql-graphql@3.75.0':
+    resolution: {integrity: sha512-xMUgWp1+BJBbaYqMoaAqor8EYSQ9+6InV6yC30939ixV023YsMdjdMfOjdUD7O1RxzhdTZz3Vrgdq+ykcPSFpQ==}
     engines: {node: '>=22.19.0'}
 
   '@platformatic/sql-json-schema-mapper@3.67.0':
@@ -6138,11 +6138,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@platformatic/sql-graphql@3.69.0(supports-color@7.2.0)':
+  '@platformatic/sql-graphql@3.75.0(supports-color@7.2.0)':
     dependencies:
       '@fastify/error': 4.2.1
       '@mercuriusjs/federation': 5.1.1
-      '@platformatic/foundation': 3.69.0(supports-color@7.2.0)
+      '@platformatic/foundation': 3.75.0(supports-color@7.2.0)
       camelcase: 6.3.0
       fastify-plugin: 6.0.1
       graphql: 16.14.2
