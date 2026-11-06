@@ -60,12 +60,9 @@ async function buildCallFunction (
   queryParser,
   bodyTimeout,
   headersTimeout,
-  dispatcher
+  dispatcher,
+  ajv
 ) {
-  if (validateResponse) {
-    await $RefParser.dereference(spec)
-  }
-  const ajv = new Ajv()
   const url = new URL(baseUrl)
   method = method.toUpperCase()
   path = join(url.pathname, path)
@@ -447,6 +444,11 @@ export async function buildOpenAPIClient (options, openTelemetry) {
   }
 
   const generatedOperationIds = new Set()
+  let ajv
+  if (validateResponse) {
+    ajv = new Ajv()
+  }
+  let specDereferenced = false
   for (const path of Object.keys(spec.paths)) {
     const pathMeta = spec.paths[path]
     let commonParameters = []
@@ -472,6 +474,10 @@ export async function buildOpenAPIClient (options, openTelemetry) {
       }
 
       client[kOperationIdMap][operationId] = { path, method }
+      if (validateResponse && !specDereferenced) {
+        await $RefParser.dereference(spec)
+        specDereferenced = true
+      }
       client[operationId] = await buildCallFunction(
         spec,
         baseUrl,
@@ -485,7 +491,8 @@ export async function buildOpenAPIClient (options, openTelemetry) {
         queryParser,
         bodyTimeout,
         headersTimeout,
-        dispatcher
+        dispatcher,
+        ajv
       )
     }
   }
