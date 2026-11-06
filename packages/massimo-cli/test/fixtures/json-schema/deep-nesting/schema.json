@@ -1,0 +1,580 @@
+{
+  "$id": "https://example.com/schemas/catalog/v1/catalog.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Catalog",
+  "type": "object",
+  "required": [
+    "id",
+    "code",
+    "version",
+    "regionCode",
+    "type",
+    "owner",
+    "name",
+    "summary",
+    "status",
+    "schedule",
+    "locales",
+    "entries",
+    "timezone"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Identifier of the catalog"
+    },
+    "code": {
+      "type": "string",
+      "description": "Human-readable identifier of the catalog"
+    },
+    "version": {
+      "type": "string",
+      "description": "Revision identifier of the catalog"
+    },
+    "regionCode": {
+      "type": "string",
+      "title": "The region",
+      "enum": ["NA", "EMEA", "APAC", "LATAM"]
+    },
+    "type": {
+      "$ref": "#/definitions/CatalogType"
+    },
+    "owner": {
+      "$ref": "#/definitions/Owner",
+      "description": "Details of the owner that manages this catalog"
+    },
+    "name": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z]{2}-[A-Z]{2}$": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "status": {
+      "$ref": "#/definitions/Status"
+    },
+    "schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startAt", "endAt"],
+      "properties": {
+        "startAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "locales": {
+      "$ref": "#/definitions/LocaleCollection"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "title": "CatalogEntry",
+        "type": "object",
+        "required": [
+          "id",
+          "code",
+          "version",
+          "kind",
+          "name",
+          "summary",
+          "schedule",
+          "status",
+          "cost",
+          "contentRef",
+          "category",
+          "delivery",
+          "value",
+          "notes",
+          "provider",
+          "lifecycle"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/properties/entries/items/definitions/EntryId"
+          },
+          "code": {
+            "$ref": "#/properties/entries/items/definitions/EntryCode"
+          },
+          "version": {
+            "$ref": "#/properties/entries/items/definitions/EntryVersion"
+          },
+          "kind": {
+            "$ref": "#/properties/entries/items/definitions/EntryKind"
+          },
+          "name": {
+            "$ref": "#/properties/summary"
+          },
+          "summary": {
+            "$ref": "#/properties/summary"
+          },
+          "schedule": {
+            "$ref": "#/properties/schedule"
+          },
+          "status": {
+            "$ref": "#/properties/entries/items/definitions/EntryStatus"
+          },
+          "cost": {
+            "$ref": "#/properties/entries/items/definitions/Cost"
+          },
+          "contentRef": {
+            "$ref": "#/properties/entries/items/definitions/EntryContentRef"
+          },
+          "category": {
+            "$ref": "#/properties/entries/items/definitions/Category"
+          },
+          "delivery": {
+            "$ref": "#/properties/entries/items/definitions/Delivery"
+          },
+          "value": {
+            "$ref": "#/properties/entries/items/definitions/Value"
+          },
+          "notes": {
+            "$ref": "#/properties/entries/items/definitions/Notes"
+          },
+          "provider": {
+            "$ref": "#/properties/entries/items/definitions/Provider"
+          },
+          "lifecycle": {
+            "$ref": "#/properties/entries/items/definitions/Lifecycle"
+          }
+        },
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "CREDIT"
+              },
+              "value": {
+                "$ref": "#/properties/entries/items/definitions/CreditValue"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "FIXED_REDUCTION"
+              },
+              "value": {
+                "$ref": "#/properties/entries/items/definitions/FixedReductionValue"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "RATE_REDUCTION"
+              },
+              "value": {
+                "$ref": "#/properties/entries/items/definitions/RateReductionValue"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "FIXED_PRICE"
+              },
+              "value": {
+                "$ref": "#/properties/entries/items/definitions/FixedPriceValue"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "SERVICE"
+              },
+              "value": {
+                "$ref": "#/properties/entries/items/definitions/ServiceValue"
+              }
+            }
+          }
+        ],
+        "definitions": {
+          "EntryId": {
+            "type": "string",
+            "description": "Identifier of the catalog entry"
+          },
+          "EntryCode": {
+            "type": "string",
+            "description": "Human-readable identifier of the catalog entry"
+          },
+          "EntryVersion": {
+            "type": "string",
+            "description": "Revision identifier of the catalog entry"
+          },
+          "EntryKind": {
+            "type": "string",
+            "enum": ["CREDIT", "FIXED_REDUCTION", "RATE_REDUCTION", "FIXED_PRICE", "SERVICE"]
+          },
+          "EntryStatus": {
+            "type": "string",
+            "enum": ["DRAFT", "ACTIVE", "ARCHIVED"]
+          },
+          "Cost": {
+            "type": "object",
+            "required": ["currencyCode", "amount", "taxAmount"],
+            "properties": {
+              "currencyCode": {
+                "type": "string",
+                "enum": ["USD", "EUR", "SEK"]
+              },
+              "amount": {
+                "type": "string",
+                "description": "String representation of a number with 2 decimal points"
+              },
+              "taxAmount": {
+                "type": "string",
+                "description": "String representation of a number with 2 decimal points"
+              }
+            }
+          },
+          "EntryContentRef": {
+            "type": "string",
+            "description": "Opaque key for associating extended content with this catalog entry"
+          },
+          "Category": {
+            "type": "string",
+            "enum": ["DIGITAL", "PHYSICAL", "SERVICE"]
+          },
+          "Delivery": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "Value": {
+            "type": "object"
+          },
+          "CreditValue": {
+            "type": "object",
+            "required": ["amount", "currencyCode"],
+            "properties": {
+              "amount": {
+                "type": "string"
+              },
+              "currencyCode": {
+                "type": "string",
+                "enum": ["USD", "EUR", "SEK"]
+              }
+            }
+          },
+          "FixedReductionValue": {
+            "type": "object",
+            "required": ["amount", "currencyCode"],
+            "properties": {
+              "amount": {
+                "type": "string"
+              },
+              "currencyCode": {
+                "type": "string",
+                "enum": ["USD", "EUR", "SEK"]
+              }
+            }
+          },
+          "RateReductionValue": {
+            "type": "object",
+            "required": ["value"],
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          "FixedPriceValue": {
+            "type": "object",
+            "required": ["amount", "currencyCode"],
+            "properties": {
+              "amount": {
+                "type": "string"
+              },
+              "currencyCode": {
+                "type": "string",
+                "enum": ["USD", "EUR", "SEK"]
+              }
+            }
+          },
+          "ServiceValue": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "Notes": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "Provider": {
+            "type": "object",
+            "required": ["type", "config", "code"],
+            "properties": {
+              "type": {
+                "$ref": "#/properties/entries/items/definitions/ProviderType"
+              },
+              "config": {
+                "$ref": "#/properties/entries/items/definitions/ProviderConfig"
+              },
+              "code": {
+                "type": "string"
+              },
+              "pin": {
+                "type": "string"
+              }
+            },
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "CODE"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": ["pin"],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "const": "CODE_WITH_PIN"
+                  }
+                }
+              }
+            ]
+          },
+          "ProviderType": {
+            "type": "string",
+            "enum": ["CODE", "CODE_WITH_PIN"]
+          },
+          "ProviderConfig": {
+            "type": "object",
+            "required": ["sourceSystem", "campaignId"],
+            "properties": {
+              "sourceSystem": {
+                "type": "string",
+                "enum": ["INTERNAL", "PARTNER"]
+              },
+              "campaignId": {
+                "type": "integer"
+              }
+            }
+          },
+          "Lifecycle": {
+            "type": "object",
+            "required": [
+              "redeemContext",
+              "redeemConstraints",
+              "expiration",
+              "internalBufferDays",
+              "communicationBufferDays"
+            ],
+            "properties": {
+              "redeemContext": {
+                "type": "string",
+                "enum": ["CHECKOUT", "PORTAL"]
+              },
+              "redeemConstraints": {
+                "type": "array",
+                "items": {
+                  "title": "RedeemConstraint",
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "required": ["type", "minimumPurchase"],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "MINIMUM_PURCHASE"
+                        },
+                        "minimumPurchase": {
+                          "type": "object",
+                          "required": ["currencyCode", "amount"],
+                          "properties": {
+                            "currencyCode": {
+                              "type": "string",
+                              "enum": ["USD", "EUR", "SEK"]
+                            },
+                            "amount": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "required": ["type", "channels"],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "CHANNELS"
+                        },
+                        "channels": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": ["ONLINE", "STORE"]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "required": ["type", "limit"],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "LIMIT"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "expiration": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "required": ["type", "date"],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "DATE"
+                      },
+                      "date": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": ["type", "duration"],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "DURATION"
+                      },
+                      "duration": {
+                        "type": "object",
+                        "required": ["length", "unit"],
+                        "properties": {
+                          "length": {
+                            "type": "string"
+                          },
+                          "unit": {
+                            "type": "string",
+                            "enum": ["DAY", "WEEK", "MONTH", "YEAR"]
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              "internalBufferDays": {
+                "type": "integer"
+              },
+              "communicationBufferDays": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "timezone": {
+      "type": "string"
+    }
+  },
+  "definitions": {
+    "CatalogType": {
+      "type": "string",
+      "enum": ["STANDARD", "SEGMENTED"]
+    },
+    "Owner": {
+      "type": "object",
+      "required": ["displayName", "legalName", "region"],
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "legalName": {
+          "type": "string"
+        },
+        "region": {
+          "type": "object",
+          "required": ["code"],
+          "properties": {
+            "code": {
+              "$ref": "#/properties/regionCode"
+            }
+          }
+        }
+      }
+    },
+    "Status": {
+      "type": "string",
+      "enum": ["DRAFT", "ACTIVE", "ARCHIVED"]
+    },
+    "LocaleCollection": {
+      "type": "array",
+      "items": {
+        "title": "Locale",
+        "type": "object",
+        "required": ["locale", "language", "primary", "fallbacks", "aliases"],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "pattern": "^[a-z]{2}-[A-Z]{2}$"
+          },
+          "language": {
+            "type": "string"
+          },
+          "primary": {
+            "type": "boolean"
+          },
+          "fallbacks": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-[A-Z]{2}$"
+            }
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-[A-Z]{2}$"
+            }
+          }
+        }
+      }
+    }
+  }
+}
