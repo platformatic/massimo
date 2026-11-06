@@ -1,6 +1,5 @@
-import CodeBlockWriter from 'code-block-writer'
 import { UnknownTypeError } from './errors.js'
-import { capitalize, toJavaScriptName } from './utils.js'
+import { capitalize, createCodeWriter, toJavaScriptName } from './utils.js'
 
 export function processGraphQL ({ schema, name, folder, url, moduleFormat }) {
   schema = schema.__schema
@@ -15,11 +14,7 @@ const skip = new Set(['Query', 'Mutation', 'Subscription', 'Boolean', 'String'])
 function generateTypesFromGraphQL ({ schema, name }) {
   const camelcasedName = toJavaScriptName(name)
 
-  const writer = new CodeBlockWriter({
-    indentNumberOfSpaces: 2,
-    useTabs: false,
-    useSingleQuote: true
-  })
+  const writer = createCodeWriter()
 
   const functionName = `generate${capitalize(camelcasedName)}Client`
 
@@ -64,11 +59,7 @@ function generateImplementationFromGraqhQL ({ name, url, moduleFormat }) {
   const camelcasedName = toJavaScriptName(name)
   const isESM = moduleFormat === 'esm'
 
-  const writer = new CodeBlockWriter({
-    indentNumberOfSpaces: 2,
-    useTabs: false,
-    useSingleQuote: true
-  })
+  const writer = createCodeWriter()
 
   if (isESM) {
     writer.writeLine("import { buildGraphQLClient } from 'massimo'")

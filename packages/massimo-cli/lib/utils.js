@@ -1,6 +1,15 @@
 import camelcase from 'camelcase'
+import CodeBlockWriter from 'code-block-writer'
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
+
+export function createCodeWriter () {
+  return new CodeBlockWriter({
+    indentNumberOfSpaces: 2,
+    useTabs: false,
+    useSingleQuote: true
+  })
+}
 
 export function capitalize (str) {
   return str.charAt(0).toUpperCase() + str.slice(1)

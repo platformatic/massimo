@@ -1,11 +1,10 @@
 import { hasDuplicatedParameters } from 'massimo'
 import camelcase from 'camelcase'
-import CodeBlockWriter from 'code-block-writer'
 import jsonpointer from 'jsonpointer'
 import { TypeNotSupportedError } from './errors.js'
 import { getType } from './get-type.js'
 import { getResponseTypeName, responsesWriter } from './responses-writer.js'
-import { capitalize, getBodyType } from './utils.js'
+import { capitalize, createCodeWriter, getBodyType } from './utils.js'
 
 export function writeOperations (
   interfacesWriter,
@@ -35,11 +34,7 @@ export function writeOperations (
 
     let isRequestArray = false
     let isStructuredType = false
-    const bodyWriter = new CodeBlockWriter({
-      indentNumberOfSpaces: 2,
-      useTabs: false,
-      useSingleQuote: true
-    })
+    const bodyWriter = createCodeWriter()
 
     const addedProps = new Set()
     if (parameters) {
