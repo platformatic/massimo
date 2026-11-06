@@ -47,12 +47,12 @@
   },
   "devDependencies": {
     "@platformatic/composer": "3.75.0",
-    "@platformatic/db": "3.67.0",
+    "@platformatic/db": "3.75.0",
     "@platformatic/foundation": "3.75.0",
-    "@platformatic/runtime": "3.68.0",
-    "@platformatic/service": "3.67.0",
+    "@platformatic/runtime": "3.75.0",
+    "@platformatic/service": "3.75.0",
     "@platformatic/sql-graphql": "3.75.0",
-    "@platformatic/sql-mapper": "3.69.0",
+    "@platformatic/sql-mapper": "3.75.0",
     "@playwright/test": "^1.42.1",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
@@ -72,7 +72,7 @@
     "tsd": "^0.33.0",
     "typescript": "^5.5.4",
     "vite": "^5.1.6",
-    "wattpm": "3.67.0",
+    "wattpm": "3.75.0",
     "why-is-node-running": "^2.2.2"
   },
   "engines": {

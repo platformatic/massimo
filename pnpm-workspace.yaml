@@ -17,9 +17,6 @@ allowBuilds:
   protobufjs: true
 
 minimumReleaseAge: 10080
-minimumReleaseAgeExclude:
-  - fastify@5.12.1
-  - find-my-way@9.9.0
 minimumReleaseAgeExcludePrune: true
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 10080
