@@ -50,20 +50,21 @@ export function buildSchemaNames (spec, takenNames = []) {
   if (!schemas) return schemaNames
 
   const keys = Object.keys(schemas)
+  const typeNames = new Map(keys.map(key => [key, toTypeName(key)]))
   const taken = new Set([...RESERVED_TYPE_NAMES, ...takenNames])
   const assigned = new Map()
   const claim = key => {
-    const name = toTypeName(key)
+    const name = typeNames.get(key)
     if (!taken.has(name)) {
       taken.add(name)
       assigned.set(key, name)
     }
   }
-  keys.filter(key => toTypeName(key) === key).forEach(claim)
-  keys.filter(key => toTypeName(key) !== key).forEach(claim)
+  keys.filter(key => typeNames.get(key) === key).forEach(claim)
+  keys.filter(key => typeNames.get(key) !== key).forEach(claim)
   for (const key of keys) {
     if (assigned.has(key)) continue
-    const base = `${toTypeName(key)}Schema`
+    const base = `${typeNames.get(key)}Schema`
     let name = base
     for (let i = 2; taken.has(name); i++) {
       name = `${base}${i}`

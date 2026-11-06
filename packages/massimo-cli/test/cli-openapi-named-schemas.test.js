@@ -92,6 +92,30 @@ test('buildSchemaNames is deterministic and maps refs with JSON pointer escaping
   equal(buildSchemaNames({}).size, 0)
 })
 
+test('buildSchemaNames preserves collision priority for normalized names', () => {
+  const spec = {
+    components: {
+      schemas: {
+        'foo-bar': {},
+        foo_bar: {},
+        'foo/bar': {},
+        FooBar: {},
+        FooBarSchema: {},
+        Array: {}
+      }
+    }
+  }
+
+  deepEqual([...buildSchemaNames(spec).entries()], [
+    ['#/components/schemas/foo_bar', 'foo_bar'],
+    ['#/components/schemas/FooBar', 'FooBar'],
+    ['#/components/schemas/FooBarSchema', 'FooBarSchema'],
+    ['#/components/schemas/foo-bar', 'FooBarSchema2'],
+    ['#/components/schemas/foo~1bar', 'FooBarSchema3'],
+    ['#/components/schemas/Array', 'ArraySchema']
+  ])
+})
+
 test('--named-schemas works with --frontend', async () => {
   const dir = await moveToTmpdir(after)
   await execa('node', [join(import.meta.dirname, '..', 'index.js'), openAPIfile, '--name', 'movies', '--frontend', '--language', 'ts', '--named-schemas'])
