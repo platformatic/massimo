@@ -1,6 +1,6 @@
 import { generateOperationId } from 'massimo'
 import { writeNamedSchemas } from './named-schemas.js'
-import { getOperationTypeNames, writeOperations } from './openapi-common.js'
+import { getOperationTypeNames, getPathMapTypeNames, writeOperations, writePathMap } from './openapi-common.js'
 import { buildSchemaNames } from './schema-names.js'
 import { capitalize, createCodeWriter, toJavaScriptName } from './utils.js'
 
@@ -14,7 +14,8 @@ export function processOpenAPI ({
   typesComment,
   propsOptional,
   moduleFormat,
-  namedSchemas
+  namedSchemas,
+  pathMap
 }) {
   return {
     types: generateTypesFromOpenAPI({
@@ -25,7 +26,8 @@ export function processOpenAPI ({
       optionalHeaders,
       typesComment,
       propsOptional,
-      namedSchemas
+      namedSchemas,
+      pathMap
     }),
     implementation: generateImplementationFromOpenAPI({ name, fullResponse, fullRequest, validateResponse, moduleFormat })
   }
@@ -83,7 +85,8 @@ function generateTypesFromOpenAPI ({
   optionalHeaders,
   typesComment,
   propsOptional,
-  namedSchemas
+  namedSchemas,
+  pathMap
 }) {
   const camelcasedName = toJavaScriptName(name)
   const capitalizedName = capitalize(camelcasedName)
@@ -141,15 +144,18 @@ function generateTypesFromOpenAPI ({
   interfaces.blankLine()
 
   // Operation and client types keep their names; a schema that collides is renamed
+  const operationTypeNames = (namedSchemas || pathMap) ? getOperationTypeNames(operations) : []
+  const pathMapNames = pathMap ? getPathMapTypeNames(capitalizedName, operationTypeNames) : undefined
   const schemaNames = namedSchemas
-    ? buildSchemaNames(schema, [...getOperationTypeNames(operations), capitalizedName])
+    ? buildSchemaNames(schema, [...operationTypeNames, capitalizedName, ...Object.values(pathMapNames ?? {})])
     : undefined
   if (schemaNames) {
     writeNamedSchemas(interfaces, schema, schemaNames)
   }
 
+  let pathMapEntries
   writer.write(`export type ${capitalizedName} =`).block(() => {
-    writeOperations(interfaces, writer, operations, {
+    pathMapEntries = writeOperations(interfaces, writer, operations, {
       fullRequest,
       fullResponse,
       optionalHeaders,
@@ -158,6 +164,10 @@ function generateTypesFromOpenAPI ({
       schemaNames
     })
   })
+
+  if (pathMap) {
+    writePathMap(interfaces, pathMapNames, pathMapEntries)
+  }
 
   writer.write(interfaces.toString())
 
