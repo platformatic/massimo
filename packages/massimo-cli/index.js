@@ -127,7 +127,8 @@ async function writeOpenAPIClient (
   moduleFormat,
   typeExtension,
   explicitModuleFormat,
-  namedSchemas
+  namedSchemas,
+  pathMap
 ) {
   await createDirectory(folder)
 
@@ -160,6 +161,7 @@ async function writeOpenAPIClient (
       withCredentials,
       propsOptional,
       namedSchemas,
+      pathMap,
       typeExt
     })
     await writeFile(join(folder, `${name}-types.${typeExt}`), types)
@@ -178,7 +180,8 @@ async function writeOpenAPIClient (
       typesComment,
       propsOptional,
       moduleFormat,
-      namedSchemas
+      namedSchemas,
+      pathMap
     })
     const typeExt = await determineTypeExtension(folder, moduleFormat, typeExtension, explicitModuleFormat, generateImplementation)
     const implExt = moduleFormat === 'esm' ? 'mjs' : 'cjs'
@@ -250,7 +253,8 @@ async function downloadAndWriteOpenAPI (
   moduleFormat,
   typeExtension,
   explicitModuleFormat,
-  namedSchemas
+  namedSchemas,
+  pathMap
 ) {
   logger.debug(`Trying to download OpenAPI schema from ${url}`)
   let requestOptions
@@ -291,7 +295,8 @@ async function downloadAndWriteOpenAPI (
         moduleFormat,
         typeExtension,
         explicitModuleFormat,
-        namedSchemas
+        namedSchemas,
+        pathMap
       )
       /* c8 ignore next 3 */
     } catch (err) {
@@ -366,7 +371,8 @@ async function readFromFileAndWrite (
   moduleFormat,
   typeExtension,
   explicitModuleFormat,
-  namedSchemas
+  namedSchemas,
+  pathMap
 ) {
   logger.info(`Trying to read schema from file ${file}`)
   const text = await readFile(file, 'utf8')
@@ -391,7 +397,8 @@ async function readFromFileAndWrite (
       moduleFormat,
       typeExtension,
       explicitModuleFormat,
-      namedSchemas
+      namedSchemas,
+      pathMap
     )
     return 'openapi'
   } catch (err) {
@@ -440,7 +447,8 @@ async function downloadAndProcess (options) {
     typeExtension,
     explicitModuleFormat,
     skipPrefixedUrl,
-    namedSchemas
+    namedSchemas,
+    pathMap
   } = options
 
   const generateImplementation = options.generateImplementation
@@ -473,7 +481,8 @@ async function downloadAndProcess (options) {
             moduleFormat,
             typeExtension,
             explicitModuleFormat,
-            namedSchemas
+            namedSchemas,
+            pathMap
           )
         )
       }
@@ -500,7 +509,8 @@ async function downloadAndProcess (options) {
           moduleFormat,
           typeExtension,
           explicitModuleFormat,
-          namedSchemas
+          namedSchemas,
+          pathMap
         )
       )
     } else if (options.type === 'graphql') {
@@ -558,7 +568,8 @@ async function downloadAndProcess (options) {
             moduleFormat,
             typeExtension,
             explicitModuleFormat,
-            namedSchemas
+            namedSchemas,
+            pathMap
           )
         )
         toTry.push(
@@ -598,7 +609,8 @@ async function downloadAndProcess (options) {
           moduleFormat,
           typeExtension,
           explicitModuleFormat,
-          namedSchemas
+          namedSchemas,
+          pathMap
         )
       )
       toTry.push(
@@ -638,7 +650,8 @@ async function downloadAndProcess (options) {
         moduleFormat,
         typeExtension,
         explicitModuleFormat,
-        namedSchemas
+        namedSchemas,
+        pathMap
       )
     )
   }
@@ -706,7 +719,8 @@ export async function command (argv) {
       'props-optional',
       'type-extension',
       'skip-prefixed-url',
-      'named-schemas'
+      'named-schemas',
+      'path-map'
     ],
     default: {
       typescript: false,
@@ -777,6 +791,7 @@ export async function command (argv) {
     options.typeExtension = options['type-extension']
     options.skipPrefixedUrl = options['skip-prefixed-url']
     options.namedSchemas = options['named-schemas']
+    options.pathMap = options['path-map']
     options.explicitModuleFormat = !!options.module
     await downloadAndProcess({ url, ...options, logger })
     logger.info(`Client generated successfully into ${options.folder}`)

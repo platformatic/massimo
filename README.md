@@ -222,6 +222,9 @@ massimo <url> --name myclient --type-extension
 
 # Declare components.schemas as named types instead of inlining every $ref
 massimo <url> --name myclient --named-schemas
+
+# Declare a map from path template and HTTP method to the operation types
+massimo <url> --name myclient --path-map
 ```
 
 ### Named Schemas
@@ -229,6 +232,26 @@ massimo <url> --name myclient --named-schemas
 With `--named-schemas`, every `components.schemas` entry is declared once as a named type: an `interface` for an object schema, `interface X extends A, B` for an `allOf` of named objects whose members declare disjoint properties, and a `type` alias otherwise. Response types print each `$ref` as that name, so recursive schemas stay typed instead of becoming `unknown`. Request types keep inlining, because there date formats widen to `string | Date`.
 
 A schema whose name is already taken by a generated type (e.g. `GetMoviesResponseOK`), by another schema, or by a TypeScript built-in is declared with a `Schema` suffix (`Schema2`, `Schema3`, ... if needed), with a comment on the declaration. Names are stable for a given spec but not across its revisions: a new operation or schema can take a name and move a schema to a suffixed one.
+
+### Path Map
+
+With `--path-map`, the generated types also declare an interface keyed by path template, then by HTTP method. Each entry names the request and responses types of the client method for that operation, so code that only knows the path and the method (a generic fetch wrapper, a router, a mock server) can reach the same types as the client:
+
+```ts
+export interface MyclientPaths {
+  '/movies/{id}': {
+    'get': { 'request': GetMovieRequest; 'responses': GetMovieResponses };
+    'delete': { 'request': DeleteMovieRequest; 'responses': DeleteMovieResponses };
+  }
+}
+
+export type MyclientPathRequest<P extends keyof MyclientPaths, M extends keyof MyclientPaths[P]> = MyclientPaths[P][M] extends { 'request': infer R } ? R : never
+export type MyclientPathResponses<P extends keyof MyclientPaths, M extends keyof MyclientPaths[P]> = MyclientPaths[P][M] extends { 'responses': infer R } ? R : never
+```
+
+The entries use the type names of the client methods, including an operation without `operationId` (named from its path) and one renamed because its `operationId` is repeated. A path or method that is not in the spec is a type error. Use the two aliases when the path and the method are type parameters: `MyclientPaths[P][M]['request']` does not compile there (TS2536), because nothing tells TypeScript that every entry has a `request` member.
+
+`Myclient` is the client type name derived from `--name`. If an operation already declares `MyclientPathRequest` or `MyclientPathResponses` (an `operationId` of `myclientPath`), the alias gets a numeric suffix (`MyclientPathRequest2`). Like schema names, the alias names are stable for a given spec but not across its revisions: a new operation can take an alias name and move the alias to a suffixed one. `MyclientPaths` itself never gets a suffix. The option works with or without `--named-schemas`; when both are set, a component schema named like the map or an alias is renamed with the `Schema` suffix described above.
 
 ### Module Format Detection
 

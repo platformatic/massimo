@@ -1,7 +1,7 @@
 import camelcase from 'camelcase'
 import { generateOperationId } from 'massimo'
 import { writeNamedSchemas } from './named-schemas.js'
-import { getOperationTypeNames, writeOperations } from './openapi-common.js'
+import { getOperationTypeNames, getPathMapTypeNames, writeOperations, writePathMap } from './openapi-common.js'
 import { buildSchemaNames } from './schema-names.js'
 import {
   capitalize,
@@ -22,9 +22,10 @@ export function processFrontendOpenAPI ({
   withCredentials,
   propsOptional,
   namedSchemas,
+  pathMap,
   typeExt = 'd.mts'
 }) {
-  const { types, operations } = generateTypesFromOpenAPI({ schema, name, fullResponse, fullRequest, propsOptional, namedSchemas })
+  const { types, operations } = generateTypesFromOpenAPI({ schema, name, fullResponse, fullRequest, propsOptional, namedSchemas, pathMap })
   return {
     types,
     implementation: generateFrontendImplementationFromOpenAPI({
@@ -395,7 +396,7 @@ function generateFrontendImplementationFromOpenAPI ({
   return writer.toString()
 }
 
-function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, propsOptional, namedSchemas }) {
+function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, propsOptional, namedSchemas, pathMap }) {
   const camelCaseName = capitalize(camelcase(name))
   const { paths } = schema
   const generatedOperationIds = new Set()
@@ -425,19 +426,22 @@ function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, pr
   interfaces.blankLine()
 
   // Operation and client types keep their names; a schema that collides is renamed
+  const operationTypeNames = (namedSchemas || pathMap) ? getOperationTypeNames(operations) : []
+  const pathMapNames = pathMap ? getPathMapTypeNames(camelCaseName, operationTypeNames) : undefined
   const schemaNames = namedSchemas
-    ? buildSchemaNames(schema, [...getOperationTypeNames(operations), camelCaseName, 'PlatformaticFrontendClient', 'BuildOptions'])
+    ? buildSchemaNames(schema, [...operationTypeNames, camelCaseName, ...Object.values(pathMapNames ?? {}), 'PlatformaticFrontendClient', 'BuildOptions'])
     : undefined
   if (schemaNames) {
     writeNamedSchemas(interfaces, schema, schemaNames)
   }
 
+  let pathMapEntries
   writer.blankLine()
   writer.write(`export interface ${camelCaseName}`).block(() => {
     writer.writeLine('setBaseUrl(newUrl: string): void;')
     writer.writeLine('setDefaultHeaders(headers: object): void;')
     writer.writeLine('setDefaultFetchParams(fetchParams: RequestInit): void;')
-    writeOperations(interfaces, writer, operations, {
+    pathMapEntries = writeOperations(interfaces, writer, operations, {
       fullRequest,
       fullResponse,
       optionalHeaders: [],
@@ -446,6 +450,10 @@ function generateTypesFromOpenAPI ({ schema, name, fullRequest, fullResponse, pr
       schemaNames
     })
   })
+
+  if (pathMap) {
+    writePathMap(interfaces, pathMapNames, pathMapEntries)
+  }
 
   // Declare the module-level named exports emitted by the implementation file,
   // so consumers relying on the .d.ts can `import { setBaseUrl, ... }` without type errors.
