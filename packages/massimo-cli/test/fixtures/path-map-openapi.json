@@ -1,0 +1,96 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Path map", "version": "1.0.0" },
+  "paths": {
+    "/movies": {
+      "get": {
+        "operationId": "getMovies",
+        "responses": {
+          "200": {
+            "description": "Movies",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Movie" } } } }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createMovie",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "object", "required": ["title"], "properties": { "title": { "type": "string" } } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Movie",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Movie" } } }
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": {
+            "description": "Movie",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Movie" } } }
+          },
+          "404": {
+            "description": "Not found",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "message": { "type": "string" } } } } }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteMovie",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "204": { "description": "Deleted" }
+        }
+      }
+    },
+    "/accounts/{accountId}/folders": {
+      "post": {
+        "operationId": "createFolder",
+        "parameters": [{ "name": "accountId", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Folder",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Folder" } } }
+          }
+        }
+      }
+    },
+    "/folders": {
+      "post": {
+        "operationId": "createFolder",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "object", "required": ["name", "accountId"], "properties": { "name": { "type": "string" }, "accountId": { "type": "integer" } } } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Folder",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Folder" } } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Movie": {
+        "type": "object",
+        "required": ["id", "title"],
+        "properties": { "id": { "type": "integer" }, "title": { "type": "string" } }
+      },
+      "Folder": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": { "id": { "type": "integer" }, "name": { "type": "string" } }
+      },
+      "MoviesPaths": { "type": "string" },
+      "MoviesPathRequest": { "type": "number" }
+    }
+  }
+}

@@ -78,4 +78,5 @@ Options:
 * `--retry-timeout-ms` - If passed, the HTTP request to get an Open API schema will be retried (reference: https://undici.nodejs.org/#/docs/api/RetryHandler.md)
 * `--type-extension` - Force the use of module-specific type extensions (.d.mts for ESM, .d.cts for CJS) instead of the default logic.
 * `--named-schemas` - Declare every `components.schemas` entry as a named type and print response `$ref`s as that name instead of inlining the schema. Off by default.
+* `--path-map` - Also declare `<Name>Paths`, an interface keyed by path template and HTTP method whose entries are the request and responses types of each client method, with the lookup aliases `<Name>PathRequest<P, M>` and `<Name>PathResponses<P, M>`. Works with or without `--named-schemas`. Off by default.
 * `--skip-prefixed-url` - If passed, it will avoid unnecessary extra HTTP call to check if, for instance, the `/documentation/json` Open API URL exists

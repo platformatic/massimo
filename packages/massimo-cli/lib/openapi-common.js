@@ -16,6 +16,7 @@ export function writeOperations (
   const originalFullRequest = fullRequest
   let currentFullResponse = originalFullResponse
   let currentFullRequest = originalFullRequest
+  const pathMapEntries = []
   for (const operation of operations) {
     const { operationId, description, summary, deprecated } = operation.operation
     const camelCaseOperationId = camelcase(operationId)
@@ -136,9 +137,66 @@ export function writeOperations (
     mainWriter.writeLine(` * @returns the API response${fullResponse ? '' : ' body'}`)
     mainWriter.writeLine(' */')
     mainWriter.writeLine(`${camelCaseOperationId}(req: ${operationRequestName}): Promise<${allResponsesName}>;`)
+    pathMapEntries.push({ path: operation.path, method: operation.method, request: operationRequestName, responses: allResponsesName })
     currentFullResponse = originalFullResponse
     currentFullRequest = originalFullRequest
   }
+  return pathMapEntries
+}
+
+// The names of the path map and its two lookup aliases declared for the client
+// type `clientTypeName`. Operation types end in `Request`, `Responses`, or
+// `Response` followed by a status name or preceded by a status code, so none
+// can end in `Paths` and only a component schema can take the map's name. A
+// component schema is declared under a name of its own only with named
+// schemas, and then `buildSchemaNames` renames it. An operation whose id is
+// `<clientTypeName>Path` does declare `<clientTypeName>PathRequest` and
+// `<clientTypeName>PathResponses`, so an alias whose name an operation type
+// already has gets a numeric suffix instead.
+export function getPathMapTypeNames (clientTypeName, operationTypeNames) {
+  const taken = new Set(operationTypeNames)
+  const free = base => {
+    let name = base
+    for (let i = 2; taken.has(name); i++) {
+      name = `${base}${i}`
+    }
+    return name
+  }
+  return {
+    map: `${clientTypeName}Paths`,
+    request: free(`${clientTypeName}PathRequest`),
+    responses: free(`${clientTypeName}PathResponses`)
+  }
+}
+
+// Declares an interface keyed by path template, then HTTP method, whose values
+// name the request and response types `writeOperations` declared for that
+// operation. The entries are the ones `writeOperations` returns, so the names
+// are the ones the client methods use, including operations whose id was
+// generated from the path or renamed to stay unique. Two aliases resolve an
+// entry's request and responses types for a generic path and method: indexing
+// `Map[P][M]['request']` directly does not compile, because the per-path types
+// share no constraint that would prove the member exists.
+export function writePathMap (writer, names, entries) {
+  const methodsByPath = new Map()
+  for (const entry of entries) {
+    const methods = methodsByPath.get(entry.path) ?? []
+    methods.push(entry)
+    methodsByPath.set(entry.path, methods)
+  }
+  writer.write(`export interface ${names.map}`).block(() => {
+    for (const [path, methods] of methodsByPath) {
+      writer.quote(path).write(': ').block(() => {
+        for (const { method, request, responses } of methods) {
+          writer.quote(method).write(`: { 'request': ${request}; 'responses': ${responses} };`).newLine()
+        }
+      })
+    }
+  })
+  writer.blankLine()
+  const params = `P extends keyof ${names.map}, M extends keyof ${names.map}[P]`
+  writer.writeLine(`export type ${names.request}<${params}> = ${names.map}[P][M] extends { 'request': infer R } ? R : never`)
+  writer.writeLine(`export type ${names.responses}<${params}> = ${names.map}[P][M] extends { 'responses': infer R } ? R : never`)
 }
 
 // Every type name `writeOperations` declares for these operations.
