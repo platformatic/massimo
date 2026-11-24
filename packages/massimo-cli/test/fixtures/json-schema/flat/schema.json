@@ -1,0 +1,94 @@
+{
+  "$id": "https://example.com/schemas/catalog/commands/activate-catalog.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActivateCatalog",
+  "type": "object",
+  "required": [
+    "specversion",
+    "id",
+    "idempotencykey",
+    "source",
+    "type",
+    "subject",
+    "datacontenttype",
+    "dataschema",
+    "sequencenumber",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idempotencykey": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string",
+      "format": "uri-reference"
+    },
+    "type": {
+      "$ref": "#/definitions/CommandType"
+    },
+    "subject": {
+      "type": "string",
+      "pattern": "^.+$"
+    },
+    "datacontenttype": {
+      "const": "application/json"
+    },
+    "dataschema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "sequencenumber": {
+      "type": "integer",
+      "minimum": -1
+    },
+    "correlationid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "data": {
+      "$ref": "#/definitions/CommandData"
+    }
+  },
+  "definitions": {
+    "CommandType": {
+      "const": "example.catalog.commands.activate-catalog"
+    },
+    "CommandData": {
+      "type": "object",
+      "required": ["catalog"],
+      "properties": {
+        "catalog": {
+          "type": "object",
+          "required": ["regionCode", "slug", "revision"],
+          "properties": {
+            "regionCode": {
+              "type": "string",
+              "title": "The region",
+              "enum": ["NA", "EMEA", "APAC", "LATAM"]
+            },
+            "slug": {
+              "description": "Human-readable identifier for the catalog",
+              "type": "string"
+            },
+            "revision": {
+              "description": "Revision identifier for the catalog",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
